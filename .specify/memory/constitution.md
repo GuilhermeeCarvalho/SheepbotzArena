@@ -1,18 +1,15 @@
 <!--
 Relatório de impacto da sincronização — material temporário para revisão humana.
 Remover este comentário antes de confirmar a constituição no controle de versão.
-Versão: modelo sem versão → 1.0.0 (adoção inicial).
-Princípios preenchidos a partir dos cinco espaços do modelo:
-- I. Simulação matemática e física em 2D com visualização em 3D.
-- II. Rastreabilidade às regras da RoboCore.
-- III. Desenvolvimento orientado por testes.
-- IV. Código limpo e responsabilidades explícitas.
-- V. Português na comunicação e inglês no código.
-Seções adicionadas: Escopo e restrições do produto; Fluxo de desenvolvimento e revisão;
-Governança (preenchimento das seções do modelo).
+Versão: 1.0.0 → 1.1.0 (ampliação material das exigências de arquitetura).
+Princípio modificado:
+- IV. Código limpo e responsabilidades explícitas →
+  IV. Código limpo, baixo acoplamento e extensibilidade.
+Seção ajustada: Fluxo de desenvolvimento e revisão, com verificação de extensibilidade.
+Seções adicionadas: nenhuma.
 Seções removidas: nenhuma.
 Pendências de preenchimento: nenhuma.
-Intenção adiada: especificar e desenvolver o simulador web de sumô autônomo.
+Demais princípios e regras existentes preservados.
 -->
 # Constituição do SheepbotzArena
 
@@ -63,7 +60,7 @@ Cada entrega DEVE registrar evidências do ciclo de falha e sucesso e executar o
 afetados, além das verificações automatizadas exigidas pelo projeto. Testes reprovados
 DEVEM ser resolvidos antes da integração da entrega.
 
-### IV. Código limpo e responsabilidades explícitas
+### IV. Código limpo, baixo acoplamento e extensibilidade
 
 O código DEVE usar nomes que expressem intenção, unidades com responsabilidade definida
 e contratos explícitos entre regras de domínio, simulação, estratégias e apresentação.
@@ -74,6 +71,24 @@ identificáveis. Duplicação de regras DEVE ser eliminada em favor de uma defin
 compartilhada. Abstrações e dependências novas DEVEM responder a uma necessidade
 demonstrada na especificação ou na implementação, com justificativa na revisão.
 Refatorações DEVEM preservar o comportamento verificado pelos testes.
+
+O sistema DEVE manter baixo acoplamento entre o núcleo compartilhado e as modalidades
+de robôs. Regras, parâmetros de arena, critérios de arbitragem e comportamentos específicos
+de cada modalidade DEVEM ser encapsulados em módulos com contratos explícitos.
+O núcleo compartilhado DEVE depender desses contratos, sem depender das implementações
+concretas de uma modalidade. Módulos de modalidades distintas NÃO DEVEM depender entre si.
+
+A inclusão de uma modalidade DEVE ocorrer pela implementação dos contratos de extensão
+e por sua configuração ou registro, sem exigir alterações nas implementações das
+modalidades existentes. Caso uma capacidade nova exija evolução dos contratos ou do
+núcleo compartilhado, a especificação DEVE justificar a mudança e definir testes de
+regressão para as modalidades afetadas. A composição das implementações DEVE ficar em
+pontos explícitos, evitando condicionais por modalidade espalhadas pelo núcleo.
+
+Os contratos de extensão DEVEM permitir testar cada modalidade isoladamente e verificar
+sua integração com o núcleo sob TDD. Essa organização reduz o esforço e o risco de
+adicionar modalidades, preservando a exigência de justificar abstrações por necessidades
+demonstradas.
 
 ### V. Português na comunicação e inglês no código
 
@@ -110,10 +125,14 @@ Esta constituição não seleciona uma categoria nem uma tecnologia de implement
    cenários, critérios de aceitação e limites do modelo. Consultar e citar a referência
    da RoboCore sempre que houver dependência de regras; registrar interpretações adotadas.
 2. No planejamento, identificar responsabilidades, contratos, unidades físicas e a
-   estratégia de testes, demonstrando a separação entre simulação 2D e apresentação 3D.
+    estratégia de testes, demonstrando a separação entre simulação 2D e apresentação 3D.
+   Para mudanças de arquitetura ou inclusão de modalidades, documentar os pontos de
+   extensão, a direção das dependências e os módulos que precisarão ser alterados.
 3. Implementar por incrementos usando o ciclo de TDD e registrar as verificações realizadas.
 4. Na revisão, verificar rastreabilidade regulamentar, critérios de aceitação, testes,
-   responsabilidades do código, convenções de idioma e documentação das simplificações.
+    responsabilidades do código, convenções de idioma e documentação das simplificações.
+   Verificar também o isolamento das modalidades, os contratos de extensão e a ausência
+   de dependências do núcleo compartilhado em implementações concretas de modalidades.
 5. Integrar somente após aprovação da revisão e das verificações exigidas. Desvios desta
    constituição DEVEM ser resolvidos ou submetidos ao procedimento de emenda antes da integração.
 
@@ -139,4 +158,4 @@ registrar as adequações necessárias. O relatório de impacto no início do ar
 material temporário de revisão e DEVE ser removido antes de confirmar a emenda no
 controle de versão.
 
-**Versão**: 1.0.0 | **Ratificada em**: 2026-11-14 | **Última alteração**: 2026-11-14
+**Versão**: 1.1.0 | **Ratificada em**: 2026-11-14 | **Última alteração**: 2026-11-14

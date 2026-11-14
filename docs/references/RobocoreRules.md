@@ -5,7 +5,8 @@ Site referencia de regras: https://events.robocore.net/rules
 ## Mega Sumô (3kg), Mini Sumô (500g) e Sumô LEGO®
 # Documento Revisado 11/08/2025
 
-# Especificação da Arena: 
+# Especificação da Arena:
+Artigo 3 
 Especificações de Dohyo
 - Mega Sumô (3kg): Dohyo deve ser, idealmente, uma estrutura circular de alumínio de
 154cm (+/- 50mm) de diâmetro (incluindo Tawara), coberta por uma folha de SPCC
@@ -41,6 +42,33 @@ circular de 2,5cm de largura, do interior para a linha externa de Dohyo (o Tawar
 ser considerado dentro do Dohyo)
 
 # Especificações dos Robos
+Artigo 4
+As especificações do robô devem ser as seguintes:
+● Medidas do Robô
+- Mega Sumô (3kg): O robô deve possuir um comprimento e largura menor ou igual a
+20cm, sem restrições de altura, e ser capaz de caber em uma estrutura de caixa para
+inspeção padrão baseada nesses limites dimensionais.
+- Mini Sumô (500g): O robô deve possuir um comprimento e largura menor ou igual a
+10cm, sem restrições de altura, e ser capaz de caber em uma estrutura de caixa para
+inspeção padrão baseada nesses limites dimensionais. Todo e qualquer dispositivo ou
+componente utilizado para fixar o robô ao Dohyo é proibido.
+- Mini Sumô (500g) – Junior: O robô deve possuir um comprimento e largura menor ou
+igual a 10cm, sem restrições de altura, e ser capaz de caber em uma estrutura de
+caixa para inspeção padrão baseada nesses limites dimensionais. Todo e qualquer
+dispositivo ou componente utilizado para fixar o robô ao Dohyo é proibido. Robôs Mini
+sumô (500g) – Junior não podem ser fabricados de modo a possuir partes afiadas na
+rampa. O robô deve ser capaz de superar uma chapa de 0,2 mm ± 0,05 mm de
+espessura colada sobre uma superfície de madeira sem ficar enroscado.
+- Sumô LEGO®: O robô deve possuir um comprimento e largura menor ou igual a
+15,2cm (19 studs), sem restrições de altura, e ser capaz de caber em uma estrutura de
+caixa para inspeção padrão baseada nesses limites dimensionais. O robô deverá ser
+única e exclusivamente construído utilizando peças e componentes LEGO® em seu
+estado original. Quaisquer modificações, tais como lixar peças com o objetivo de
+torná-las mais afiadas, cortar ou lixar peças para reduzir sua dimensão, colar peças a
+fim de se aumentar a resistência mecânica, utilizar adesivo para contenção das peças,
+entre outras, implicarão na desclassificação do robô. Todo e qualquer dispositivo ou componente utilizado para fixar o robô ao Dohyo ou para aumentar a aderência dos
+pneus é proibido.
+
 [Condições de Movimento para o Robô do Tipo autônomo]
 Artigo 5
 Um robô deve ser projetado para detectar, virar, enfrentar e agir mostrando sua luta contra o
