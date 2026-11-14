@@ -5,13 +5,37 @@ Site referencia de regras: https://events.robocore.net/rules
 ## Mega Sumô (3kg), Mini Sumô (500g) e Sumô LEGO®
 # Documento Revisado 11/08/2025
 
+● Dohyo: é o espaço onde os robôs batalham.
+● Dohyo Jonai: é toda a área considerada como zona de batalha.
+● Dohyo Jogai: é toda a área externa do Dohyo Jonai.
+
+● Fusensho: uma vitória sem luta devido ao adversário não aparecer ou quando o robô
+adversário não funciona para a partida.
+
+● Hakama: é uma pirâmide retangular truncada que serve como base do Dohyo.
+
+● Partida: é o confronto entre 2 robôs e é composto, principalmente, por 3 rounds.
+
+● Round: é o tempo em que dois robôs lutam com o objetivo de empurrar o oponente para
+fora do Dohyo.
+
+● Shikiri-sen: linha de partida, delimita onde o robô pode ser colocado dentro do Dohyo.
+● Shinitai: robô morto, é referido como um robô que não pode se mover porque não se
+movimenta no Dohyo.
+
+● Tawara: linha divisória ou linha branca, delimita a borda externa do Dohyo.
+
+● Yuko: ponto efetivo e é considerado para o robô que derrota o oponente durante um round.
+● Yusei: robô predominante, é referido ao robô que mostrou mais ações/iniciativas de batalha.
+● Yochi: é a área quadrada onde o Dohyo é colocado e delimita a área segura.
+
+
 # Especificação da Arena:
 Artigo 3 
 Especificações de Dohyo
 - Mega Sumô (3kg): Dohyo deve ser, idealmente, uma estrutura circular de alumínio de
 154cm (+/- 50mm) de diâmetro (incluindo Tawara), coberta por uma folha de SPCC
-preta localizada na parte superior, a 5cm de altura. No Brasil, em função da dificuldade
-de se utilizar a folha SPCC, fica permitido a utilização de aço compatível de mesmo
+preta localizada na parte superior, a 5cm de altura.
 diâmetro e espessura de 6,35mm.
 - Mini Sumô (500g) e Sumô LEGO®: Dohyo deve ser uma placa de madeira circular de
 77cm de diâmetro (incluindo a Tawara) coberta por um laminado de fórmica localizada
