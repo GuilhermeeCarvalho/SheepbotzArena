@@ -1,0 +1,110 @@
+/*
+ * Tokens de design da biblioteca de componentes SheepBotz (plan 002, "Identidade visual").
+ * Única fonte de cores, espaçamentos, raios, sombras e tipografia da interface.
+ */
+:root {
+  /* Superfícies */
+  --color-bg: #0f1419;
+  --color-surface: #161c24;
+  --color-surface-raised: #1d2530;
+  --color-surface-hover: #242e3b;
+  --color-border: #2a3441;
+  --color-border-strong: #3a4656;
+
+  /* Texto */
+  --color-text: #e6edf3;
+  --color-text-muted: #9aa7b4;
+  --color-text-subtle: #6b7785;
+  --color-text-inverse: #0f1419;
+
+  /* Marca e estados */
+  --color-accent: #a3e635;
+  --color-accent-hover: #bef264;
+  --color-accent-soft: rgba(163, 230, 53, 0.14);
+  --color-info: #22d3ee;
+  --color-info-soft: rgba(34, 211, 238, 0.14);
+  --color-success: #4ade80;
+  --color-success-soft: rgba(74, 222, 128, 0.14);
+  --color-warning: #fbbf24;
+  --color-warning-soft: rgba(251, 191, 36, 0.14);
+  --color-danger: #f87171;
+  --color-danger-soft: rgba(248, 113, 113, 0.14);
+
+  /* Espaçamento (base 4 px) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+
+  /* Raios e sombras */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-full: 999px;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.35);
+  --focus-ring: 0 0 0 2px var(--color-bg), 0 0 0 4px var(--color-accent);
+
+  /* Tipografia */
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SFMono-Regular', Menlo, Consolas, monospace;
+  --text-xs: 11px;
+  --text-sm: 12.5px;
+  --text-md: 14px;
+  --text-lg: 16px;
+  --text-xl: 20px;
+
+  /* Movimento */
+  --transition-fast: 120ms ease;
+
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: var(--text-md);
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+::selection {
+  background: var(--color-accent-soft);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: var(--radius-full);
+  border: 2px solid var(--color-surface);
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
