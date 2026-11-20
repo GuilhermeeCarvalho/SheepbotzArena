@@ -60,6 +60,22 @@ export default tseslint.config(
     },
   },
   {
+    // Biblioteca de componentes genérica (constitution v2.1.0)
+    files: ['src/ui/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            { group: ['**/core/**', '**/core', 'src/core/**'], message: 'src/ui não depende do núcleo.' },
+            { group: ['**/modalities/**', '**/modalities'], message: 'src/ui não depende de modalidades.' },
+            { group: ['**/app/**', '**/app'], message: 'src/ui não depende da aplicação.' },
+          ],
+        },
+      ],
+    },
+  },
+  {
     files: ['scripts/**/*.mjs'],
     languageOptions: { globals: { process: 'readonly', console: 'readonly' } },
   },
