@@ -1,7 +1,7 @@
 # SheepBotz Arena
 
 <!-- stats:start -->
-**135 testes · 97,2% de cobertura** (linhas; relatório em [`coverage/`](coverage/index.html))
+**193 testes · 95,9% de cobertura** (linhas; relatório em [`coverage/`](coverage/index.html))
 <!-- stats:end -->
 
 Simulador web de robôs móveis para a equipe Univille SheepBotz, no espírito do
@@ -27,7 +27,7 @@ Projeto desenvolvido com **Spec-Driven Development** (GitHub SpecKit).
 | Feature | Situação |
 |---------|----------|
 | [001 — Núcleo de simulação headless](specs/001-nucleo-simulacao/) | ✅ implementada (58/58 tarefas) |
-| [002 — Visualização 3D e controles](specs/002-visualizacao-3d/) | em implementação |
+| [002 — Visualização 3D e controles](specs/002-visualizacao-3d/) | ✅ implementada (31/31 tarefas) |
 | 003 — Catálogo de componentes reais e montador de robôs | planejada |
 | 004 — Modalidade Sumô | planejada |
 | 005 — Painel de inspeção e replay | planejada |
@@ -40,6 +40,8 @@ Requisitos: Node.js 22 ou superior.
 
 ```bash
 npm install
+npm run dev               # interface 3D em http://localhost:5173
+npm run build             # build de produção em dist/
 npm test                  # suíte de testes
 npm run test:coverage     # cobertura (falha abaixo de 80%), relatório em coverage/
 npm run readme:stats      # atualiza a linha de testes e cobertura deste README
