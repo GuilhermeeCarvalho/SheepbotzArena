@@ -1,16 +1,3 @@
-<!--
-Relatório de impacto da sincronização — material temporário para revisão humana.
-Remover este comentário antes de confirmar a constituição no controle de versão.
-Versão: 1.0.0 → 1.1.0 (ampliação material das exigências de arquitetura).
-Princípio modificado:
-- IV. Código limpo e responsabilidades explícitas →
-  IV. Código limpo, baixo acoplamento e extensibilidade.
-Seção ajustada: Fluxo de desenvolvimento e revisão, com verificação de extensibilidade.
-Seções adicionadas: nenhuma.
-Seções removidas: nenhuma.
-Pendências de preenchimento: nenhuma.
-Demais princípios e regras existentes preservados.
--->
 # Constituição do SheepbotzArena
 
 ## Princípios fundamentais
@@ -19,9 +6,9 @@ Demais princípios e regras existentes preservados.
 
 Toda lógica matemática e física da simulação DEVE operar em duas dimensões.
 O estado dos robôs, as interações com a arena, as leituras simuladas dos sensores e
-os resultados das partidas DEVEM derivar desse modelo 2D. A visualização das batalhas
-DEVE ser tridimensional e consumir o estado da simulação, sem decidir colisões,
-leituras de sensores ou resultados por meio de física 3D.
+os resultados das partidas DEVEM derivar desse modelo 2D. A visualização DEVE ser
+tridimensional e consumir o estado da simulação, sem decidir colisões, leituras de
+sensores ou resultados por meio de física 3D.
 
 O núcleo da simulação DEVE ser executável e testável sem renderização. Alterar a
 frequência de renderização NÃO DEVE alterar o resultado para as mesmas condições e
@@ -30,9 +17,11 @@ entradas simuladas. Essa separação permite validar estratégias sem depender d
 ### II. Rastreabilidade às regras da RoboCore
 
 Toda especificação que dependa de regras oficiais das partidas, dos robôs ou das arenas
-DEVE consultar `./docs/references/RobocoreRules.Md`. A especificação DEVE identificar a
-categoria abrangida e citar os artigos, notas ou seções que fundamentam seus requisitos.
-Parâmetros de categorias diferentes NÃO DEVEM ser combinados implicitamente.
+DEVE consultar o documento da categoria em `./docs/references/robocore/`. A especificação
+DEVE identificar a categoria abrangida e citar os artigos, notas ou seções que fundamentam
+seus requisitos. Parâmetros de categorias diferentes NÃO DEVEM ser combinados implicitamente.
+Quando uma modalidade não tiver regulamento da RoboCore, a especificação DEVE indicar a
+fonte regulamentar adotada e registrar essa escolha.
 
 Qualquer ambiguidade, conflito ou lacuna relevante DEVE ser registrado na própria
 especificação, acompanhado da interpretação adotada, da justificativa e dos efeitos
@@ -52,13 +41,13 @@ Correções de defeitos DEVEM começar por um teste que reproduza o problema.
 
 Os testes DEVEM verificar comportamentos observáveis e critérios de aceitação, incluindo
 casos de fronteira pertinentes à física, aos sensores e à aplicação das regras.
-Integrações entre simulação, estratégias, arbitragem e visualização DEVEM ter testes
-quando seus contratos forem introduzidos ou alterados. O tempo simulado e eventuais
-fontes de aleatoriedade DEVEM ser controláveis nos testes para permitir reprodução.
+Todo critério de aceitação numérico de uma especificação DEVE ter um teste automatizado
+correspondente, que cite o identificador do cenário ou requisito. Integrações entre
+simulação, estratégias, arbitragem e visualização DEVEM ter testes quando seus contratos
+forem introduzidos ou alterados.
 
-Cada entrega DEVE registrar evidências do ciclo de falha e sucesso e executar os testes
-afetados, além das verificações automatizadas exigidas pelo projeto. Testes reprovados
-DEVEM ser resolvidos antes da integração da entrega.
+Cada entrega DEVE executar a suíte completa. Testes reprovados DEVEM ser resolvidos antes
+da integração da entrega.
 
 ### IV. Código limpo, baixo acoplamento e extensibilidade
 
@@ -72,69 +61,140 @@ compartilhada. Abstrações e dependências novas DEVEM responder a uma necessid
 demonstrada na especificação ou na implementação, com justificativa na revisão.
 Refatorações DEVEM preservar o comportamento verificado pelos testes.
 
-O sistema DEVE manter baixo acoplamento entre o núcleo compartilhado e as modalidades
-de robôs. Regras, parâmetros de arena, critérios de arbitragem e comportamentos específicos
-de cada modalidade DEVEM ser encapsulados em módulos com contratos explícitos.
-O núcleo compartilhado DEVE depender desses contratos, sem depender das implementações
-concretas de uma modalidade. Módulos de modalidades distintas NÃO DEVEM depender entre si.
+O sistema DEVE manter baixo acoplamento entre o núcleo compartilhado e as modalidades.
+Regras, parâmetros de arena, critérios de arbitragem e comportamentos específicos de cada
+modalidade DEVEM ser encapsulados em módulos com contratos explícitos. O núcleo
+compartilhado DEVE depender desses contratos, sem depender das implementações concretas
+de uma modalidade. Módulos de modalidades distintas NÃO DEVEM depender entre si.
 
 A inclusão de uma modalidade DEVE ocorrer pela implementação dos contratos de extensão
-e por sua configuração ou registro, sem exigir alterações nas implementações das
-modalidades existentes. Caso uma capacidade nova exija evolução dos contratos ou do
-núcleo compartilhado, a especificação DEVE justificar a mudança e definir testes de
-regressão para as modalidades afetadas. A composição das implementações DEVE ficar em
-pontos explícitos, evitando condicionais por modalidade espalhadas pelo núcleo.
-
-Os contratos de extensão DEVEM permitir testar cada modalidade isoladamente e verificar
-sua integração com o núcleo sob TDD. Essa organização reduz o esforço e o risco de
-adicionar modalidades, preservando a exigência de justificar abstrações por necessidades
-demonstradas.
+e por seu registro, sem exigir alterações nas modalidades existentes. Caso uma capacidade
+nova exija evolução dos contratos ou do núcleo compartilhado, a especificação DEVE
+justificar a mudança e definir testes de regressão para as modalidades afetadas.
+A composição das implementações DEVE ficar em pontos explícitos, evitando condicionais
+por modalidade espalhadas pelo núcleo. A direção das dependências DEVE ser verificada
+automaticamente.
 
 ### V. Português na comunicação e inglês no código
 
-Toda documentação produzida pelo projeto, incluindo especificações, planos, registros
-de decisões e instruções, DEVE estar em português. Comentários de código, documentação
-embutida e textos apresentados pela interface também DEVEM estar em português.
+Toda documentação produzida pelo projeto, incluindo especificações, planos, tarefas,
+registros de decisões, instruções e mensagens de commit, DEVE estar em português.
+Comentários de código, documentação embutida, mensagens de erro e textos apresentados
+pela interface também DEVEM estar em português.
 
-Identificadores de código, incluindo variáveis, funções, classes, módulos e identificadores
-de testes, DEVEM estar em inglês. Textos de interface permanecem em português mesmo quando
-armazenados no código. Nomes próprios, identificadores de APIs externas e trechos citados
-de referências DEVEM preservar sua grafia original, com explicação em português quando
-necessária. A revisão DEVE verificar essas convenções nos artefatos alterados.
+Identificadores de código, incluindo variáveis, funções, classes, módulos, campos do
+arquivo de mundo e identificadores de testes, DEVEM estar em inglês. Nomes próprios,
+termos regulamentares (por exemplo, Dohyo e Tawara), identificadores de APIs externas e
+trechos citados de referências DEVEM preservar sua grafia original.
+
+### VI. Determinismo e física própria
+
+O núcleo de simulação DEVE ser determinístico: o mesmo mundo, a mesma seed, o mesmo
+passo de tempo e os mesmos controladores DEVEM produzir a mesma sequência de estados,
+tick a tick, no mesmo ambiente de execução. O passo de tempo é fixo durante uma execução
+e o tempo simulado avança somente por ticks, nunca pelo relógio do sistema.
+
+Toda fonte de aleatoriedade (ruído de sensores, sorteios de modalidades, aleatoriedade
+disponível ao controlador) DEVE derivar da seed da simulação. Controladores NÃO DEVEM
+ter acesso ao relógio do sistema nem a geradores aleatórios não semeados.
+
+Cinemática, detecção e resolução de colisões e sensores DEVEM ser implementados pelo
+projeto. Bibliotecas de motor de física prontas NÃO DEVEM ser usadas. Bibliotecas de
+apoio (validação, renderização, interface) são permitidas desde que não decidam
+comportamento físico.
+
+### VII. Rastreabilidade de ponta a ponta e evidência de qualidade
+
+Todo artefato DEVE ser rastreável na cadeia
+`requisito do briefing (RB) → requisito funcional (FR) → tarefa (T) → commit`:
+
+- os requisitos extraídos do briefing ficam em `docs/briefing/requisitos-extraidos.md`;
+- cada especificação cita os `RB` que atende;
+- cada tarefa cita os `FR` que implementa;
+- cada commit de implementação cita a tarefa e os requisitos no formato
+  `<tipo>(<feature>/<tarefa>): <descrição> [<FR>, ...]`, por exemplo
+  `feat(001/T014): calcula leituras do laser por raycast [FR-012, FR-013]`.
+  Commits de documentação sem tarefa usam `docs: <descrição>`.
+
+A cobertura de testes automatizados DEVE ser de no mínimo 80% em linhas, funções,
+ramificações e instruções, verificada pela própria suíte (que falha abaixo do limite).
+O relatório de cobertura DEVE ser versionado no repositório, e o início do `README.md`
+DEVE exibir a quantidade de testes e o percentual de cobertura, atualizados a cada entrega.
+Somente pontos de entrada de inicialização sem lógica podem ser excluídos da medição,
+e cada exclusão DEVE estar listada no plano da feature.
 
 ## Escopo e restrições do produto
 
-O SheepbotzArena destina-se a uma equipe de robótica que precisa testar estratégias de
-sumô autônomo, reduzindo testes manuais e desgaste dos robôs físicos. Seu escopo de produto
-é um sistema web que simula a arena, os sensores e partidas individuais entre dois robôs,
-com lógica matemática e física em 2D e visualização das batalhas em 3D.
+O SheepbotzArena destina-se à equipe de robótica Univille SheepBotz, que precisa testar
+estratégias de robôs autônomos sem desgastar os robôs físicos. É um simulador web genérico
+de robôs móveis de tração diferencial, no espírito do Stage (Player/Stage), com lógica em
+2D e aparência de um Gazebo leve em 3D. O usuário descreve o mundo num arquivo, escreve o
+controlador de cada robô e acompanha a simulação com play, pause, step e reset.
 
+O núcleo é genérico e independente de modalidade. As modalidades da RoboCore são módulos
+de extensão que definem mundos de exemplo, parâmetros regulamentares e arbitragem
+(condições de vitória, pontuação e fim de partida):
+
+| Modalidade         | Robôs por arena | Referência regulamentar                         | Papel          |
+|--------------------|-----------------|-------------------------------------------------|----------------|
+| Sumô (Mega, Mini, LEGO®) | 2         | `docs/references/robocore/sumo.md`              | Foco da demo   |
+| Seguidor de Linha  | 1               | `docs/references/robocore/seguidor-de-linha.md` | Adicional      |
+| Trekking           | 1               | `docs/references/robocore/trekking.md`          | Adicional      |
+| Futebol de robôs   | 2 ou mais       | `docs/references/robocore/futebol.md`           | Adicional      |
+
+Uma simulação sem modalidade (apenas mundo e controladores) DEVE ser sempre possível.
 As estratégias DEVEM decidir as ações dos robôs autonomamente a partir das entradas
 definidas pela especificação. Cada funcionalidade DEVE declarar os sensores modelados,
 suas limitações, as condições iniciais e os parâmetros necessários para reproduzir os
 cenários de teste. Aproximações físicas DEVEM ser documentadas com seus limites de uso;
 a simulação NÃO DEVE ser descrita como validação de fenômenos que não modela.
 
-A categoria de sumô, os parâmetros da arena e os critérios de arbitragem DEVEM ser
-definidos nas especificações correspondentes com base na referência regulamentar.
-Esta constituição não seleciona uma categoria nem uma tecnologia de implementação.
+O projeto é uma prova de conceito. Escopo reduzido, bem especificado e funcionando tem
+prioridade sobre amplitude: modalidades adicionais só começam depois que o escopo
+completo do briefing estiver entregue e com cobertura ≥ 80%.
+
+## Stack tecnológica
+
+As escolhas abaixo valem para todas as features. Trocar ou adicionar uma dependência
+de execução exige emenda desta seção.
+
+| Área                       | Escolha                                                        |
+|----------------------------|----------------------------------------------------------------|
+| Linguagem                  | TypeScript (modo `strict`), executado em Node.js 22+ e navegadores modernos |
+| Build e servidor de dev    | Vite                                                           |
+| Interface                  | React                                                          |
+| Visualização 3D            | Three.js (primitivas geométricas e controles de câmera orbital) |
+| Editor do controlador      | CodeMirror                                                     |
+| Validação do arquivo de mundo | Zod                                                         |
+| Testes e cobertura         | Vitest com cobertura V8                                        |
+| Qualidade                  | ESLint (incluindo regra de direção de dependências) e Prettier |
+| Formato do mundo           | JSON                                                           |
+| Linguagem do controlador   | JavaScript, executado contra uma API limitada                  |
+| Análise sintática do controlador | acorn (apenas para relatar erros com linha e coluna)     |
+| Linha de comando           | Node.js com `tsx`                                              |
+
+O núcleo de simulação NÃO DEVE depender de React, Three.js, DOM ou APIs exclusivas do
+navegador, para rodar igualmente no Node.js (testes e linha de comando) e no navegador.
 
 ## Fluxo de desenvolvimento e revisão
 
 1. Antes da implementação, elaborar uma especificação em português com objetivo,
-   cenários, critérios de aceitação e limites do modelo. Consultar e citar a referência
-   da RoboCore sempre que houver dependência de regras; registrar interpretações adotadas.
-2. No planejamento, identificar responsabilidades, contratos, unidades físicas e a
-    estratégia de testes, demonstrando a separação entre simulação 2D e apresentação 3D.
-   Para mudanças de arquitetura ou inclusão de modalidades, documentar os pontos de
-   extensão, a direção das dependências e os módulos que precisarão ser alterados.
-3. Implementar por incrementos usando o ciclo de TDD e registrar as verificações realizadas.
-4. Na revisão, verificar rastreabilidade regulamentar, critérios de aceitação, testes,
-    responsabilidades do código, convenções de idioma e documentação das simplificações.
-   Verificar também o isolamento das modalidades, os contratos de extensão e a ausência
-   de dependências do núcleo compartilhado em implementações concretas de modalidades.
-5. Integrar somente após aprovação da revisão e das verificações exigidas. Desvios desta
-   constituição DEVEM ser resolvidos ou submetidos ao procedimento de emenda antes da integração.
+   histórias de usuário, critérios de aceitação verificáveis (numéricos quando houver
+   cálculo) e limites do modelo, sem detalhes de tecnologia. Citar os `RB` atendidos e,
+   quando houver dependência de regras, a referência regulamentar.
+2. No planejamento, registrar as decisões técnicas (arquitetura, stack, dados, contratos),
+   as unidades físicas e a estratégia de testes, demonstrando a separação entre simulação
+   2D e apresentação 3D. Para inclusão de modalidades, documentar os pontos de extensão,
+   a direção das dependências e os módulos alterados.
+3. Gerar tarefas em fatias verticais por história de usuário, cada uma com caminho de
+   arquivo e os `FR` atendidos.
+4. Implementar por incrementos com TDD, com commits no formato do princípio VII.
+5. Na revisão, verificar rastreabilidade, critérios de aceitação, cobertura, convenções
+   de idioma, documentação das simplificações, isolamento das modalidades e ausência de
+   dependências do núcleo em modalidades ou na apresentação.
+6. Toda mudança entra por branch e pull request. Integrar somente após aprovação da
+   revisão e das verificações exigidas. Desvios desta constituição DEVEM ser resolvidos
+   ou submetidos ao procedimento de emenda antes da integração.
 
 ## Governança
 
@@ -151,11 +211,14 @@ O versionamento DEVE seguir o formato MAJOR.MINOR.PATCH: incrementar MAJOR ao re
 redefinir princípios de maneira incompatível; MINOR ao adicionar princípios ou seções,
 ou ampliar materialmente suas exigências; PATCH para esclarecimentos e correções sem
 mudança semântica. Toda emenda DEVE atualizar a versão e a data da última alteração,
-preservando a data da ratificação inicial.
+preservando a data da ratificação inicial, e registrar a mudança no histórico abaixo.
 
-As revisões DEVEM identificar especificações e demais artefatos afetados por emendas e
-registrar as adequações necessárias. O relatório de impacto no início do arquivo é
-material temporário de revisão e DEVE ser removido antes de confirmar a emenda no
-controle de versão.
+### Histórico de emendas
 
-**Versão**: 1.1.0 | **Ratificada em**: 2026-11-14 | **Última alteração**: 2026-11-14
+| Versão | Data       | Mudança                                                                                  |
+|--------|------------|------------------------------------------------------------------------------------------|
+| 1.0.0  | 2026-11-14 | Adoção inicial (princípios I a V).                                                       |
+| 1.1.0  | 2026-11-14 | Princípio IV ampliado para baixo acoplamento e extensibilidade de modalidades.           |
+| 1.2.0  | 2026-11-20 | Princípios VI (determinismo e física própria) e VII (rastreabilidade e cobertura) adicionados; escopo ampliado para simulador genérico com várias modalidades da RoboCore e foco da demo em Sumô; seção de stack adicionada; referências movidas para `docs/references/robocore/`; mensagens de commit em português. |
+
+**Versão**: 1.2.0 | **Ratificada em**: 2026-11-14 | **Última alteração**: 2026-11-20
