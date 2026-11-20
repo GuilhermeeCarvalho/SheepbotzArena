@@ -1,0 +1,35 @@
+{
+  "name": "sheepbotz-arena",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Simulador web de robôs móveis para a equipe Univille SheepBotz",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:perf": "vitest run --config vitest.perf.config.ts",
+    "lint": "eslint . && tsc --noEmit",
+    "format": "prettier --write .",
+    "sim": "tsx src/cli/main.ts",
+    "readme:stats": "node scripts/update-readme-stats.mjs"
+  },
+  "dependencies": {
+    "acorn": "^8.19.0",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^26.6.6",
+    "@vitest/coverage-v8": "^5.1.1",
+    "eslint": "^10.15.0",
+    "prettier": "^3.10.1",
+    "tsx": "^4.23.15",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.73.0",
+    "vitest": "^5.1.1"
+  }
+}
