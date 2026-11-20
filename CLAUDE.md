@@ -14,6 +14,6 @@ projetos herdadas de diretórios-pai; aqui valem apenas as regras abaixo.
   sem tarefa usa `docs: <descrição>`. Sempre em branch + pull request.
 - **Arquitetura**: `src/core` (puro, sem DOM/React/Three/`node:*`) ← `src/modalities/*`
   ← `src/app`; `src/cli` → `src/core`. Modalidades não dependem entre si.
-- **TDD obrigatório**; cobertura ≥ 80% (a suíte falha abaixo disso); atualizar o README
+- **Testes obrigatórios** para todo comportamento (TDD não é exigido); cobertura ≥ 80% (a suíte falha abaixo disso); atualizar o README
   com `npm run readme:stats` a cada entrega.
 - **Sem motor de física pronto**; tudo determinístico (seed e `dt` fixos).

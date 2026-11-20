@@ -49,7 +49,7 @@ Three.js ou `node:*`.
 |-----------|-------------|----------|
 | I. 2D com visualização 3D | Núcleo 2D puro; nenhuma renderização nesta feature; estado serializável para a feature 002. | ✅ |
 | II. Regras da RoboCore | Feature genérica, sem regra regulamentar; nenhum parâmetro de categoria é codificado no núcleo. | ✅ (não se aplica) |
-| III. TDD | Tarefas de teste precedem as de implementação em cada história; um teste por cenário numérico. | ✅ |
+| III. Testes dos critérios de aceitação | Cada história tem tarefas de teste e só fecha com os testes aprovados; um teste por cenário numérico. | ✅ |
 | IV. Baixo acoplamento | Contrato `Modality` no núcleo com registro injetado (D-14); regra de lint de dependências (D-15). | ✅ |
 | V. Idioma | Mensagens de erro e documentação em português; identificadores e campos do JSON em inglês. | ✅ |
 | VI. Determinismo e física própria | `dt` e seed fixos, fluxos aleatórios semeados (D-08), controlador sem relógio/aleatoriedade (D-09), cinemática e colisão próprias (D-01, D-05). | ✅ |
@@ -182,8 +182,8 @@ direção `app → modalities → core` e `cli → core`.
 | CLI | `run()` com argumentos e arquivos de fixture; códigos de término | `tests/unit/cli/` |
 | Desempenho | SC-004 como teste marcado (`perf`) fora da suíte padrão | `tests/perf/` |
 
-Ciclo TDD: cada tarefa de implementação tem uma tarefa de teste anterior na mesma
-história; o commit do teste vermelho e o do verde podem ser separados.
+Cada história tem suas tarefas de teste na mesma fase; teste e implementação podem ser
+escritos em qualquer ordem, mas o checkpoint da história exige a suíte aprovada.
 
 ## Unidades e constantes nomeadas
 

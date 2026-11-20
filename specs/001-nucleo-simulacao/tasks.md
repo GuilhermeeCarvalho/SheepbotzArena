@@ -9,8 +9,9 @@ description: "Lista de tarefas da feature 001 — Núcleo de simulação headles
 **Pré-requisitos**: [plan.md](./plan.md), [spec.md](./spec.md), [research.md](./research.md),
 [data-model.md](./data-model.md), [contracts/](./contracts/)
 
-**Testes**: obrigatórios (constitution, princípio III). Em cada história, as tarefas de
-teste vêm antes das de implementação e devem falhar antes de ela começar.
+**Testes**: obrigatórios (constitution, princípio III). Cada história tem suas tarefas
+de teste; a ordem entre teste e implementação é livre, mas a história só fecha com os
+testes aprovados.
 
 **Organização**: uma fase por história de usuário, em ordem de prioridade. Cada fase é uma
 fatia vertical: ao final, a história funciona e é testável sozinha.
@@ -234,7 +235,7 @@ exceção e usando recursos proibidos.
 
 ### Dentro de cada história
 
-Fixtures e testes → (testes vermelhos) → implementação → integração no pipeline → checkpoint.
+Fixtures → implementação e testes (em qualquer ordem) → integração no pipeline → testes aprovados → checkpoint.
 
 ### Oportunidades de paralelismo
 
@@ -294,6 +295,6 @@ Em seguida:  T030 → T031 → T032
 ## Notas
 
 - [P] = arquivos diferentes, sem dependências pendentes.
-- Verificar que os testes falham antes de implementar.
+- Uma história só é concluída com todos os seus testes aprovados.
 - Um commit por tarefa (ou por par teste/implementação), sempre citando ID e FR.
 - Parar em cada checkpoint para validar a história isoladamente.

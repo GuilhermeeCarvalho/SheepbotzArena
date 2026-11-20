@@ -32,12 +32,12 @@ as simplificações necessárias quando afetar a aplicação das regras.
 Alterações da referência DEVEM motivar revisão das especificações e dos testes afetados
 antes da incorporação de novos comportamentos regulamentares.
 
-### III. Desenvolvimento orientado por testes
+### III. Testes automatizados dos critérios de aceitação
 
-Todo comportamento novo ou alterado DEVE seguir TDD: escrever um teste que expresse o
-comportamento esperado, executá-lo e observar sua falha pelo motivo esperado, implementar
-o mínimo para fazê-lo passar e refatorar mantendo os testes aprovados.
-Correções de defeitos DEVEM começar por um teste que reproduza o problema.
+Todo comportamento novo ou alterado DEVE ser entregue com testes automatizados na mesma
+entrega. A ordem entre escrever o teste e o código é livre; uma história de usuário só é
+considerada concluída quando seus testes estão aprovados. Correções de defeitos DEVEM
+incluir um teste que reproduza o problema.
 
 Os testes DEVEM verificar comportamentos observáveis e critérios de aceitação, incluindo
 casos de fronteira pertinentes à física, aos sensores e à aplicação das regras.
@@ -188,7 +188,8 @@ navegador, para rodar igualmente no Node.js (testes e linha de comando) e no nav
    a direção das dependências e os módulos alterados.
 3. Gerar tarefas em fatias verticais por história de usuário, cada uma com caminho de
    arquivo e os `FR` atendidos.
-4. Implementar por incrementos com TDD, com commits no formato do princípio VII.
+4. Implementar por incrementos, cada um com seus testes, com commits no formato do
+   princípio VII.
 5. Na revisão, verificar rastreabilidade, critérios de aceitação, cobertura, convenções
    de idioma, documentação das simplificações, isolamento das modalidades e ausência de
    dependências do núcleo em modalidades ou na apresentação.
@@ -220,5 +221,6 @@ preservando a data da ratificação inicial, e registrar a mudança no históric
 | 1.0.0  | 2026-11-14 | Adoção inicial (princípios I a V).                                                       |
 | 1.1.0  | 2026-11-14 | Princípio IV ampliado para baixo acoplamento e extensibilidade de modalidades.           |
 | 1.2.0  | 2026-11-20 | Princípios VI (determinismo e física própria) e VII (rastreabilidade e cobertura) adicionados; escopo ampliado para simulador genérico com várias modalidades da RoboCore e foco da demo em Sumô; seção de stack adicionada; referências movidas para `docs/references/robocore/`; mensagens de commit em português. |
+| 2.0.0  | 2026-11-20 | Princípio III redefinido: TDD deixa de ser obrigatório; exige-se teste automatizado de todo comportamento e de todo critério de aceitação na mesma entrega, em qualquer ordem. |
 
-**Versão**: 1.2.0 | **Ratificada em**: 2026-11-14 | **Última alteração**: 2026-11-20
+**Versão**: 2.0.0 | **Ratificada em**: 2026-11-14 | **Última alteração**: 2026-11-20
