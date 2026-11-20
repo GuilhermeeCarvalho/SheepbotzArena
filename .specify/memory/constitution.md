@@ -163,10 +163,11 @@ de execução exige emenda desta seção.
 | Linguagem                  | TypeScript (modo `strict`), executado em Node.js 22+ e navegadores modernos |
 | Build e servidor de dev    | Vite                                                           |
 | Interface                  | React                                                          |
-| Visualização 3D            | Three.js (primitivas geométricas e controles de câmera orbital) |
-| Editor do controlador      | CodeMirror                                                     |
+| Visualização 3D            | Three.js via React Three Fiber (`@react-three/fiber`) e utilitários `@react-three/drei` (câmera orbital, grade); geometria procedural, sem modelos externos |
+| Biblioteca de componentes  | Própria, em `src/ui/`: tokens de design em variáveis CSS e componentes React estilizados com CSS Modules; ícones `lucide-react` |
+| Editor do controlador      | CodeMirror 6 (`codemirror`, linguagens JavaScript e JSON)      |
 | Validação do arquivo de mundo | Zod                                                         |
-| Testes e cobertura         | Vitest com cobertura V8                                        |
+| Testes e cobertura         | Vitest com cobertura V8; Testing Library e jsdom para componentes; `@react-three/test-renderer` para a cena 3D |
 | Qualidade                  | ESLint (incluindo regra de direção de dependências) e Prettier |
 | Formato do mundo           | JSON                                                           |
 | Linguagem do controlador   | JavaScript, executado contra uma API limitada                  |
@@ -175,6 +176,11 @@ de execução exige emenda desta seção.
 
 O núcleo de simulação NÃO DEVE depender de React, Three.js, DOM ou APIs exclusivas do
 navegador, para rodar igualmente no Node.js (testes e linha de comando) e no navegador.
+
+A interface DEVE reutilizar os componentes de `src/ui/` em vez de estilizar elementos
+avulsos; `src/ui/` é genérica e NÃO DEVE depender do núcleo, das modalidades nem da
+aplicação. Estilos usam os tokens de design (cores, espaçamentos, raios, tipografia)
+definidos uma única vez. Textos da interface ficam em português.
 
 ## Fluxo de desenvolvimento e revisão
 
@@ -222,5 +228,6 @@ preservando a data da ratificação inicial, e registrar a mudança no históric
 | 1.1.0  | 2026-11-14 | Princípio IV ampliado para baixo acoplamento e extensibilidade de modalidades.           |
 | 1.2.0  | 2026-11-20 | Princípios VI (determinismo e física própria) e VII (rastreabilidade e cobertura) adicionados; escopo ampliado para simulador genérico com várias modalidades da RoboCore e foco da demo em Sumô; seção de stack adicionada; referências movidas para `docs/references/robocore/`; mensagens de commit em português. |
 | 2.0.0  | 2026-11-20 | Princípio III redefinido: TDD deixa de ser obrigatório; exige-se teste automatizado de todo comportamento e de todo critério de aceitação na mesma entrega, em qualquer ordem. |
+| 2.1.0  | 2026-11-20 | Stack ampliada para a interface: React Three Fiber/drei, biblioteca de componentes própria (`src/ui/`, CSS Modules, lucide-react), CodeMirror 6 e ferramentas de teste de componentes; regra de reutilização e independência da biblioteca de componentes. |
 
-**Versão**: 2.0.0 | **Ratificada em**: 2026-11-14 | **Última alteração**: 2026-11-20
+**Versão**: 2.1.0 | **Ratificada em**: 2026-11-14 | **Última alteração**: 2026-11-20
