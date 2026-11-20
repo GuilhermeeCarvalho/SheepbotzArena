@@ -67,8 +67,14 @@ export default tseslint.config(
         'error',
         {
           patterns: [
-            { group: ['**/core/**', '**/core', 'src/core/**'], message: 'src/ui não depende do núcleo.' },
-            { group: ['**/modalities/**', '**/modalities'], message: 'src/ui não depende de modalidades.' },
+            {
+              group: ['**/core/**', '**/core', 'src/core/**'],
+              message: 'src/ui não depende do núcleo.',
+            },
+            {
+              group: ['**/modalities/**', '**/modalities'],
+              message: 'src/ui não depende de modalidades.',
+            },
             { group: ['**/app/**', '**/app'], message: 'src/ui não depende da aplicação.' },
           ],
         },

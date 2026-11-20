@@ -19,7 +19,16 @@ const world = worldData({
       { type: 'disc', center: [0, 0], radius: 0.5, reflectance: 0.1 },
       { type: 'ring', center: [0, 0], innerRadius: 0.45, outerRadius: 0.5, reflectance: 1 },
       { type: 'rect', center: [1, 1], width: 0.4, height: 0.2, reflectance: 0.5 },
-      { type: 'line', points: [[-1, -1], [1, -1], [1, -0.5]], width: 0.02, reflectance: 0.9 },
+      {
+        type: 'line',
+        points: [
+          [-1, -1],
+          [1, -1],
+          [1, -0.5],
+        ],
+        width: 0.02,
+        reflectance: 0.9,
+      },
     ],
   },
   obstacles: [
@@ -50,7 +59,15 @@ describe('cena 3D', () => {
     const renderer = await renderScene();
     const scene = renderer.scene;
     expect(scene.findByProps({ name: 'arena-floor' })).toBeDefined();
-    for (const id of ['arena:bottom', 'arena:top', 'arena:left', 'arena:right', 'pilar', 'caixa', 'parede']) {
+    for (const id of [
+      'arena:bottom',
+      'arena:top',
+      'arena:left',
+      'arena:right',
+      'pilar',
+      'caixa',
+      'parede',
+    ]) {
       expect(scene.findByProps({ name: id })).toBeDefined();
     }
     const pillar = scene.findByProps({ name: 'pilar' });
@@ -89,9 +106,15 @@ describe('cena 3D', () => {
   it('US6-AC2: anel de destaque e seleção por clique', async () => {
     const onSelect = vi.fn();
     const renderer = await renderScene({ selectedRobotId: 'r1' }, onSelect);
-    expect(renderer.scene.findByProps({ name: 'robot-r1' }).findAllByProps({ name: 'selection-ring' })).toHaveLength(1);
-    expect(renderer.scene.findByProps({ name: 'robot-r2' }).findAllByProps({ name: 'selection-ring' })).toHaveLength(0);
-    await renderer.fireEvent(renderer.scene.findByProps({ name: 'robot-r2' }), 'onClick', { stopPropagation: () => {} });
+    expect(
+      renderer.scene.findByProps({ name: 'robot-r1' }).findAllByProps({ name: 'selection-ring' }),
+    ).toHaveLength(1);
+    expect(
+      renderer.scene.findByProps({ name: 'robot-r2' }).findAllByProps({ name: 'selection-ring' }),
+    ).toHaveLength(0);
+    await renderer.fireEvent(renderer.scene.findByProps({ name: 'robot-r2' }), 'onClick', {
+      stopPropagation: () => {},
+    });
     expect(onSelect).toHaveBeenCalledWith('r2');
   });
 });

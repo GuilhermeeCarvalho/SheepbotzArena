@@ -173,7 +173,12 @@ describe('formulário e estado', () => {
 
   it('IssueList lista local e mensagem e some quando vazia', () => {
     const { rerender } = render(
-      <IssueList issues={[{ location: 'robots[0].radius', message: 'deve ser maior que 0' }, { message: 'geral' }]} />,
+      <IssueList
+        issues={[
+          { location: 'robots[0].radius', message: 'deve ser maior que 0' },
+          { message: 'geral' },
+        ]}
+      />,
     );
     expect(screen.getByRole('alert')).toHaveTextContent('Erros encontrados (2)');
     expect(screen.getByText('robots[0].radius')).toBeInTheDocument();
@@ -190,10 +195,22 @@ describe('CodeEditor', () => {
   it('mostra o valor, sincroniza mudanças externas e emite edições', async () => {
     const onChange = vi.fn();
     const { container, rerender } = render(
-      <CodeEditor value="function onTick(robot) {}" onChange={onChange} language="javascript" ariaLabel="Código" />,
+      <CodeEditor
+        value="function onTick(robot) {}"
+        onChange={onChange}
+        language="javascript"
+        ariaLabel="Código"
+      />,
     );
     expect(container.textContent).toContain('function onTick(robot) {}');
-    rerender(<CodeEditor value='{ "version": 1 }' onChange={onChange} language="javascript" ariaLabel="Código" />);
+    rerender(
+      <CodeEditor
+        value='{ "version": 1 }'
+        onChange={onChange}
+        language="javascript"
+        ariaLabel="Código"
+      />,
+    );
     expect(container.textContent).toContain('"version"');
     const content = screen.getByLabelText('Código');
     await userEvent.click(content);

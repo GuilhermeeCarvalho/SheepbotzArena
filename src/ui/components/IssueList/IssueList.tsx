@@ -4,7 +4,13 @@ import styles from './IssueList.module.css';
 export type IssueItem = { location?: string; message: string };
 
 /** Lista de erros de validação com local e mensagem. */
-export function IssueList({ issues, title = 'Erros encontrados' }: { issues: IssueItem[]; title?: string }) {
+export function IssueList({
+  issues,
+  title = 'Erros encontrados',
+}: {
+  issues: IssueItem[];
+  title?: string;
+}) {
   if (issues.length === 0) return null;
   return (
     <div className={styles.issues} role="alert">

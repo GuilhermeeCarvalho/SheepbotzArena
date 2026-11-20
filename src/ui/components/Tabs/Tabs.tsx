@@ -22,7 +22,12 @@ export function Tabs({ tabs, value, onChange, label, className }: TabsProps) {
     if (next) onChange(next.id);
   };
   return (
-    <div role="tablist" aria-label={label} className={cx(styles.tabs, className)} onKeyDown={onKeyDown}>
+    <div
+      role="tablist"
+      aria-label={label}
+      className={cx(styles.tabs, className)}
+      onKeyDown={onKeyDown}
+    >
       {tabs.map((tab) => {
         const selected = tab.id === value;
         return (

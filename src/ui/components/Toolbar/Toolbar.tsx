@@ -3,7 +3,15 @@ import { cx } from '../../cx';
 import styles from './Toolbar.module.css';
 
 /** Barra horizontal de ferramentas. */
-export function Toolbar({ children, className, label }: { children: ReactNode; className?: string; label?: string }) {
+export function Toolbar({
+  children,
+  className,
+  label,
+}: {
+  children: ReactNode;
+  className?: string;
+  label?: string;
+}) {
   return (
     <div role="toolbar" aria-label={label} className={cx(styles.toolbar, className)}>
       {children}

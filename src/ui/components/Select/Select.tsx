@@ -17,7 +17,15 @@ export type SelectProps = {
 };
 
 /** Seletor nativo estilizado. */
-export function Select({ label, hideLabel, options, value, onChange, disabled, className }: SelectProps) {
+export function Select({
+  label,
+  hideLabel,
+  options,
+  value,
+  onChange,
+  disabled,
+  className,
+}: SelectProps) {
   const id = useId();
   return (
     <div className={cx(styles.wrapper, className)}>
@@ -27,7 +35,13 @@ export function Select({ label, hideLabel, options, value, onChange, disabled, c
         </label>
       )}
       <div className={styles.control}>
-        <select id={id} className={styles.select} value={value} disabled={disabled} onChange={(e) => onChange(e.target.value)}>
+        <select
+          id={id}
+          className={styles.select}
+          value={value}
+          disabled={disabled}
+          onChange={(e) => onChange(e.target.value)}
+        >
           {options.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}

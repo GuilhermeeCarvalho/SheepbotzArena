@@ -13,7 +13,10 @@ export type SplitLayoutProps = {
 /** Área principal flexível com coluna lateral fixa. */
 export function SplitLayout({ main, aside, asideWidth = 420, className }: SplitLayoutProps) {
   return (
-    <div className={cx(styles.split, className)} style={{ gridTemplateColumns: `minmax(0, 1fr) ${asideWidth}px` }}>
+    <div
+      className={cx(styles.split, className)}
+      style={{ gridTemplateColumns: `minmax(0, 1fr) ${asideWidth}px` }}
+    >
       <div className={styles.main}>{main}</div>
       <aside className={styles.aside}>{aside}</aside>
     </div>
