@@ -168,7 +168,9 @@ examples/
 scripts/update-readme-stats.mjs   # atualiza a linha de testes e cobertura do README
 ```
 
-**Decisão de estrutura**: pacote único com fronteiras por diretório. `src/modalities/` e
+**Decisão de estrutura**: pacote único com fronteiras por diretório. O código de `src/`
+usa imports relativos (o alias `src/*` é usado só nos testes), porque a worker thread da
+CLI carrega o TypeScript com `tsx` sem resolução de aliases (`src/cli/worker-entry.mjs`). `src/modalities/` e
 `src/app/` serão criados pelas features 003 e 002. A regra de lint D-15 garante a
 direção `app → modalities → core` e `cli → core`.
 

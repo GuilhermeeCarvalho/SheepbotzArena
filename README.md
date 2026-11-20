@@ -1,7 +1,7 @@
 # SheepBotz Arena
 
 <!-- stats:start -->
-**0 testes · 0% de cobertura** — implementação ainda não iniciada
+**135 testes · 97,2% de cobertura** (linhas; relatório em [`coverage/`](coverage/index.html))
 <!-- stats:end -->
 
 Simulador web de robôs móveis para a equipe Univille SheepBotz, no espírito do
@@ -26,7 +26,7 @@ Projeto desenvolvido com **Spec-Driven Development** (GitHub SpecKit).
 
 | Feature | Situação |
 |---------|----------|
-| [001 — Núcleo de simulação headless](specs/001-nucleo-simulacao/) | spec, plano e tarefas prontos |
+| [001 — Núcleo de simulação headless](specs/001-nucleo-simulacao/) | ✅ implementada (58/58 tarefas) |
 | 002 — Visualização 3D e controles | planejada |
 | 003 — Modalidade Sumô | planejada |
 | 004 — Painel de inspeção e replay | planejada |
@@ -35,14 +35,44 @@ Projeto desenvolvido com **Spec-Driven Development** (GitHub SpecKit).
 
 ## Como rodar
 
-> Disponível a partir da implementação da feature 001.
+Requisitos: Node.js 22 ou superior.
 
 ```bash
 npm install
 npm test                  # suíte de testes
-npm run test:coverage     # cobertura (mínimo 80%), relatório em coverage/
-npm run sim -- <mundo.json> --ticks <N> --controller <robô>=<controlador.js>
+npm run test:coverage     # cobertura (falha abaixo de 80%), relatório em coverage/
+npm run readme:stats      # atualiza a linha de testes e cobertura deste README
+npm run test:perf         # desempenho (10 000 ticks, 4 robôs, laser de 30 raios)
+npm run lint              # ESLint (inclui direção de dependências) + TypeScript
 ```
+
+### Simulação sem interface (headless)
+
+```bash
+npm run sim -- <mundo.json> --ticks <N> [--controller <robô>=<arquivo.js>]... [--timeout-ms <ms>] [--pretty]
+
+# exemplos
+npm run sim -- examples/worlds/corridor.json --ticks 600 --pretty
+npm run sim -- tests/fixtures/worlds/laser-wall-3rays.json --ticks 0 --pretty
+```
+
+A saída é o estado final em JSON. Códigos de término: `0` sucesso, `1` uso incorreto,
+`2` mundo inválido, `3` controlador inválido, `4` tempo limite excedido
+([contrato](specs/001-nucleo-simulacao/contracts/cli.md)).
+
+### Escrevendo um controlador
+
+```js
+// Chamado uma vez por tick; variáveis de fora de onTick funcionam como memória.
+function onTick(robot) {
+  const ranges = robot.readLaser(); // da direita para a esquerda
+  const front = ranges[Math.floor(ranges.length / 2)];
+  robot.setSpeed(front < 0.5 ? 0 : 0.5, front < 0.5 ? 1.5 : 0); // v (m/s), w (rad/s)
+}
+```
+
+API completa em [`contracts/controller-api.md`](specs/001-nucleo-simulacao/contracts/controller-api.md);
+formato do mundo em [`contracts/world-file.md`](specs/001-nucleo-simulacao/contracts/world-file.md).
 
 ## Rastreabilidade
 

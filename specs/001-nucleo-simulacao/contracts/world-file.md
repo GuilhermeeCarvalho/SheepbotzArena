@@ -135,7 +135,9 @@ opcional):
 
 ## Regras semânticas (após o esquema)
 
-Executadas somente se o esquema for válido; todos os problemas são acumulados.
+A regra 1 roda sempre, mesmo com erros de esquema (para que um arquivo com vários
+problemas os apresente juntos); as regras 2 a 4 rodam somente se o esquema for válido.
+Todos os problemas são acumulados.
 
 1. `id` repetido entre robôs, entre obstáculos ou entre sensores do mesmo robô →
    `DUPLICATE_ID` no caminho da **segunda** ocorrência.
@@ -152,8 +154,9 @@ Executadas somente se o esquema for válido; todos os problemas são acumulados.
 { "path": "robots[0].sensors[1].type", "code": "UNKNOWN_TYPE", "message": "tipo de sensor desconhecido 'lidar3d'; use laser, sonar, bumper ou floor" }
 ```
 
-`path` usa notação de ponto e colchetes; erros da raiz usam `""`. Ao exibir para o
-usuário: `<path ou (raiz)>: <message>`, um por linha, na ordem em que aparecem no arquivo.
+`path` usa notação de ponto e colchetes; erros da raiz usam `""`. Os erros são ordenados
+pelo caminho (segmento a segmento; índices em ordem numérica crescente). Ao exibir para o
+usuário: `<path ou (raiz)>: <message>`, um por linha.
 
 ### Catálogo de códigos
 
@@ -163,6 +166,7 @@ usuário: `<path ou (raiz)>: <message>`, um por linha, na ordem em que aparecem 
 | `REQUIRED` | campo obrigatório ausente | `campo obrigatório ausente` |
 | `UNKNOWN_FIELD` | campo não previsto | `campo desconhecido '{nome}'` |
 | `INVALID_TYPE` | tipo errado | `esperado {tipo esperado}` |
+| `INVALID_FORMAT` | texto fora do formato (cor, identificador) | ex.: `cor inválida; use o formato #rgb ou #rrggbb` |
 | `OUT_OF_RANGE` | número fora do intervalo | ex.: `deve ser maior que 0`, `deve estar entre 0 e 1` |
 | `UNKNOWN_TYPE` | `type` desconhecido em sensor, obstáculo ou região | `tipo de {elemento} desconhecido '{valor}'; use {opções}` |
 | `INVALID_GEOMETRY` | parede de comprimento 0, anel inválido, linha com < 2 pontos | descreve a geometria |
@@ -171,3 +175,4 @@ usuário: `<path ou (raiz)>: <message>`, um por linha, na ordem em que aparecem 
 | `UNKNOWN_MODALITY` | modalidade não registrada | `modalidade desconhecida '{m}'` |
 | `OUT_OF_ARENA` | pose inicial fora da arena | `robô '{id}' começa fora da arena` |
 | `INITIAL_OVERLAP` | sobreposição inicial | `robô '{id}' começa sobreposto a {elemento}` |
+| `MODALITY_RULE` | regra própria de uma modalidade (contrato `modality.md`) | definida pela modalidade |
