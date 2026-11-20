@@ -11,3 +11,6 @@ if (typeof Range !== 'undefined') {
   Range.prototype.getClientRects = () => Object.assign([], { item: () => null }) as unknown as DOMRectList;
   Range.prototype.getBoundingClientRect = () => emptyRect as DOMRect;
 }
+
+// Habilita act() do React fora do Testing Library (ex.: @react-three/test-renderer).
+(globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
