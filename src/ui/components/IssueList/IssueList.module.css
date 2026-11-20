@@ -1,5 +1,5 @@
 .issues {
-  border: 1px solid rgba(248, 113, 113, 0.35);
+  border: 1px solid var(--color-danger-border);
   border-radius: var(--radius-sm);
   background: var(--color-danger-soft);
   padding: var(--space-3);
@@ -10,12 +10,12 @@
   gap: var(--space-2);
   margin: 0 0 var(--space-2);
   font-size: var(--text-sm);
-  font-weight: 650;
+  font-weight: 600;
   color: var(--color-danger);
 }
 .title svg {
-  width: 15px;
-  height: 15px;
+  width: 14px;
+  height: 14px;
 }
 .list {
   margin: 0;
@@ -32,12 +32,14 @@
   flex-wrap: wrap;
   gap: var(--space-2);
   font-size: var(--text-sm);
+  color: var(--color-text);
 }
 .location {
   font-family: var(--font-mono);
   font-size: var(--text-xs);
-  color: var(--color-text);
-  background: rgba(0, 0, 0, 0.25);
-  padding: 1px 6px;
+  color: var(--color-danger);
+  background: var(--color-surface);
+  border: 1px solid var(--color-danger-border);
+  padding: 0 5px;
   border-radius: 4px;
 }

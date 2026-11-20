@@ -53,3 +53,26 @@ function buildSceneModel(
 - Paredes de borda: 4 caixas de espessura 0,04 m centradas nas bordas da arena.
 - `rotationY` de caixas = ângulo da simulação; de paredes = `atan2(dy, dx)` do segmento.
 - Câmera inicial: alvo no centro; posição `[0, 0,7·L, 0,7·L]` com `L = max(largura, altura)`.
+
+## Modos de câmera (FR-015)
+
+```ts
+type CameraMode = 'perspective' | 'top' | 'follow';
+type CameraPose = { position: Vec3; target: Vec3 };
+
+function framingDistance(width: number, depth: number, aspect: number, elevation: number, fovDeg = 45): number;
+function fitPerspectiveCamera(width: number, depth: number, aspect: number): CameraPose; // 45° de elevação
+function fitTopCamera(width: number, depth: number, aspect: number): CameraPose;
+function followCamera(robot: { position; rotationY; radius }): CameraPose;   // atrás e acima do robô
+const followDistance = (radius: number) => Math.max(0.6, 8 * radius);
+```
+
+`framingDistance` escolhe a maior distância entre a necessária para a largura caber no
+campo de visão horizontal e para a profundidade (encurtada por `sin(elevação)`) caber no
+vertical, com margem de 30%.
+
+## Rótulos (FR-016)
+
+O nome do robô sob o mouse e do selecionado aparece numa camada DOM sobre o canvas; a
+posição na tela vem da projeção do ponto acima do robô pela câmera, a cada quadro
+(`RobotLabelProjector`).

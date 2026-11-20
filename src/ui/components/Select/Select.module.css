@@ -26,11 +26,12 @@
 .select {
   appearance: none;
   width: 100%;
-  height: 34px;
-  padding: 0 32px 0 var(--space-3);
+  height: 32px;
+  padding: 0 30px 0 10px;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
-  background: var(--color-surface-raised);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
   cursor: pointer;
   text-overflow: ellipsis;
 }
@@ -43,11 +44,11 @@
 }
 .chevron {
   position: absolute;
-  right: 10px;
+  right: 9px;
   top: 50%;
-  width: 15px;
-  height: 15px;
+  width: 14px;
+  height: 14px;
   transform: translateY(-50%);
   pointer-events: none;
-  color: var(--color-text-muted);
+  color: var(--color-text-subtle);
 }

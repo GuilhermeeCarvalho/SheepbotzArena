@@ -101,6 +101,14 @@ Commits: `<tipo>(002/<ID>): <descrição> [<FR>, ...]`.
 - [x] T030 Validar `quickstart.md` no navegador (`npm run dev`, `npm run build`) (todos os FR)
 - [x] T031 Atualizar README (como abrir a interface) e estatísticas de testes/cobertura (constitution, princípio VII)
 
+## Fase 10: Revisão visual e história 7 (pedido da equipe)
+
+- [x] T032 Reescrever `src/ui/tokens.css` e os componentes para o tema claro neutro (abas sublinhadas, títulos sem caixa alta, botão primário grafite), trocar o tema do `CodeEditor` (FR-013)
+- [x] T033 [P] [US7] Implementar `perspectiveCamera`, `topCamera` e `followCamera` em `src/app/scene/sceneModel.ts` com testes `US7-AC1` a `US7-AC3` (FR-015)
+- [x] T034 [US7] Reestruturar a tela: cena em tela cheia, `TransportBar` e `CameraControls` flutuantes, `SceneHud`, painel lateral recolhível (FR-005, FR-014, FR-015)
+- [x] T035 [US7] Rótulo do robô ao passar o mouse e seleção por clique abrindo o controlador; modo "Seguir" no `CameraRig` (FR-015, FR-016)
+- [x] T036 Atualizar testes de componentes e de integração para o novo layout e validar no navegador (FR-013 a FR-016)
+
 ## Dependências
 
 Preparação → Fundação (biblioteca) → US1 → US2 → US3 → US4 → US5 → US6 → Acabamento.
@@ -122,5 +130,7 @@ US4 e US5 dependem da sessão (US2). Tarefas [P] da fundação podem rodar em pa
 | FR-010 | T023, T024 |
 | FR-011 | T008, T025, T026 |
 | FR-012 | T026, T027, T028 |
-| FR-013 | T004 a T009, T029 |
-| FR-014 | T006, T029 |
+| FR-013 | T004 a T009, T029, T032, T036 |
+| FR-014 | T006, T029, T034 |
+| FR-015 | T033, T034, T035 |
+| FR-016 | T035, T036 |

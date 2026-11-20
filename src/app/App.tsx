@@ -1,19 +1,24 @@
 import { Bot, Code2, Globe2 } from 'lucide-react';
 import { type ReactNode, useCallback, useEffect, useState } from 'react';
-import { Panel, SplitLayout, Tabs } from '../ui/index';
+import { SplitLayout, Tabs } from '../ui/index';
 import { type Example, loadBundledExamples } from './examples/examples';
 import { AppShell } from './layout/AppShell';
 import shellStyles from './layout/AppShell.module.css';
-import { StatusBar } from './layout/StatusBar';
+import { CameraControls } from './layout/CameraControls';
+import { SceneHud } from './layout/SceneHud';
 import { TopBar } from './layout/TopBar';
+import { TransportBar } from './layout/TransportBar';
 import { ControllerPanel } from './panels/ControllerPanel';
 import { RobotList } from './panels/RobotList';
 import { WorldPanel } from './panels/WorldPanel';
+import type { CameraMode } from './scene/sceneModel';
 import { Viewport } from './scene/Viewport';
 import { createSession } from './session/session';
 import { useSimulationSession } from './session/useSimulationSession';
 
 type SideTab = 'controller' | 'world' | 'robots';
+
+const SIDE_PANEL_WIDTH = 420;
 
 const isTypingTarget = (target: EventTarget | null): boolean =>
   target instanceof HTMLElement &&
@@ -28,7 +33,9 @@ export function App({ examples = loadBundledExamples() }: { examples?: Example[]
     return createSession(first.worldText, first.controllers, first.id);
   });
   const [tab, setTab] = useState<SideTab>('controller');
+  const [sidePanelOpen, setSidePanelOpen] = useState(true);
   const [showRays, setShowRays] = useState(true);
+  const [cameraMode, setCameraMode] = useState<CameraMode>('perspective');
   const [selected, setSelected] = useState<string | null>(session.world.robots[0]?.id ?? null);
   const [resetViewSignal, setResetViewSignal] = useState(0);
 
@@ -37,6 +44,8 @@ export function App({ examples = loadBundledExamples() }: { examples?: Example[]
   const selectedRobotId =
     selected !== null && robotIds.includes(selected) ? selected : (robotIds[0] ?? null);
   const finished = session.state.match?.phase === 'finished';
+  const effectiveCameraMode: CameraMode =
+    cameraMode === 'follow' && selectedRobotId === null ? 'perspective' : cameraMode;
 
   const togglePlay = useCallback(
     () => (session.running ? actions.pause() : actions.play()),
@@ -65,47 +74,45 @@ export function App({ examples = loadBundledExamples() }: { examples?: Example[]
     if (example) actions.applyWorld(example.worldText, example.controllers, example.id);
   };
 
-  const controllerIssues = session.controllerIssues;
-  const sidePanels: Record<SideTab, { title: string; content: ReactNode }> = {
-    controller: {
-      title: 'Controlador',
-      content: (
-        <ControllerPanel
-          key={`${session.worldText}|${selectedRobotId}|${selectedRobotId ? session.controllers[selectedRobotId] : ''}`}
-          world={session.world}
-          robotId={selectedRobotId}
-          source={selectedRobotId ? session.controllers[selectedRobotId] : undefined}
-          issues={controllerIssues}
-          onSelectRobot={setSelected}
-          onApply={(robotId, source) => actions.applyController(robotId, source)}
-        />
-      ),
-    },
-    world: {
-      title: 'Mundo',
-      content: (
-        <WorldPanel
-          key={session.worldText}
-          worldText={session.worldText}
-          issues={session.worldIssues}
-          onApply={(text) => actions.applyWorld(text)}
-        />
-      ),
-    },
-    robots: {
-      title: 'Robôs',
-      content: (
-        <RobotList
-          world={session.world}
-          robots={session.state.robots}
-          selectedRobotId={selectedRobotId}
-          onSelect={setSelected}
-        />
-      ),
-    },
+  /** Clique num robô na cena: seleciona e abre o controlador dele (FR-016). */
+  const selectRobotFromScene = (id: string | null) => {
+    if (id === null) return;
+    setSelected(id);
+    setTab('controller');
+    setSidePanelOpen(true);
   };
 
+  const controllerIssues = session.controllerIssues;
   const errorCount = session.state.robots.filter((r) => r.status === 'error').length;
+  const sidePanels: Record<SideTab, ReactNode> = {
+    controller: (
+      <ControllerPanel
+        key={`${session.worldText}|${selectedRobotId}|${selectedRobotId ? session.controllers[selectedRobotId] : ''}`}
+        world={session.world}
+        robotId={selectedRobotId}
+        source={selectedRobotId ? session.controllers[selectedRobotId] : undefined}
+        issues={controllerIssues}
+        onSelectRobot={setSelected}
+        onApply={(robotId, source) => actions.applyController(robotId, source)}
+      />
+    ),
+    world: (
+      <WorldPanel
+        key={session.worldText}
+        worldText={session.worldText}
+        issues={session.worldIssues}
+        onApply={(text) => actions.applyWorld(text)}
+      />
+    ),
+    robots: (
+      <RobotList
+        world={session.world}
+        robots={session.state.robots}
+        selectedRobotId={selectedRobotId}
+        onSelect={setSelected}
+      />
+    ),
+  };
 
   return (
     <AppShell
@@ -114,68 +121,79 @@ export function App({ examples = loadBundledExamples() }: { examples?: Example[]
           examples={examples}
           exampleId={session.exampleId}
           onSelectExample={selectExample}
-          running={session.running}
-          finished={finished}
-          speed={session.speed}
-          showRays={showRays}
-          onPlay={actions.play}
-          onPause={actions.pause}
-          onStep={actions.step}
-          onReset={actions.reset}
-          onSpeedChange={actions.setSpeed}
-          onShowRaysChange={setShowRays}
-          onResetView={() => setResetViewSignal((n) => n + 1)}
+          sidePanelOpen={sidePanelOpen}
+          onToggleSidePanel={() => setSidePanelOpen((open) => !open)}
         />
       }
     >
       <SplitLayout
-        asideWidth={440}
+        asideWidth={sidePanelOpen ? SIDE_PANEL_WIDTH : 0}
         main={
-          <>
+          <div className={shellStyles.stage}>
             <Viewport
               world={session.world}
               state={session.state}
               showRays={showRays}
               selectedRobotId={selectedRobotId}
-              onSelectRobot={(id) => id !== null && setSelected(id)}
+              onSelectRobot={selectRobotFromScene}
+              cameraMode={effectiveCameraMode}
               resetViewSignal={resetViewSignal}
             />
-            <StatusBar
-              tick={session.state.tick}
-              time={session.state.time}
+            <SceneHud
+              worldName={session.world.name}
               running={session.running}
               robotCount={session.world.robots.length}
               match={session.state.match}
             />
-          </>
+            <CameraControls
+              mode={effectiveCameraMode}
+              canFollow={selectedRobotId !== null}
+              showRays={showRays}
+              onModeChange={setCameraMode}
+              onShowRaysChange={setShowRays}
+              onResetView={() => setResetViewSignal((n) => n + 1)}
+            />
+            <TransportBar
+              running={session.running}
+              finished={finished}
+              speed={session.speed}
+              tick={session.state.tick}
+              time={session.state.time}
+              onPlay={actions.play}
+              onPause={actions.pause}
+              onStep={actions.step}
+              onReset={actions.reset}
+              onSpeedChange={actions.setSpeed}
+            />
+          </div>
         }
         aside={
-          <>
-            <Tabs
-              label="Painéis"
-              className={shellStyles.sideTabs}
-              value={tab}
-              onChange={(id) => setTab(id as SideTab)}
-              tabs={[
-                {
-                  id: 'controller',
-                  label: 'Controlador',
-                  icon: <Code2 />,
-                  badge: controllerIssues.length || undefined,
-                },
-                {
-                  id: 'world',
-                  label: 'Mundo',
-                  icon: <Globe2 />,
-                  badge: session.worldIssues.length || undefined,
-                },
-                { id: 'robots', label: 'Robôs', icon: <Bot />, badge: errorCount || undefined },
-              ]}
-            />
-            <Panel className={shellStyles.sidePanel} title={sidePanels[tab].title}>
-              {sidePanels[tab].content}
-            </Panel>
-          </>
+          sidePanelOpen && (
+            <>
+              <Tabs
+                label="Painéis"
+                className={shellStyles.sideTabs}
+                value={tab}
+                onChange={(id) => setTab(id as SideTab)}
+                tabs={[
+                  {
+                    id: 'controller',
+                    label: 'Controlador',
+                    icon: <Code2 />,
+                    badge: controllerIssues.length || undefined,
+                  },
+                  {
+                    id: 'world',
+                    label: 'Mundo',
+                    icon: <Globe2 />,
+                    badge: session.worldIssues.length || undefined,
+                  },
+                  { id: 'robots', label: 'Robôs', icon: <Bot />, badge: errorCount || undefined },
+                ]}
+              />
+              <div className={shellStyles.sidePanel}>{sidePanels[tab]}</div>
+            </>
+          )
         }
       />
     </AppShell>

@@ -8,7 +8,11 @@
 .workspace {
   flex: 1;
   min-height: 0;
-  padding: var(--space-3);
+}
+.stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
 }
 .sideTabs {
   flex-shrink: 0;
@@ -16,4 +20,6 @@
 .sidePanel {
   flex: 1;
   min-height: 0;
+  overflow: auto;
+  padding: var(--space-4);
 }

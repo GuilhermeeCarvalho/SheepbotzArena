@@ -1,5 +1,6 @@
-import type { RobotMesh as RobotDescriptor } from './sceneModel';
+import { useEffect, useState } from 'react';
 import { SCENE_COLORS } from './palette';
+import type { RobotMesh as RobotDescriptor } from './sceneModel';
 
 /**
  * Robô de tração diferencial: chassi com o diâmetro de colisão, duas rodas laterais,
@@ -8,11 +9,18 @@ import { SCENE_COLORS } from './palette';
 export function RobotMesh({
   robot,
   onSelect,
+  onHoverChange,
 }: {
   robot: RobotDescriptor;
   onSelect?: (id: string) => void;
+  /** Informa quando o mouse entra (id) ou sai (null) do robô (FR-016). */
+  onHoverChange?: (id: string | null) => void;
 }) {
   const { radius: r, bodyHeight: h } = robot;
+  const [hovered, setHovered] = useState(false);
+  useEffect(() => {
+    onHoverChange?.(hovered ? robot.id : null);
+  }, [hovered, onHoverChange, robot.id]);
   const wheelRadius = h * 0.45;
   const wheelWidth = r * 0.22;
   const chassisColor = robot.status === 'error' ? SCENE_COLORS.error : robot.color;
@@ -25,6 +33,11 @@ export function RobotMesh({
         event.stopPropagation();
         onSelect?.(robot.id);
       }}
+      onPointerOver={(event) => {
+        event.stopPropagation();
+        setHovered(true);
+      }}
+      onPointerOut={() => setHovered(false)}
     >
       {/* Chassi */}
       <mesh name="chassis" position={[0, h * 0.05, 0]} castShadow receiveShadow>
@@ -34,7 +47,7 @@ export function RobotMesh({
       {/* Tampa */}
       <mesh position={[0, h * 0.42, 0]} castShadow>
         <cylinderGeometry args={[r * 0.78, r * 0.9, h * 0.08, 48]} />
-        <meshStandardMaterial color="#111827" roughness={0.3} metalness={0.3} />
+        <meshStandardMaterial color="#2b2d31" roughness={0.35} metalness={0.25} />
       </mesh>
       {/* Rodas (eixo lateral: y da simulação = −z local) */}
       {[-1, 1].map((side) => (
@@ -65,7 +78,7 @@ export function RobotMesh({
           rotation={[-Math.PI / 2, 0, 0]}
         >
           <ringGeometry args={[r * 1.25, r * 1.42, 64]} />
-          <meshBasicMaterial color={SCENE_COLORS.selection} transparent opacity={0.9} />
+          <meshBasicMaterial color={SCENE_COLORS.selection} transparent opacity={0.95} />
         </mesh>
       )}
     </group>

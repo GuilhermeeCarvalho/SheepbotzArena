@@ -2,6 +2,14 @@
 import { describe, expect, it } from 'vitest';
 import {
   buildSceneModel,
+  CAMERA_FOV_DEG,
+  fitPerspectiveCamera,
+  fitTopCamera,
+  framingDistance,
+  followCamera,
+  followDistance,
+  perspectiveCamera,
+  topCamera,
   OBSTACLE_HEIGHT,
   reflectanceColor,
   robotBodyHeight,
@@ -212,5 +220,53 @@ describe('US6 — destaque', () => {
       { selectedRobotId: 'r2' },
     );
     expect(model.robots.map((r) => r.selected)).toEqual([false, true]);
+  });
+});
+
+describe('US7 — modos de câmera', () => {
+  it('US7-AC1: topo sobre o centro, olhando para baixo, enquadrando a arena', () => {
+    const pose = topCamera(4);
+    expect(pose.target).toEqual([0, 0, 0]);
+    expect(pose.position[0]).toBe(0);
+    expect(pose.position[1]).toBe(5);
+    expect(Math.abs(pose.position[2])).toBeLessThan(0.01);
+  });
+
+  it('US7-AC2: seguir fica atrás e acima do robô e mira o robô', () => {
+    const robot = { position: toScene(1, 0, 0.04), rotationY: 0, radius: 0.1 };
+    const pose = followCamera(robot);
+    const d = followDistance(0.1);
+    expect(d).toBeCloseTo(0.8, 9);
+    expect(pose.target).toEqual(robot.position);
+    expectVec(pose.position, [1 - d, 0.04 + d / 2, 0]);
+    // Robô virado para +y da simulação: a câmera fica no −y (z positivo no Three.js).
+    const turned = followCamera({ ...robot, rotationY: PI / 2 });
+    expectVec(turned.position, [1, 0.04 + d / 2, d]);
+  });
+
+  it('distância mínima para robôs pequenos e perspectiva padrão', () => {
+    expect(followDistance(0.02)).toBe(0.6);
+    expect(perspectiveCamera(10)).toEqual({ position: [0, 7, 7], target: [0, 0, 0] });
+  });
+});
+
+describe('enquadramento pela proporção da tela', () => {
+  it('a largura cabe no campo de visão horizontal e a profundidade no vertical', () => {
+    const halfV = (CAMERA_FOV_DEG * PI) / 360;
+    // Topo, tela quadrada, arena 6 × 2: a largura manda.
+    const d = framingDistance(6, 2, 1, PI / 2);
+    expect(d).toBeCloseTo((1.3 * 3) / Math.tan(halfV), 9);
+    // Tela larga (aspecto 3): a profundidade passa a mandar.
+    const wide = framingDistance(2, 4, 3, PI / 2);
+    expect(wide).toBeCloseTo((1.3 * 2) / Math.tan(halfV), 9);
+  });
+
+  it('câmeras ajustadas olham para o centro', () => {
+    const perspective = fitPerspectiveCamera(4, 3, 1.5);
+    expect(perspective.target).toEqual([0, 0, 0]);
+    expect(perspective.position[1]).toBeCloseTo(perspective.position[2], 9); // 45°
+    const top = fitTopCamera(4, 3, 1.5);
+    expect(top.position[0]).toBe(0);
+    expect(top.position[1]).toBeGreaterThan(0);
   });
 });

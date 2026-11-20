@@ -29,15 +29,22 @@ export const StaticSceneContent = memo(function StaticSceneContent({
 export function DynamicSceneContent({
   scene,
   onSelectRobot,
+  onHoverRobot,
 }: {
   scene: DynamicScene;
   onSelectRobot?: (id: string) => void;
+  onHoverRobot?: (id: string | null) => void;
 }) {
   return (
     <>
       <group name="robots">
         {scene.robots.map((robot) => (
-          <RobotMesh key={robot.id} robot={robot} onSelect={onSelectRobot} />
+          <RobotMesh
+            key={robot.id}
+            robot={robot}
+            onSelect={onSelectRobot}
+            onHoverChange={onHoverRobot}
+          />
         ))}
       </group>
       <SensorRays rays={scene.rays} />

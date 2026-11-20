@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for app/layout/StatusBar.tsx</title>
+    <title>Code coverage report for app/layout/CameraControls.tsx</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../prettify.css" />
     <link rel="stylesheet" href="../../base.css" />
@@ -30,34 +30,34 @@
             </select>
         </label>
 
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">app/layout</a> StatusBar.tsx</h1>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">app/layout</a> CameraControls.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>1/1</span>
+                <span class='fraction'>3/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">35.71% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>5/14</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/1</span>
+                <span class='fraction'>3/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>1/1</span>
+                <span class='fraction'>3/3</span>
             </div>
         
             
@@ -108,21 +108,17 @@
 <a name='L32'></a><a href='#L32'>32</a>
 <a name='L33'></a><a href='#L33'>33</a>
 <a name='L34'></a><a href='#L34'>34</a>
-<a name='L35'></a><a href='#L35'>35</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">32x</span>
+<a name='L35'></a><a href='#L35'>35</a>
+<a name='L36'></a><a href='#L36'>36</a>
+<a name='L37'></a><a href='#L37'>37</a>
+<a name='L38'></a><a href='#L38'>38</a>
+<a name='L39'></a><a href='#L39'>39</a>
+<a name='L40'></a><a href='#L40'>40</a>
+<a name='L41'></a><a href='#L41'>41</a>
+<a name='L42'></a><a href='#L42'>42</a>
+<a name='L43'></a><a href='#L43'>43</a>
+<a name='L44'></a><a href='#L44'>44</a>
+<a name='L45'></a><a href='#L45'>45</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -138,42 +134,76 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">43x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Badge, Stat, StatusDot } from '../../ui/index';
-import type { MatchStatus } from '../../core/index';
-import styles from './StatusBar.module.css';
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Box, Crosshair, LocateFixed, Radar, Square } from 'lucide-react';
+import { IconButton, SegmentedControl } from '../../ui/index';
+import type { CameraMode } from '../scene/sceneModel';
+import styles from './overlays.module.css';
 &nbsp;
-export type StatusBarProps = {
-  tick: number;
-  time: number;
-  running: boolean;
-  robotCount: number;
-  match: MatchStatus | null;
+export type CameraControlsProps = {
+  mode: CameraMode;
+  canFollow: boolean;
+  showRays: boolean;
+  onModeChange: (mode: CameraMode) =&gt; void;
+  onShowRaysChange: (show: boolean) =&gt; void;
+  onResetView: () =&gt; void;
 };
 &nbsp;
-/** Barra de status: tick, tempo simulado, modo e resultado da partida (FR-005, FR-008). */
-export function StatusBar({ tick, time, running, robotCount, match }: StatusBarProps) {
+/** Modos de câmera e opções de visualização sobre a cena (FR-003, FR-004, FR-015). */
+export function CameraControls(props: CameraControlsProps) {
   return (
-    &lt;footer className={styles.statusBar} aria-label="Estado da simulação"&gt;
-      &lt;StatusDot
-        tone={running ? 'success' : 'neutral'}
-        label={running ? 'Executando' : 'Pausado'}
-        pulse={running}
+    &lt;div className={styles.cameraControls}&gt;
+      &lt;SegmentedControl
+        label="Câmera"
+        value={props.mode}
+        onChange={(value) =&gt; props.onModeChange(value as CameraMode)}
+        options={[
+          { value: 'perspective', label: &lt;Box aria-hidden="true" /&gt;, title: 'Perspectiva' },
+          { value: 'top', label: &lt;Square aria-hidden="true" /&gt;, title: 'Topo' },
+          {
+            value: 'follow',
+            label: &lt;LocateFixed aria-hidden="true" /&gt;,
+            title: 'Seguir robô selecionado',
+            disabled: !props.canFollow,
+          },
+        ]}
       /&gt;
-      &lt;Stat label="Tick" value={tick} /&gt;
-      &lt;Stat label="Tempo" value={time.toFixed(2).replace('.', ',')} unit="s" /&gt;
-      &lt;Stat label="Robôs" value={robotCount} /&gt;
-      {match &amp;&amp; (
-<span class="branch-1 cbranch-no" title="branch not covered" >        &lt;Badge tone={match.phase === 'finished' ? 'success' : 'info'}&gt;</span>
-          {match.phase === 'finished'
-            ? `Fim de partida${match.winner ? ` — vencedor: ${match.winner}` : ''}${match.reason ? ` (${match.reason})` : ''}`
-            : 'Partida em andamento'}
-        &lt;/Badge&gt;
-      )}
-    &lt;/footer&gt;
+      &lt;span className={styles.separator} aria-hidden="true" /&gt;
+      &lt;IconButton
+        label={props.showRays ? 'Ocultar raios' : 'Mostrar raios'}
+        icon={&lt;Radar /&gt;}
+        active={props.showRays}
+        onClick={() =&gt; props.onShowRaysChange(!props.showRays)}
+      /&gt;
+      &lt;IconButton label="Centralizar vista" icon={&lt;Crosshair /&gt;} onClick={props.onResetView} /&gt;
+    &lt;/div&gt;
   );
 }
 &nbsp;</pre></td></tr></table></pre>
@@ -183,7 +213,7 @@ export function StatusBar({ tick, time, running, robotCount, match }: StatusBarP
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://vitest.dev/" target="_blank" rel="noopener noreferrer">Vitest</a>
-                at 2026-11-20T20:50:06.288Z
+                at 2026-11-20T20:58:27.007Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

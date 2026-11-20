@@ -18,4 +18,9 @@ export { Badge, type Tone } from './components/Badge/Badge';
 export { StatusDot } from './components/StatusDot/StatusDot';
 export { Stat } from './components/Stat/Stat';
 export { IssueList, type IssueItem } from './components/IssueList/IssueList';
+export {
+  SegmentedControl,
+  type SegmentOption,
+  type SegmentedControlProps,
+} from './components/SegmentedControl/SegmentedControl';
 export { CodeEditor, type CodeEditorProps } from './components/CodeEditor/CodeEditor';

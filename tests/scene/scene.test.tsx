@@ -42,14 +42,18 @@ const world = worldData({
   ],
 });
 
-async function renderScene(options = {}, onSelect?: (id: string) => void) {
+async function renderScene(
+  options = {},
+  onSelect?: (id: string) => void,
+  onHover?: (id: string | null) => void,
+) {
   const simulation = buildSimulation(world);
   const staticScene = buildStaticScene(simulation.world);
   const dynamicScene = buildDynamicScene(simulation.world, simulation.getState(), options);
   return ReactThreeTestRenderer.create(
     <>
       <StaticSceneContent scene={staticScene} />
-      <DynamicSceneContent scene={dynamicScene} onSelectRobot={onSelect} />
+      <DynamicSceneContent scene={dynamicScene} onSelectRobot={onSelect} onHoverRobot={onHover} />
     </>,
   );
 }
@@ -116,5 +120,15 @@ describe('cena 3D', () => {
       stopPropagation: () => {},
     });
     expect(onSelect).toHaveBeenCalledWith('r2');
+  });
+
+  it('US7-AC4: passar o mouse sobre o robô informa qual robô', async () => {
+    const onHover = vi.fn();
+    const renderer = await renderScene({}, undefined, onHover);
+    const robot = renderer.scene.findByProps({ name: 'robot-r2' });
+    await renderer.fireEvent(robot, 'onPointerOver', { stopPropagation: () => {} });
+    expect(onHover).toHaveBeenLastCalledWith('r2');
+    await renderer.fireEvent(robot, 'onPointerOut');
+    expect(onHover).toHaveBeenLastCalledWith(null);
   });
 });

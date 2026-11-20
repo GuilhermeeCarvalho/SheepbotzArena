@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 // Biblioteca de componentes (tasks 002 T009; FR-013).
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Play } from 'lucide-react';
 import { useState } from 'react';
@@ -16,6 +16,7 @@ import {
   IssueList,
   Kbd,
   Panel,
+  SegmentedControl,
   Select,
   SplitLayout,
   Stat,
@@ -218,5 +219,29 @@ describe('CodeEditor', () => {
     expect(onChange).toHaveBeenCalled();
     rerender(<CodeEditor value="{}" onChange={onChange} language="json" ariaLabel="Mundo" />);
     expect(screen.getByLabelText('Mundo')).toBeInTheDocument();
+  });
+});
+
+describe('SegmentedControl', () => {
+  it('seleciona por clique, respeita desabilitado e usa o título como nome', async () => {
+    const onChange = vi.fn();
+    render(
+      <SegmentedControl
+        label="Câmera"
+        value="a"
+        onChange={onChange}
+        options={[
+          { value: 'a', label: 'A' },
+          { value: 'b', label: <Play />, title: 'Topo' },
+          { value: 'c', label: 'C', disabled: true },
+        ]}
+      />,
+    );
+    const group = screen.getByRole('radiogroup', { name: 'Câmera' });
+    expect(within(group).getByRole('radio', { name: 'A' })).toHaveAttribute('aria-checked', 'true');
+    await userEvent.click(within(group).getByRole('radio', { name: 'Topo' }));
+    expect(onChange).toHaveBeenCalledWith('b');
+    await userEvent.click(within(group).getByRole('radio', { name: 'C' }));
+    expect(onChange).toHaveBeenCalledTimes(1);
   });
 });

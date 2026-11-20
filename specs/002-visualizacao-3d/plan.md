@@ -118,17 +118,28 @@ tests/
 futura (features 003 a 005); `src/app` organiza por responsabilidade (sessão, cena,
 painéis, layout). Componentes exportados por nome; CSS Modules ao lado de cada componente.
 
-## Identidade visual
+## Identidade visual (revisada em 2026-11-20)
 
-- Tema escuro "oficina de robótica": fundo `#0f1419`, superfícies `#161c24`/`#1d2530`,
-  bordas `#2a3441`, texto `#e6edf3`/`#9aa7b4`.
-- Destaque (marca SheepBotz): verde-limão `#a3e635`; secundária ciano `#22d3ee`;
-  perigo `#f87171`; aviso `#fbbf24`; sucesso `#4ade80`.
-- Raios: detecção `#f43f5e` (vermelho-rosado), livre `#38bdf8` com 35% de opacidade.
-- Tipografia: pilha do sistema (`Inter`, `system-ui`); números em `JetBrains Mono`/monoespaçada.
-- Espaçamento base 4 px (`--space-1` … `--space-8`); raios 6/10 px.
-- Cena: céu em gradiente escuro, grade de 0,5 m, sombras suaves, piso da arena com
-  a cor do mundo.
+A primeira versão (tema escuro com verde-limão) foi substituída a pedido da equipe por
+uma interface mais limpa e neutra, no estilo de ferramentas de engenharia:
+
+- Tema claro neutro: fundo `#f3f3f1`, superfícies `#ffffff`, bordas `#e3e3df`, texto
+  `#1b1b19`/`#6b6b66`. Ações primárias em grafite (`#1b1b19`), sem cor de marca.
+- Cor só com significado: execução/seleção em laranja `#e8590c`; perigo `#d9480f`/
+  `#e03131`; sucesso `#2f9e44`; aviso `#e67700`; informação `#1c7ed6`.
+- Raios: detecção `#e03131`, livre `#1c7ed6` com 30% de opacidade.
+- Tipografia: `Inter`/`system-ui`, sem caixa alta; números em fonte monoespaçada.
+- Layout: a cena ocupa a área de trabalho inteira; controles flutuantes sobre a cena
+  (transporte embaixo ao centro, câmera no canto superior direito, HUD de estado no canto
+  superior esquerdo); painel lateral branco recolhível com abas sublinhadas.
+- Cena: fundo cinza-claro, grade suave, sombras, piso da arena com a cor do mundo.
+
+## Modos de câmera (FR-015)
+
+Funções puras em `sceneModel.ts`: `perspectiveCamera(span)`, `topCamera(span)` e
+`followCamera(robot)` devolvem `{ position, target }`. "Seguir" posiciona a câmera a
+`max(0,6; 8 × raio)` m atrás do robô e a metade disso de altura, mirando o robô; o
+`CameraRig` interpola suavemente a cada quadro.
 
 ## Constantes nomeadas
 
@@ -139,7 +150,8 @@ painéis, layout). Componentes exportados por nome; CSS Modules ao lado de cada 
 | `ROBOT_BODY_HEIGHT` | máx(0,08; 0,6 × raio) m | research D-03 |
 | `OBSTACLE_HEIGHT` | 0,15 m | research D-03 |
 | `WALL_HEIGHT` | 0,2 m; espessura visual 0,04 m | research D-03 |
-| `RAY_HEIGHT` | altura do sensor = metade do corpo | research D-03 |
+| `RAY_HEIGHT` | altura do sensor = 80% do corpo | research D-03 |
+| `FOLLOW_DISTANCE` | máx(0,6; 8 × raio) m | plan, Modos de câmera |
 
 ## Riscos
 

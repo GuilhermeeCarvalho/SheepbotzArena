@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-// Spec 002 — aplicação completa: US2 (controles), US4 (mundo), US5 (controlador), US6 (robôs).
+// Spec 002 — aplicação completa: US2 (controles), US4 (mundo), US5 (controlador), US6 (robôs), US7 (câmera).
 import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -7,18 +7,23 @@ import { App } from 'src/app/App';
 import type { Example } from 'src/app/examples/examples';
 import { constantSpeed, robotData, worldData } from '../helpers';
 
-// WebGL não existe no jsdom: o Viewport vira um dublê que expõe o que receberia.
+// WebGL não existe no jsdom: o Viewport vira um dublê que expõe o que receberia e
+// permite simular o clique num robô da cena.
 vi.mock('src/app/scene/Viewport', () => ({
   Viewport: (props: {
     state: { tick: number };
     showRays: boolean;
     selectedRobotId: string | null;
+    cameraMode: string;
     resetViewSignal: number;
+    onSelectRobot?: (id: string | null) => void;
   }) => (
     <div data-testid="viewport">
-      tick={props.state.tick} raios={String(props.showRays)} selecionado=
-      {String(props.selectedRobotId)} vista=
-      {props.resetViewSignal}
+      raios={String(props.showRays)} selecionado={String(props.selectedRobotId)} câmera=
+      {props.cameraMode} vista={props.resetViewSignal}
+      <button type="button" onClick={() => props.onSelectRobot?.('r2')}>
+        clicar-robo-r2
+      </button>
     </div>
   ),
 }));
@@ -50,8 +55,9 @@ const examples: Example[] = [
   { id: 'um', name: 'Um robô', worldText: single, controllers: {} },
 ];
 
-const statusBar = () => screen.getByRole('contentinfo', { name: 'Estado da simulação' });
-const tickShown = () => within(statusBar()).getByText('Tick').nextSibling?.textContent;
+const hud = () => screen.getByRole('region', { name: 'Estado da simulação' });
+const tickShown = () => screen.getByTestId('tick').textContent;
+const viewport = () => screen.getByTestId('viewport');
 
 describe('App', () => {
   beforeEach(() => {
@@ -63,7 +69,8 @@ describe('App', () => {
     render(<App examples={examples} />);
     expect(screen.getByLabelText('Mundo')).toHaveValue('dois');
     expect(tickShown()).toBe('0');
-    expect(screen.getByText('Pausado')).toBeInTheDocument();
+    expect(within(hud()).getByText('Pausado')).toBeInTheDocument();
+    expect(within(hud()).getByText('2 robôs')).toBeInTheDocument();
     expect(screen.getByLabelText('Controlador do robô r1')).toBeInTheDocument();
   });
 
@@ -75,10 +82,10 @@ describe('App', () => {
     await user.click(step);
     await user.click(step);
     expect(tickShown()).toBe('3');
-    expect(within(statusBar()).getByText('Tempo').nextSibling?.textContent).toContain('0,15');
+    expect(screen.getByTestId('time')).toHaveTextContent('0,15');
 
     await user.click(screen.getByRole('button', { name: 'Executar' }));
-    expect(screen.getByText('Executando')).toBeInTheDocument();
+    expect(within(hud()).getByText('Executando')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Avançar um tick' })).toBeDisabled();
     act(() => vi.advanceTimersByTime(200));
     expect(Number(tickShown())).toBeGreaterThan(3);
@@ -92,65 +99,109 @@ describe('App', () => {
     expect(tickShown()).toBe('0');
   });
 
-  it('atalhos de teclado e controles de visualização', async () => {
+  it('atalhos de teclado, velocidade e raios', async () => {
     render(<App examples={examples} />);
     fireEvent.keyDown(window, { key: 'ArrowRight' });
     expect(tickShown()).toBe('1');
     fireEvent.keyDown(window, { code: 'Space', key: ' ' });
-    expect(screen.getByText('Executando')).toBeInTheDocument();
+    expect(within(hud()).getByText('Executando')).toBeInTheDocument();
     fireEvent.keyDown(window, { code: 'Space', key: ' ' });
-    expect(screen.getByText('Pausado')).toBeInTheDocument();
+    expect(within(hud()).getByText('Pausado')).toBeInTheDocument();
     fireEvent.keyDown(window, { key: 'r' });
     expect(tickShown()).toBe('0');
     fireEvent.keyDown(window, { key: 'ArrowRight', ctrlKey: true });
     expect(tickShown()).toBe('0');
 
-    await userEvent.click(screen.getByRole('switch', { name: 'Mostrar raios' }));
-    expect(screen.getByTestId('viewport')).toHaveTextContent('raios=false');
+    await userEvent.click(screen.getByRole('button', { name: 'Ocultar raios' }));
+    expect(viewport()).toHaveTextContent('raios=false');
+    expect(screen.getByRole('button', { name: 'Mostrar raios' })).toBeInTheDocument();
+
+    const speed = screen.getByRole('radiogroup', { name: 'Velocidade' });
+    await userEvent.click(within(speed).getByRole('radio', { name: '4×' }));
+    expect(within(speed).getByRole('radio', { name: '4×' })).toHaveAttribute(
+      'aria-checked',
+      'true',
+    );
+  });
+
+  it('US7: modos de câmera e centralizar vista', async () => {
+    render(<App examples={examples} />);
+    const camera = screen.getByRole('radiogroup', { name: 'Câmera' });
+    expect(viewport()).toHaveTextContent('câmera=perspective');
+    await userEvent.click(within(camera).getByRole('radio', { name: 'Topo' }));
+    expect(viewport()).toHaveTextContent('câmera=top');
+    await userEvent.click(within(camera).getByRole('radio', { name: 'Seguir robô selecionado' }));
+    expect(viewport()).toHaveTextContent('câmera=follow');
+    await userEvent.click(within(camera).getByRole('radio', { name: 'Perspectiva' }));
+    expect(viewport()).toHaveTextContent('câmera=perspective');
     await userEvent.click(screen.getByRole('button', { name: 'Centralizar vista' }));
-    expect(screen.getByTestId('viewport')).toHaveTextContent('vista=1');
-    await userEvent.selectOptions(screen.getByLabelText('Velocidade'), '4');
-    expect(screen.getByLabelText('Velocidade')).toHaveValue('4');
+    expect(viewport()).toHaveTextContent('vista=1');
+  });
+
+  it('US7-AC3: "Seguir" fica indisponível sem robôs', () => {
+    const empty: Example = {
+      id: 'vazio',
+      name: 'Vazio',
+      worldText: JSON.stringify(worldData()),
+      controllers: {},
+    };
+    render(<App examples={[empty]} />);
+    const camera = screen.getByRole('radiogroup', { name: 'Câmera' });
+    expect(within(camera).getByRole('radio', { name: 'Seguir robô selecionado' })).toBeDisabled();
+  });
+
+  it('US7-AC4: clicar no robô da cena seleciona e abre o controlador dele', async () => {
+    render(<App examples={examples} />);
+    await userEvent.click(screen.getByRole('tab', { name: /Mundo/ }));
+    await userEvent.click(screen.getByRole('button', { name: 'clicar-robo-r2' }));
+    expect(viewport()).toHaveTextContent('selecionado=r2');
+    expect(screen.getByRole('tab', { name: /Controlador/ })).toHaveAttribute(
+      'aria-selected',
+      'true',
+    );
+    expect(screen.getByLabelText('Controlador do robô r2')).toBeInTheDocument();
+  });
+
+  it('painel lateral recolhível', async () => {
+    render(<App examples={examples} />);
+    await userEvent.click(screen.getByRole('button', { name: 'Recolher painel' }));
+    expect(screen.queryByRole('tablist', { name: 'Painéis' })).toBeNull();
+    await userEvent.click(screen.getByRole('button', { name: 'Mostrar painel' }));
+    expect(screen.getByRole('tablist', { name: 'Painéis' })).toBeInTheDocument();
   });
 
   it('US4-AC2: trocar de exemplo carrega mundo e controladores', async () => {
     render(<App examples={examples} />);
     await userEvent.selectOptions(screen.getByLabelText('Mundo'), 'um');
-    expect(within(statusBar()).getByText('Robôs').nextSibling?.textContent).toBe('1');
+    expect(within(hud()).getByText('1 robô')).toBeInTheDocument();
     expect(screen.getByLabelText('Controlador do robô solo')).toBeInTheDocument();
   });
 
   it('US4-AC3/AC4: mundo inválido lista erros; arquivo válido substitui', async () => {
     render(<App examples={examples} />);
     await userEvent.click(screen.getByRole('tab', { name: /Mundo/ }));
-    // Aplica um mundo inválido pelo arquivo: o editor recebe o texto e os erros aparecem.
     const invalid = new File(
       [JSON.stringify(worldData({ robots: [robotData({ radius: 0 })] }))],
       'mundo.json',
-      {
-        type: 'application/json',
-      },
+      { type: 'application/json' },
     );
     await userEvent.upload(screen.getByTestId('world-file-input'), invalid);
     expect(await screen.findByRole('alert')).toHaveTextContent('robots[0].radius');
     expect(screen.getByText('deve ser maior que 0')).toBeInTheDocument();
-    expect(within(statusBar()).getByText('Robôs').nextSibling?.textContent).toBe('2');
+    expect(within(hud()).getByText('2 robôs')).toBeInTheDocument();
 
     const valid = new File([single], 'outro.json', { type: 'application/json' });
     await userEvent.upload(screen.getByTestId('world-file-input'), valid);
-    await vi.waitFor(() =>
-      expect(within(statusBar()).getByText('Robôs').nextSibling?.textContent).toBe('1'),
-    );
+    await vi.waitFor(() => expect(within(hud()).getByText('1 robô')).toBeInTheDocument());
     expect(screen.getByLabelText('Mundo')).toHaveValue('__custom__');
   });
 
-  it('US5: selecionar robô, aplicar controlador válido e inválido', async () => {
+  it('US5: selecionar robô, aplicar controlador inválido e descartar', async () => {
     render(<App examples={examples} />);
     await userEvent.selectOptions(screen.getByLabelText('Robô'), 'r2');
     expect(screen.getByLabelText('Controlador do robô r2')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Aplicar' })).toBeDisabled();
 
-    // Edita o código através do CodeMirror: o rascunho habilita Aplicar e Descartar.
     const editor = screen.getByLabelText('Controlador do robô r2');
     await userEvent.click(editor);
     await userEvent.keyboard('{Control>}a{/Control}');
@@ -181,7 +232,7 @@ describe('App', () => {
     expect(within(list).getByText('sem controlador')).toBeInTheDocument();
     expect(within(list).getByText(/x 1,00 · y 1,00 · θ 90°/)).toBeInTheDocument();
     await userEvent.click(within(list).getByRole('button', { name: /Beta/ }));
-    expect(screen.getByTestId('viewport')).toHaveTextContent('selecionado=r2');
+    expect(viewport()).toHaveTextContent('selecionado=r2');
   });
 
   it('mundo sem robôs mostra estado vazio nos painéis', async () => {

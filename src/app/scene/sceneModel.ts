@@ -68,6 +68,73 @@ export type SceneModel = {
 
 export type SceneOptions = { showRays?: boolean; selectedRobotId?: string | null };
 
+// ---- Modos de câmera (plan 002, "Modos de câmera"; FR-015) -----------------
+
+export type CameraMode = 'perspective' | 'top' | 'follow';
+export type CameraPose = { position: Vec3; target: Vec3 };
+
+/** Vista inicial em perspectiva que enquadra uma arena de lado `span`. */
+export const perspectiveCamera = (span: number): CameraPose => ({
+  position: [0, 0.7 * span, 0.7 * span],
+  target: [0, 0, 0],
+});
+
+/** Vista de topo sobre o centro (pequeno deslocamento em z mantém o "para cima" estável). */
+export const topCamera = (span: number): CameraPose => ({
+  position: [0, 1.25 * span, 0.001],
+  target: [0, 0, 0],
+});
+
+export const CAMERA_FOV_DEG = 45;
+const FRAMING_MARGIN = 1.3;
+
+/**
+ * Distância da câmera ao centro para que uma área `width × depth`, vista a `elevation`
+ * radianos acima do horizonte, caiba na tela com campo de visão vertical `fovDeg` e
+ * proporção `aspect` (largura/altura).
+ */
+export function framingDistance(
+  width: number,
+  depth: number,
+  aspect: number,
+  elevation: number,
+  fovDeg = CAMERA_FOV_DEG,
+): number {
+  const halfV = (fovDeg * Math.PI) / 360;
+  const halfH = Math.atan(Math.tan(halfV) * aspect);
+  const forWidth = width / 2 / Math.tan(halfH);
+  // A profundidade aparece encurtada por sin(elevação).
+  const forDepth = (depth * Math.sin(elevation)) / 2 / Math.tan(halfV);
+  return FRAMING_MARGIN * Math.max(forWidth, forDepth);
+}
+
+/** Perspectiva a 45° que enquadra a arena na proporção da tela. */
+export function fitPerspectiveCamera(width: number, depth: number, aspect: number): CameraPose {
+  const elevation = Math.PI / 4;
+  const d = framingDistance(width, depth, aspect, elevation);
+  return { position: [0, d * Math.sin(elevation), d * Math.cos(elevation)], target: [0, 0, 0] };
+}
+
+/** Topo que enquadra a arena na proporção da tela. */
+export function fitTopCamera(width: number, depth: number, aspect: number): CameraPose {
+  const d = framingDistance(width, depth, aspect, Math.PI / 2);
+  return { position: [0, d, 0.001], target: [0, 0, 0] };
+}
+
+/** Distância da câmera que segue o robô. */
+export const followDistance = (radius: number): number => Math.max(0.6, 8 * radius);
+
+/** Câmera atrás e acima do robô, no sentido oposto à sua frente, mirando o robô. */
+export function followCamera(
+  robot: Pick<RobotMesh, 'position' | 'rotationY' | 'radius'>,
+): CameraPose {
+  const d = followDistance(robot.radius);
+  const [x, y, z] = robot.position;
+  const forwardX = Math.cos(robot.rotationY);
+  const forwardZ = -Math.sin(robot.rotationY);
+  return { position: [x - forwardX * d, y + d / 2, z - forwardZ * d], target: [x, y, z] };
+}
+
 const hex = (value: number): string => value.toString(16).padStart(2, '0');
 
 /** Cinza proporcional à refletância (0 = preto, 1 = branco). */
@@ -237,7 +304,7 @@ export function buildStaticScene(world: World): StaticScene {
     },
     floorRegions: world.floor.regions.map(floorRegion),
     obstacles: world.obstacles.map(obstacle),
-    camera: { position: [0, 0.7 * span, 0.7 * span], target: [0, 0, 0] },
+    camera: perspectiveCamera(span),
   };
 }
 

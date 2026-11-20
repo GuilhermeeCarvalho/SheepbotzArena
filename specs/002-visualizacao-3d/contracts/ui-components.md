@@ -12,6 +12,7 @@ sentido. Estilos só por tokens de `tokens.css`.
 | `Toolbar` | `children`, `align?` | barra horizontal com separadores |
 | `Panel` | `title?`, `actions?`, `children`, `padded?` | superfícies |
 | `Tabs` | `tabs: { id, label, icon?, badge? }[]`, `value`, `onChange` | abas acessíveis (`role="tablist"`) |
+| `SegmentedControl` | `label`, `options: { value, label, title?, disabled? }[]`, `value`, `onChange` | escolha única entre poucas opções (`role="radiogroup"`); `title` vira o nome acessível de opções só com ícone |
 | `Select` | `label?`, `options: { value, label }[]`, `value`, `onChange` | seletores |
 | `Toggle` | `label`, `checked`, `onChange` | liga/desliga (`role="switch"`) |
 | `Badge` | `tone: 'neutral' \| 'success' \| 'warning' \| 'danger' \| 'info'` | rótulos |

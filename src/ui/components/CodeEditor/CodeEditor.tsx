@@ -1,7 +1,6 @@
 import { javascript } from '@codemirror/lang-javascript';
 import { json } from '@codemirror/lang-json';
 import { EditorState } from '@codemirror/state';
-import { oneDark } from '@codemirror/theme-one-dark';
 import { EditorView } from '@codemirror/view';
 import { basicSetup } from 'codemirror';
 import { useEffect, useRef } from 'react';
@@ -18,8 +17,16 @@ export type CodeEditorProps = {
 
 const editorTheme = EditorView.theme({
   '&': { height: '100%', fontSize: '12.5px', backgroundColor: 'transparent' },
-  '.cm-scroller': { fontFamily: 'var(--font-mono)', lineHeight: '1.55' },
-  '.cm-gutters': { backgroundColor: 'transparent', borderRight: '1px solid var(--color-border)' },
+  '.cm-scroller': { fontFamily: 'var(--font-mono)', lineHeight: '1.6' },
+  '.cm-gutters': {
+    backgroundColor: 'transparent',
+    border: 'none',
+    color: 'var(--color-text-subtle)',
+  },
+  '.cm-activeLine, .cm-activeLineGutter': { backgroundColor: 'rgba(27, 27, 25, 0.035)' },
+  '.cm-selectionBackground, &.cm-focused .cm-selectionBackground': {
+    backgroundColor: 'rgba(28, 126, 214, 0.16) !important',
+  },
   '&.cm-focused': { outline: 'none' },
 });
 
@@ -38,7 +45,6 @@ export function CodeEditor({ value, onChange, language, ariaLabel, className }: 
         extensions: [
           basicSetup,
           language === 'json' ? json() : javascript(),
-          oneDark,
           editorTheme,
           EditorView.contentAttributes.of({ 'aria-label': ariaLabel }),
           EditorView.updateListener.of((update) => {

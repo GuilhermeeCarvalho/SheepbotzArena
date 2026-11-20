@@ -1,10 +1,21 @@
 import { Grid, OrbitControls } from '@react-three/drei';
-import { Canvas, useThree } from '@react-three/fiber';
-import { type ComponentRef, useEffect, useMemo, useRef } from 'react';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { type ComponentRef, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Vector3 } from 'three';
 import type { SimulationState, World } from '../../core/index';
 import { SCENE_COLORS } from './palette';
+import { RobotLabelProjector } from './RobotLabels';
 import { DynamicSceneContent, StaticSceneContent } from './SceneContent';
-import { buildDynamicScene, buildStaticScene, type StaticScene } from './sceneModel';
+import {
+  buildDynamicScene,
+  buildStaticScene,
+  type CameraMode,
+  type CameraPose,
+  fitPerspectiveCamera,
+  fitTopCamera,
+  followCamera,
+  type RobotMesh,
+} from './sceneModel';
 import styles from './Viewport.module.css';
 
 export type ViewportProps = {
@@ -13,43 +24,102 @@ export type ViewportProps = {
   showRays: boolean;
   selectedRobotId: string | null;
   onSelectRobot?: (id: string | null) => void;
-  /** Incrementar este número recentraliza a câmera (FR-003). */
+  cameraMode: CameraMode;
+  /** Incrementar este número recentraliza a câmera no modo atual (FR-003). */
   resetViewSignal: number;
 };
 
-/** Reposiciona a câmera na vista inicial sempre que o sinal ou o mundo mudam. */
-function CameraRig({ camera, signal }: { camera: StaticScene['camera']; signal: number }) {
+/** Suavização exponencial por quadro (independe da taxa de quadros). */
+const smoothing = (delta: number, rate = 6) => 1 - Math.exp(-rate * delta);
+
+/** Posiciona a câmera conforme o modo; em "Seguir", acompanha o robô a cada quadro. */
+function CameraRig({
+  mode,
+  width,
+  depth,
+  followed,
+  signal,
+}: {
+  mode: CameraMode;
+  width: number;
+  depth: number;
+  followed: RobotMesh | null;
+  signal: number;
+}) {
   const controls = useRef<ComponentRef<typeof OrbitControls>>(null);
-  const three = useThree();
+  const { camera, size } = useThree();
+  const followedRef = useRef(followed);
+  followedRef.current = followed;
+  // A proporção só entra no enquadramento ao trocar de modo, mundo ou centralizar,
+  // para não mover a câmera do usuário a cada redimensionamento.
+  const aspectRef = useRef(size.width / size.height);
+  aspectRef.current = size.width / size.height;
+
   useEffect(() => {
-    three.camera.position.set(...camera.position);
-    three.camera.lookAt(...camera.target);
-    controls.current?.target.set(...camera.target);
+    if (mode === 'follow') return;
+    const aspect = aspectRef.current;
+    const pose: CameraPose =
+      mode === 'top'
+        ? fitTopCamera(width, depth, aspect)
+        : fitPerspectiveCamera(width, depth, aspect);
+    camera.position.set(...pose.position);
+    controls.current?.target.set(...pose.target);
     controls.current?.update();
-  }, [camera, signal, three.camera]);
+  }, [mode, width, depth, signal, camera]);
+
+  const goal = useMemo(() => ({ position: new Vector3(), target: new Vector3() }), []);
+  useFrame((_, delta) => {
+    const robot = followedRef.current;
+    if (mode !== 'follow' || !robot || !controls.current) return;
+    const pose = followCamera(robot);
+    goal.position.set(...pose.position);
+    goal.target.set(...pose.target);
+    const k = smoothing(delta);
+    camera.position.lerp(goal.position, k);
+    controls.current.target.lerp(goal.target, k);
+    controls.current.update();
+  });
+
   return (
     <OrbitControls
       ref={controls}
       makeDefault
       enableDamping
       dampingFactor={0.12}
+      enableRotate={mode !== 'top'}
+      enablePan={mode !== 'follow'}
       maxPolarAngle={Math.PI / 2.05}
     />
   );
 }
 
-/** Cena 3D da simulação (FR-001 a FR-004). Apenas desenha o estado do núcleo. */
+/** Cena 3D da simulação (FR-001 a FR-004, FR-015, FR-016). Apenas desenha o estado do núcleo. */
 export function Viewport({
   world,
   state,
   showRays,
   selectedRobotId,
   onSelectRobot,
+  cameraMode,
   resetViewSignal,
 }: ViewportProps) {
   const staticScene = useMemo(() => buildStaticScene(world), [world]);
   const dynamicScene = buildDynamicScene(world, state, { showRays, selectedRobotId });
   const span = Math.max(world.arena.width, world.arena.height);
+  const followed = dynamicScene.robots.find((r) => r.id === selectedRobotId) ?? null;
+
+  // Rótulos: robô sob o mouse e robô selecionado (FR-016).
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const onHoverRobot = useCallback((id: string | null) => {
+    setHoveredId(id);
+    document.body.style.cursor = id ? 'pointer' : '';
+  }, []);
+  const robotsRef = useRef<RobotMesh[]>(dynamicScene.robots);
+  robotsRef.current = dynamicScene.robots;
+  const labelElements = useRef(new Map<string, HTMLElement>());
+  const labelIds = [...new Set([hoveredId, selectedRobotId])].filter(
+    (id): id is string => id !== null && dynamicScene.robots.some((r) => r.id === id),
+  );
   return (
     <div className={styles.viewport} data-testid="viewport">
       <Canvas
@@ -59,13 +129,14 @@ export function Viewport({
         onPointerMissed={() => onSelectRobot?.(null)}
       >
         <color attach="background" args={[SCENE_COLORS.background]} />
-        <fog attach="fog" args={[SCENE_COLORS.background, span * 2, span * 6]} />
-        <hemisphereLight args={['#cfe7ff', '#1a222c', 0.75]} />
+        <fog attach="fog" args={[SCENE_COLORS.background, span * 2.5, span * 7]} />
+        <hemisphereLight args={['#ffffff', '#b8bcc4', 1.1]} />
         <directionalLight
-          position={[span * 0.6, span * 1.4, span * 0.8]}
-          intensity={1.6}
+          position={[span * 0.5, span * 1.5, span * 0.7]}
+          intensity={1.8}
           castShadow
           shadow-mapSize={[2048, 2048]}
+          shadow-bias={-0.0005}
           shadow-camera-left={-span}
           shadow-camera-right={span}
           shadow-camera-top={span}
@@ -75,7 +146,7 @@ export function Viewport({
           position={[0, -0.002, 0]}
           args={[span * 4, span * 4]}
           cellSize={0.5}
-          cellThickness={0.6}
+          cellThickness={0.7}
           cellColor={SCENE_COLORS.grid}
           sectionSize={2}
           sectionThickness={1}
@@ -84,13 +155,44 @@ export function Viewport({
           infiniteGrid
         />
         <StaticSceneContent scene={staticScene} />
-        <DynamicSceneContent scene={dynamicScene} onSelectRobot={(id) => onSelectRobot?.(id)} />
-        <CameraRig camera={staticScene.camera} signal={resetViewSignal} />
+        <DynamicSceneContent
+          scene={dynamicScene}
+          onSelectRobot={(id) => onSelectRobot?.(id)}
+          onHoverRobot={onHoverRobot}
+        />
+        <RobotLabelProjector robots={robotsRef} elements={labelElements} />
+        <CameraRig
+          mode={cameraMode}
+          width={world.arena.width}
+          depth={world.arena.height}
+          followed={followed}
+          signal={resetViewSignal}
+        />
       </Canvas>
-      <div className={styles.legend} aria-hidden="true">
-        <span className={styles.hit} /> detecção
-        <span className={styles.free} /> alcance livre
+      <div className={styles.labels} aria-hidden="true">
+        {labelIds.map((id) => {
+          const robot = dynamicScene.robots.find((r) => r.id === id)!;
+          return (
+            <span
+              key={id}
+              className={styles.robotLabel}
+              ref={(element) => {
+                if (element) labelElements.current.set(id, element);
+                else labelElements.current.delete(id);
+              }}
+            >
+              {robot.name}
+              {robot.status === 'error' && <span className={styles.robotLabelError}> · erro</span>}
+            </span>
+          );
+        })}
       </div>
+      {showRays && (
+        <div className={styles.legend} aria-hidden="true">
+          <span className={styles.hit} /> detecção
+          <span className={styles.free} /> alcance livre
+        </div>
+      )}
     </div>
   );
 }

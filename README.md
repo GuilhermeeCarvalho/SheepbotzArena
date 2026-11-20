@@ -1,7 +1,7 @@
 # SheepBotz Arena
 
 <!-- stats:start -->
-**193 testes · 95,9% de cobertura** (linhas; relatório em [`coverage/`](coverage/index.html))
+**204 testes · 92,4% de cobertura** (linhas; relatório em [`coverage/`](coverage/index.html))
 <!-- stats:end -->
 
 Simulador web de robôs móveis para a equipe Univille SheepBotz, no espírito do

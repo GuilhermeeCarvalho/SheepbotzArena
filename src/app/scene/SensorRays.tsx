@@ -42,7 +42,7 @@ export function SensorRays({ rays }: { rays: RayMesh[] }) {
         <lineBasicMaterial color={SCENE_COLORS.rayHit} transparent opacity={0.9} />
       </lineSegments>
       <lineSegments name="rays-free" geometry={freeLines}>
-        <lineBasicMaterial color={SCENE_COLORS.rayFree} transparent opacity={0.35} />
+        <lineBasicMaterial color={SCENE_COLORS.rayFree} transparent opacity={0.3} />
       </lineSegments>
       <points name="rays-hit-points" geometry={hitPoints}>
         <pointsMaterial color={SCENE_COLORS.rayHit} size={0.035} sizeAttenuation />

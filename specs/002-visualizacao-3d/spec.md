@@ -210,6 +210,34 @@ leituras é escopo da feature 005.
 
 ---
 
+### História de usuário 7 — Explorar a cena com modos de câmera (Prioridade: P3)
+
+Além da câmera livre, o usuário alterna entre vista em perspectiva, vista de topo (como
+um mapa 2D) e câmera que segue o robô selecionado. Ao passar o mouse sobre um robô, seu
+nome aparece; clicar nele o seleciona e abre seu controlador.
+
+**Por que esta prioridade**: torna a análise mais rápida (a vista de topo mostra a
+geometria exata do plano 2D; a câmera que segue facilita acompanhar um robô rápido).
+Pedido da equipe após a primeira versão da interface.
+
+**Teste independente**: alternar os modos e conferir posição e alvo da câmera calculados
+a partir do mundo e da pose do robô.
+
+**Cenários de aceitação**:
+
+1. **Dado** uma arena 4 × 3 m, **quando** o usuário escolhe "Topo", **então** a câmera fica
+   sobre o centro da arena olhando para baixo, enquadrando a arena inteira.
+2. **Dado** um robô selecionado em (1; 0; 0), **quando** o usuário escolhe "Seguir",
+   **então** a câmera fica atrás e acima do robô (no sentido oposto à sua frente) e mira
+   o robô; quando o robô se move, a câmera o acompanha.
+3. **Dado** o modo "Seguir" sem robô selecionado, **quando** escolhido, **então** a opção
+   fica indisponível.
+4. **Dado** o mouse sobre um robô, **quando** a cena é exibida, **então** o nome do robô
+   aparece junto a ele; **quando** o usuário clica no robô, **então** ele fica selecionado
+   e o painel do controlador passa a mostrar o seu código.
+
+---
+
 ### Casos de borda
 
 - Mundo sem robôs: a cena mostra a arena; os controles funcionam e o tempo avança.
@@ -267,9 +295,15 @@ leituras é escopo da feature 005.
 - **FR-013**: Toda a interface DEVE estar em português e ser construída com uma
   biblioteca de componentes própria e reutilizável (botões, painéis, abas, seletores,
   campos, indicadores de estado, lista de erros, editor de código), com identidade
-  visual única e tema escuro. *(constitution, Stack e princípio V)*
+  visual única, limpa e neutra (tema claro), usando cor apenas para estado e destaque.
+  *(constitution, Stack e princípio V)*
 - **FR-014**: A interface DEVE funcionar em telas a partir de 1280 × 720 com a cena
-  ocupando a maior parte da área. *(RB-19)*
+  ocupando toda a área de trabalho; os controles de execução e de câmera ficam sobre a
+  cena, e o painel lateral pode ser recolhido. *(RB-19)*
+- **FR-015**: O sistema DEVE oferecer os modos de câmera "Perspectiva", "Topo" e "Seguir"
+  (robô selecionado), conforme a história 7. *(RB-19)*
+- **FR-016**: O sistema DEVE exibir o nome do robô sob o mouse e selecionar o robô
+  clicado, abrindo seu controlador. *(RB-19)*
 
 ### Entidades-chave
 
