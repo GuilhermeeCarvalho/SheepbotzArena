@@ -197,7 +197,7 @@ Uma lista mostra cada robô com nome, cor, estado (ok, erro, sem controlador) e 
 atual, atualizada durante a reprodução. Selecionar um robô na lista o destaca na cena.
 
 **Por que esta prioridade**: ajuda a acompanhar vários robôs; o painel completo de
-leituras é escopo da feature 004.
+leituras é escopo da feature 005.
 
 **Teste independente**: rodar um mundo com dois robôs e conferir a lista.
 
@@ -299,7 +299,7 @@ leituras é escopo da feature 004.
 - A interface roda o núcleo no mesmo fluxo da página; controladores em laço infinito
   travam a aba (limitação herdada da feature 001).
 - Não há persistência: recarregar a página volta ao primeiro exemplo. Salvar o mundo é
-  feito copiando o JSON do editor (exportar arquivo fica para a feature 004).
+  feito copiando o JSON do editor (exportar arquivo fica para a feature 005).
 - Geometria procedural (sem modelos 3D externos); modelos realistas dos robôs podem ser
   adicionados depois sem mudar a simulação.
-- Painel completo de leituras, gravação e replay: feature 004. Modalidades: features 003+.
+- Painel completo de leituras, gravação e replay: feature 005. Catálogo de componentes: feature 003. Modalidades: features 004+.

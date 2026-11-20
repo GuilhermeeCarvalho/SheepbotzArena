@@ -521,5 +521,5 @@ saída e o código de término.
   limitada, não segurança contra código malicioso. Um controlador em laço infinito trava
   a execução; a linha de comando oferece tempo limite.
 - **Escopo fora desta feature**: visualização 3D e controles de play/pause (feature 002),
-  regras de modalidades (features 003, 005 a 007), painel de inspeção e replay
-  (feature 004), controle remoto (feature 008).
+  regras de modalidades (features 004, 006 a 008), painel de inspeção e replay
+  (feature 005), controle remoto (feature 009). (Numeração revisada em 2026-11-20.)

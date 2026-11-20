@@ -115,7 +115,7 @@ tests/
 ```
 
 **Decisão de estrutura**: `src/ui` é uma biblioteca interna reutilizável por qualquer tela
-futura (features 003 e 004); `src/app` organiza por responsabilidade (sessão, cena,
+futura (features 003 a 005); `src/app` organiza por responsabilidade (sessão, cena,
 painéis, layout). Componentes exportados por nome; CSS Modules ao lado de cada componente.
 
 ## Identidade visual

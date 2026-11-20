@@ -64,7 +64,7 @@ Reavaliação após a fase 1: sem violações. A tabela de complexidade não é 
   mundo.json │  world/      │ World │  simulation/         │ SimulationState
  ───────────►│  loadWorld   ├──────►│  createSimulation    ├────────────────► CLI (JSON)
              │  (Zod + regras│       │  step/reset/getState │                  feature 002 (3D)
-             │  semânticas) │       └──┬───────┬───────┬───┘                  feature 004 (replay)
+             │  semânticas) │       └──┬───────┬───────┬───┘                  feature 005 (replay)
              └──────────────┘          │       │       │
                      ┌─────────────────┘       │       └──────────────┐
                      ▼                         ▼                      ▼
@@ -75,7 +75,7 @@ Reavaliação após a fase 1: sem violações. A tabela de complexidade não é 
                      └──────── math/ (vec2, ângulos, geometria) ──────┘
                                random/ (mulberry32, fluxos)
 
-  modality/contract.ts  ◄── implementado por src/modalities/* (feature 003+), injetado via registro
+  modality/contract.ts  ◄── implementado por src/modalities/* (feature 004+), injetado via registro
 ```
 
 ### Pipeline de um tick (`simulation/tick.ts`)
@@ -171,7 +171,7 @@ scripts/update-readme-stats.mjs   # atualiza a linha de testes e cobertura do RE
 **Decisão de estrutura**: pacote único com fronteiras por diretório. O código de `src/`
 usa imports relativos (o alias `src/*` é usado só nos testes), porque a worker thread da
 CLI carrega o TypeScript com `tsx` sem resolução de aliases (`src/cli/worker-entry.mjs`). `src/modalities/` e
-`src/app/` serão criados pelas features 003 e 002. A regra de lint D-15 garante a
+`src/app/` serão criados pelas features 004 e 002. A regra de lint D-15 garante a
 direção `app → modalities → core` e `cli → core`.
 
 ## Estratégia de testes

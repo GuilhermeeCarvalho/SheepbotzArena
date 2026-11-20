@@ -1,8 +1,8 @@
 # Contrato: extensão de modalidades (`src/core/modality/contract.ts`)
 
 Referências: spec FR-024; constitution princípio IV; research D-14.
-Implementações concretas chegam nas features 003 (Sumô), 005 (Seguidor de Linha),
-006 (Trekking) e 007 (Futebol). O núcleo conhece **apenas** estas interfaces.
+Implementações concretas chegam nas features 004 (Sumô), 006 (Seguidor de Linha),
+007 (Trekking) e 008 (Futebol). O núcleo conhece **apenas** estas interfaces.
 
 ```ts
 type MatchStatus = {

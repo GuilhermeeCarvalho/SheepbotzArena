@@ -27,11 +27,12 @@ Projeto desenvolvido com **Spec-Driven Development** (GitHub SpecKit).
 | Feature | Situação |
 |---------|----------|
 | [001 — Núcleo de simulação headless](specs/001-nucleo-simulacao/) | ✅ implementada (58/58 tarefas) |
-| 002 — Visualização 3D e controles | planejada |
-| 003 — Modalidade Sumô | planejada |
-| 004 — Painel de inspeção e replay | planejada |
-| 005 — Seguidor de Linha · 006 — Trekking · 007 — Futebol | planejadas |
-| 008 — Controlador remoto via WebSocket (bônus) | planejada |
+| [002 — Visualização 3D e controles](specs/002-visualizacao-3d/) | em implementação |
+| 003 — Catálogo de componentes reais e montador de robôs | planejada |
+| 004 — Modalidade Sumô | planejada |
+| 005 — Painel de inspeção e replay | planejada |
+| 006 — Seguidor de Linha · 007 — Trekking · 008 — Futebol | planejadas |
+| 009 — Controlador remoto via WebSocket (bônus) | planejada |
 
 ## Como rodar
 

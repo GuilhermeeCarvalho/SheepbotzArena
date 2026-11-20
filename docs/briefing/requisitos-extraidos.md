@@ -62,6 +62,14 @@ registradas nas seções finais deste documento.
 | RB-22 | Gravação e replay de simulações.                                                             |
 | RB-23 | Modalidade escolhida define condições de vitória e mundos de exemplo; o núcleo continua independente dela. |
 
+### Requisitos da equipe (levantados com o cliente após o briefing)
+
+| ID    | Requisito                                                                                   | Origem            |
+|-------|---------------------------------------------------------------------------------------------|-------------------|
+| RB-24 | Em cada modalidade, o usuário configura o próprio robô (chassi, rodas, motores, sensores e itens) a partir de componentes reais usados pela equipe, para maior afinidade entre simulador e robô físico. | Equipe, 2026-11-20 |
+| RB-25 | A configuração respeita os limites da categoria (dimensões e massa máximas do regulamento). | Equipe, 2026-11-20 |
+| RB-26 | Cada modalidade oferece estratégias de exemplo em código (ex.: sumô: busca e ataque, fuga de borda). | Equipe, 2026-11-20 |
+
 ### Bônus
 
 | ID    | Requisito                                                                                   |
@@ -100,6 +108,8 @@ revista por emenda na especificação correspondente.
 | Q-11 | Robôs saem da arena no Sumô (não há paredes). Como o núcleo trata isso?  | O núcleo não impõe paredes de borda, a menos que o mundo declare. Quem decide "saiu do Dohyo" é o árbitro da modalidade. | spec 003         |
 | Q-12 | Futebol exige uma bola, que não é robô.                                  | Será proposta como extensão do núcleo ("corpo passivo") na spec 007, com justificativa e testes de regressão, conforme a constitution. | spec 007         |
 | Q-13 | Portugol (bônus) roda no navegador?                                      | Em aberto. Avaliar após o escopo completo, sem modificar o meuPiá.                                                | —                |
+| Q-14 | Como representar componentes reais sem mudar o núcleo?                   | Um **catálogo** à parte converte dados de datasheet em parâmetros do núcleo (ex.: alcance e FOV → laser; rpm e diâmetro da roda → velocidade máxima; dimensões → raio; soma das massas → massa). O núcleo continua genérico. | spec 003         |
+| Q-15 | De onde vêm os números dos componentes?                                  | De datasheets oficiais, registrados com fonte em `docs/references/componentes/`; valores ausentes ficam marcados e não são inventados. | spec 003         |
 
 ## 4. Mapa de features
 
@@ -109,12 +119,16 @@ Cada feature é uma pasta `specs/NNN-nome/` com `spec.md`, `plan.md` e `tasks.md
 |---------|----------------------------------------|---------------------------------|---------------|
 | 001     | Núcleo de simulação headless           | RB-01..04, 10..17, 20, 45       | Mínimo        |
 | 002     | Visualização 3D e controles            | RB-03, 05, 17, 18, 19           | Mínimo        |
-| 003     | Modalidade Sumô (Mega, Mini e LEGO)    | RB-20, 23                       | Completo      |
-| 004     | Painel de inspeção e replay            | RB-21, 22                       | Completo      |
-| 005     | Modalidade Seguidor de Linha           | RB-23                           | Além do completo |
-| 006     | Modalidade Trekking                    | RB-23                           | Além do completo |
-| 007     | Modalidade Futebol de robôs            | RB-20, 23                       | Além do completo |
-| 008     | Controlador remoto via WebSocket       | RB-31                           | Bônus         |
+| 003     | Catálogo de componentes e montador de robôs | RB-24, 25                  | Completo (pedido da equipe) |
+| 004     | Modalidade Sumô (Mega, Mini e LEGO)    | RB-20, 23, 25, 26               | Completo      |
+| 005     | Painel de inspeção e replay            | RB-21, 22                       | Completo      |
+| 006     | Modalidade Seguidor de Linha           | RB-23, 25, 26                   | Além do completo |
+| 007     | Modalidade Trekking                    | RB-23, 25, 26                   | Além do completo |
+| 008     | Modalidade Futebol de robôs            | RB-20, 23, 25, 26               | Além do completo |
+| 009     | Controlador remoto via WebSocket       | RB-31                           | Bônus         |
 
-Ordem de entrega: 001 → 002 → 003 → 004 fecham o escopo completo. 005 a 008 só
+Ordem de entrega: 001 → 002 → 003 → 004 → 005 fecham o escopo completo. 006 a 009 só
 começam com o escopo completo entregue e a cobertura ≥ 80%.
+
+> Renumeração em 2026-11-20: o catálogo de componentes (pedido da equipe) entrou como 003,
+> antes das modalidades, porque todas as modalidades o usam para montar robôs.

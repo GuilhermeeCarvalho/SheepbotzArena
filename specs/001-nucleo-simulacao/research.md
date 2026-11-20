@@ -145,13 +145,13 @@ Cada decisão segue o formato: Decisão / Justificativa / Alternativas considera
   calculadas ao final do tick (as mesmas que o controlador recebe no tick seguinte).
   Registros (`robot.log`) mantêm as últimas 100 mensagens por robô.
 - **Justificativa**: consumidores (visualização, replay, testes) não conseguem corromper a
-  simulação; o mesmo formato serve à linha de comando e à feature 004 (replay).
+  simulação; o mesmo formato serve à linha de comando e à feature 005 (replay).
 
 ## D-14 — Contrato de modalidade no núcleo
 
 - **Decisão**: o núcleo define as interfaces `Modality` e `Referee` e recebe um
   `ModalityRegistry` por injeção (`loadWorld` e `createSimulation`). Não existe lista de
-  modalidades no núcleo; o registro concreto fica em `src/modalities/index.ts` (feature 003).
+  modalidades no núcleo; o registro concreto fica em `src/modalities/index.ts` (feature 004).
   Quando o árbitro declara `finished`, novos passos não avançam o tick.
 - **Justificativa**: princípio IV (núcleo depende do contrato, nunca das implementações).
 
