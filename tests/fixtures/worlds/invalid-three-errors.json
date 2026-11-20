@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "arena": { "width": 4, "height": 4 },
+  "robots": [
+    {
+      "id": "r1",
+      "pose": { "x": 0, "y": 0, "theta": 0 },
+      "radius": -0.1,
+      "sensors": [{ "id": "s1", "type": "lidar3d", "rays": 3 }]
+    },
+    { "id": "r1", "pose": { "x": 1, "y": 0, "theta": 0 }, "radius": 0.1 }
+  ]
+}

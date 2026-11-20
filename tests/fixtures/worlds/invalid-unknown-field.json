@@ -1,0 +1,5 @@
+{
+  "version": 1,
+  "arena": { "width": 2, "height": 2 },
+  "robots": [{ "id": "r1", "pose": { "x": 0, "y": 0, "theta": 0 }, "raio": 0.1 }]
+}

@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "arena": { "width": 10, "height": 10 },
+  "robots": [
+    {
+      "id": "r1",
+      "pose": { "x": 0, "y": 0, "theta": 0 },
+      "radius": 0.1,
+      "controller": "../controllers/forward-1ms.js"
+    },
+    { "id": "r2", "pose": { "x": 0, "y": 1, "theta": 0 }, "radius": 0.1 }
+  ]
+}

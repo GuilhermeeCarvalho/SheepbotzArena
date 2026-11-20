@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "name": "Laser contra parede",
+  "arena": { "width": 10, "height": 10 },
+  "obstacles": [{ "id": "parede", "type": "wall", "from": [1, -5], "to": [1, 5] }],
+  "robots": [
+    {
+      "id": "r1",
+      "pose": { "x": 0, "y": 0, "theta": 0 },
+      "radius": 0.1,
+      "sensors": [
+        { "id": "laser", "type": "laser", "rays": 3, "fov": 3.141592653589793, "maxRange": 2 }
+      ]
+    }
+  ]
+}
