@@ -52,4 +52,4 @@ function buildSceneModel(
   `hit = leitura < maxRange − 1e-9`. Para sonar, todos os raios usam a leitura única.
 - Paredes de borda: 4 caixas de espessura 0,04 m centradas nas bordas da arena.
 - `rotationY` de caixas = ângulo da simulação; de paredes = `atan2(dy, dx)` do segmento.
-- Câmera inicial: alvo no centro; posição `[0, 0,9·L, 0,9·L]` com `L = max(largura, altura)`.
+- Câmera inicial: alvo no centro; posição `[0, 0,7·L, 0,7·L]` com `L = max(largura, altura)`.

@@ -83,10 +83,30 @@ function arenaWalls(world: World): WallMesh[] {
   const t = WALL_THICKNESS;
   const y = WALL_HEIGHT / 2;
   return [
-    { id: 'arena:bottom', position: toScene(0, -hh - t / 2, y), size: [world.arena.width + 2 * t, WALL_HEIGHT, t], rotationY: 0 },
-    { id: 'arena:top', position: toScene(0, hh + t / 2, y), size: [world.arena.width + 2 * t, WALL_HEIGHT, t], rotationY: 0 },
-    { id: 'arena:left', position: toScene(-hw - t / 2, 0, y), size: [t, WALL_HEIGHT, world.arena.height], rotationY: 0 },
-    { id: 'arena:right', position: toScene(hw + t / 2, 0, y), size: [t, WALL_HEIGHT, world.arena.height], rotationY: 0 },
+    {
+      id: 'arena:bottom',
+      position: toScene(0, -hh - t / 2, y),
+      size: [world.arena.width + 2 * t, WALL_HEIGHT, t],
+      rotationY: 0,
+    },
+    {
+      id: 'arena:top',
+      position: toScene(0, hh + t / 2, y),
+      size: [world.arena.width + 2 * t, WALL_HEIGHT, t],
+      rotationY: 0,
+    },
+    {
+      id: 'arena:left',
+      position: toScene(-hw - t / 2, 0, y),
+      size: [t, WALL_HEIGHT, world.arena.height],
+      rotationY: 0,
+    },
+    {
+      id: 'arena:right',
+      position: toScene(hw + t / 2, 0, y),
+      size: [t, WALL_HEIGHT, world.arena.height],
+      rotationY: 0,
+    },
   ];
 }
 
@@ -104,7 +124,12 @@ function floorRegion(region: FloorRegionSpec, index: number): FloorRegionMesh {
         color,
       };
     case 'disc':
-      return { kind: 'disc', position: toScene(region.center[0], region.center[1], layer), radius: region.radius, color };
+      return {
+        kind: 'disc',
+        position: toScene(region.center[0], region.center[1], layer),
+        radius: region.radius,
+        color,
+      };
     case 'ring':
       return {
         kind: 'ring',
@@ -176,12 +201,18 @@ function sensorRays(world: World, state: SimulationState): RayMesh[] {
       if (sensor.type !== 'laser' && sensor.type !== 'sonar') continue;
       const reading = robot.sensors[sensor.id];
       rayGeometry(sensor, robot.pose).forEach(({ origin, angle }, i) => {
-        const distance = Array.isArray(reading) ? (reading[i] ?? sensor.maxRange) : (reading as number);
+        const distance = Array.isArray(reading)
+          ? (reading[i] ?? sensor.maxRange)
+          : (reading as number);
         rays.push({
           robotId: spec.id,
           sensorId: sensor.id,
           from: toScene(origin.x, origin.y, height),
-          to: toScene(origin.x + distance * Math.cos(angle), origin.y + distance * Math.sin(angle), height),
+          to: toScene(
+            origin.x + distance * Math.cos(angle),
+            origin.y + distance * Math.sin(angle),
+            height,
+          ),
           hit: distance < sensor.maxRange - MAX_RANGE_EPSILON,
         });
       });
@@ -206,7 +237,7 @@ export function buildStaticScene(world: World): StaticScene {
     },
     floorRegions: world.floor.regions.map(floorRegion),
     obstacles: world.obstacles.map(obstacle),
-    camera: { position: [0, 0.9 * span, 0.9 * span], target: [0, 0, 0] },
+    camera: { position: [0, 0.7 * span, 0.7 * span], target: [0, 0, 0] },
   };
 }
 

@@ -12,7 +12,13 @@ export function ObstacleMesh({ obstacle }: { obstacle: ObstacleDescriptor }) {
     );
   }
   return (
-    <mesh name={obstacle.id} position={obstacle.position} rotation={[0, obstacle.rotationY, 0]} castShadow receiveShadow>
+    <mesh
+      name={obstacle.id}
+      position={obstacle.position}
+      rotation={[0, obstacle.rotationY, 0]}
+      castShadow
+      receiveShadow
+    >
       <boxGeometry args={obstacle.size} />
       {material}
     </mesh>

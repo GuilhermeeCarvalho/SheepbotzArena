@@ -10,7 +10,14 @@ export function ArenaMesh({ arena }: { arena: StaticScene['arena'] }) {
         <meshStandardMaterial color={arena.color} roughness={0.95} />
       </mesh>
       {arena.walls.map((wall) => (
-        <mesh key={wall.id} name={wall.id} position={wall.position} rotation={[0, wall.rotationY, 0]} castShadow receiveShadow>
+        <mesh
+          key={wall.id}
+          name={wall.id}
+          position={wall.position}
+          rotation={[0, wall.rotationY, 0]}
+          castShadow
+          receiveShadow
+        >
           <boxGeometry args={wall.size} />
           <meshStandardMaterial color={SCENE_COLORS.wall} roughness={0.7} />
         </mesh>

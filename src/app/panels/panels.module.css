@@ -1,0 +1,106 @@
+.editorPanel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  height: 100%;
+  min-height: 0;
+}
+.editorActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+.editorArea {
+  flex: 1;
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+}
+.robotSelect {
+  flex: 1;
+  min-width: 160px;
+}
+.apiReference {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+.apiReference summary {
+  cursor: pointer;
+  color: var(--color-text);
+  font-weight: 550;
+}
+.apiReference dl {
+  display: grid;
+  gap: var(--space-1);
+  margin: var(--space-2) 0;
+}
+.apiReference dt code {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-accent);
+}
+.apiReference dd {
+  margin: 0 0 var(--space-1);
+}
+.hint {
+  margin: 0;
+  line-height: 1.8;
+}
+.robotList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.robotRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-raised);
+  text-align: left;
+  cursor: pointer;
+}
+.robotRow:hover {
+  border-color: var(--color-border-strong);
+}
+.robotRow[aria-pressed='true'] {
+  border-color: var(--color-accent);
+  box-shadow: inset 0 0 0 1px var(--color-accent);
+}
+.robotRow:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+.swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.08);
+}
+.robotMain {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+.robotName {
+  font-weight: 600;
+}
+.robotPose {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+.robotError {
+  font-size: var(--text-xs);
+  color: var(--color-danger);
+}

@@ -34,7 +34,15 @@ describe('US1 — arena e robôs', () => {
         arena: { width: 4, height: 3, walls: true },
         obstacles: [
           { id: 'pilar', type: 'disc', center: [1, 0.5], radius: 0.2 },
-          { id: 'caixa', type: 'box', center: [-1, 0], width: 0.3, height: 0.6, angle: 0.5, color: '#ff0000' },
+          {
+            id: 'caixa',
+            type: 'box',
+            center: [-1, 0],
+            width: 0.3,
+            height: 0.6,
+            angle: 0.5,
+            color: '#ff0000',
+          },
           { id: 'muro', type: 'wall', from: [0, -1], to: [1, 0] },
         ],
       }),
@@ -149,7 +157,7 @@ describe('US1 — arena e robôs', () => {
 
   it('câmera inicial enquadra a arena', () => {
     const model = modelOf(worldData({ arena: { width: 20, height: 10 } }));
-    expect(model.camera).toEqual({ position: [0, 18, 18], target: [0, 0, 0] });
+    expect(model.camera).toEqual({ position: [0, 14, 14], target: [0, 0, 0] });
   });
 });
 

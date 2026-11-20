@@ -7,7 +7,12 @@ import { createSession } from 'src/app/session/session';
 
 const dir = (sub: string) => fileURLToPath(new URL(`../../../examples/${sub}/`, import.meta.url));
 const readAll = (sub: string) =>
-  Object.fromEntries(readdirSync(dir(sub)).map((name) => [`/examples/${sub}/${name}`, readFileSync(dir(sub) + name, 'utf8')]));
+  Object.fromEntries(
+    readdirSync(dir(sub)).map((name) => [
+      `/examples/${sub}/${name}`,
+      readFileSync(dir(sub) + name, 'utf8'),
+    ]),
+  );
 
 describe('exemplos', () => {
   const examples = buildExamples(readAll('worlds'), readAll('controllers'));
@@ -30,7 +35,13 @@ describe('exemplos', () => {
 
   it('robô com controlador inexistente fica sem controlador; nome padrão é o id', () => {
     const [example] = buildExamples(
-      { '/w/sem-nome.json': JSON.stringify({ version: 1, arena: { width: 1, height: 1 }, robots: [{ id: 'a', controller: 'x.js' }] }) },
+      {
+        '/w/sem-nome.json': JSON.stringify({
+          version: 1,
+          arena: { width: 1, height: 1 },
+          robots: [{ id: 'a', controller: 'x.js' }],
+        }),
+      },
       {},
     );
     expect(example).toMatchObject({ id: 'sem-nome', name: 'sem-nome', controllers: {} });

@@ -19,12 +19,15 @@ const worldText = JSON.stringify(
     dt: 0.05,
     seed: 11,
     robots: [
-      robotData({ sensors: [{ id: 'laser', type: 'laser', rays: 5, fov: 2, maxRange: 2, noise: 0.01 }] }),
+      robotData({
+        sensors: [{ id: 'laser', type: 'laser', rays: 5, fov: 2, maxRange: 2, noise: 0.01 }],
+      }),
       robotData({ id: 'r2', pose: { x: 1, y: 1, theta: 0 } }),
     ],
   }),
 );
-const wander = 'function onTick(r) { r.setSpeed(0.2 + r.random() * 0.3, r.readLaser()[2] < 1 ? 1 : 0); }';
+const wander =
+  'function onTick(r) { r.setSpeed(0.2 + r.random() * 0.3, r.readLaser()[2] < 1 ? 1 : 0); }';
 const controllers = { r1: wander, r2: constantSpeed(0.3, 0.4) };
 
 describe('US2 — execução', () => {
@@ -102,7 +105,10 @@ describe('US2 — execução', () => {
 describe('US4 — mundo', () => {
   it('US4-AC3: mundo inválido mantém a sessão e lista os erros', () => {
     const session = createSession(worldText, controllers);
-    const next = applyWorld(play(session), JSON.stringify(worldData({ robots: [robotData({ radius: 0 })] })));
+    const next = applyWorld(
+      play(session),
+      JSON.stringify(worldData({ robots: [robotData({ radius: 0 })] })),
+    );
     expect(next.world).toBe(session.world);
     expect(next.running).toBe(false);
     expect(next.worldIssues).toEqual([
@@ -111,7 +117,10 @@ describe('US4 — mundo', () => {
   });
 
   it('US4-AC4: mundo válido substitui; robôs sem controlador ficam parados', () => {
-    const session = applyWorld(createSession(worldText, controllers), JSON.stringify(worldData({ robots: [robotData({ id: 'novo' })] })));
+    const session = applyWorld(
+      createSession(worldText, controllers),
+      JSON.stringify(worldData({ robots: [robotData({ id: 'novo' })] })),
+    );
     expect(session.worldIssues).toEqual([]);
     expect(session.world.robots.map((r) => r.id)).toEqual(['novo']);
     expect(session.controllers).toEqual({});
@@ -147,7 +156,17 @@ describe('US5 — controlador', () => {
   });
 
   it('US5-AC4: erro em execução aparece no estado do robô', () => {
-    const next = advance(applyController(createSession(worldText, controllers), 'r2', 'function onTick() { throw new Error("pane"); }'), 3);
-    expect(next.state.robots[1]).toMatchObject({ status: 'error', error: { tick: 1, message: 'pane' } });
+    const next = advance(
+      applyController(
+        createSession(worldText, controllers),
+        'r2',
+        'function onTick() { throw new Error("pane"); }',
+      ),
+      3,
+    );
+    expect(next.state.robots[1]).toMatchObject({
+      status: 'error',
+      error: { tick: 1, message: 'pane' },
+    });
   });
 });

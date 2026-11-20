@@ -1,0 +1,19 @@
+.shell {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  min-width: 1100px;
+  min-height: 640px;
+}
+.workspace {
+  flex: 1;
+  min-height: 0;
+  padding: var(--space-3);
+}
+.sideTabs {
+  flex-shrink: 0;
+}
+.sidePanel {
+  flex: 1;
+  min-height: 0;
+}

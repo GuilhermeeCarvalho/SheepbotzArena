@@ -12,7 +12,10 @@ export type PlaybackClock = {
   reset(): void;
 };
 
-export function createPlaybackClock(dt: number, maxTicksPerFrame = MAX_TICKS_PER_FRAME): PlaybackClock {
+export function createPlaybackClock(
+  dt: number,
+  maxTicksPerFrame = MAX_TICKS_PER_FRAME,
+): PlaybackClock {
   let accumulated = 0; // segundos simulados pendentes
   return {
     advance(elapsedMs, speed) {

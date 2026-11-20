@@ -27,12 +27,20 @@ export type SessionState = {
   readonly controllerIssues: ControllerIssue[];
 };
 
-type Built = { ok: true; world: World; simulation: Simulation } | { ok: false; worldIssues: ValidationIssue[]; controllerIssues: ControllerIssue[] };
+type Built =
+  | { ok: true; world: World; simulation: Simulation }
+  | { ok: false; worldIssues: ValidationIssue[]; controllerIssues: ControllerIssue[] };
 
-function build(worldText: string, controllers: Record<string, string>, modalities: ModalityRegistry): Built {
+function build(
+  worldText: string,
+  controllers: Record<string, string>,
+  modalities: ModalityRegistry,
+): Built {
   const world = loadWorld(worldText, { modalities });
   if (!world.ok) return { ok: false, worldIssues: world.errors, controllerIssues: [] };
-  const known = Object.fromEntries(Object.entries(controllers).filter(([id]) => world.value.robots.some((r) => r.id === id)));
+  const known = Object.fromEntries(
+    Object.entries(controllers).filter(([id]) => world.value.robots.some((r) => r.id === id)),
+  );
   const simulation = createSimulation(world.value, { controllers: known, modalities });
   if (!simulation.ok) return { ok: false, worldIssues: [], controllerIssues: simulation.errors };
   return { ok: true, world: world.value, simulation: simulation.value };
@@ -50,7 +58,9 @@ const fresh = (
   exampleId,
   worldText,
   world: built.world,
-  controllers: Object.fromEntries(Object.entries(controllers).filter(([id]) => built.world.robots.some((r) => r.id === id))),
+  controllers: Object.fromEntries(
+    Object.entries(controllers).filter(([id]) => built.world.robots.some((r) => r.id === id)),
+  ),
   simulation: built.simulation,
   state: built.simulation.getState(),
   running: false,
@@ -67,7 +77,10 @@ export function createSession(
 ): SessionState {
   const built = build(worldText, controllers, modalities);
   if (!built.ok) {
-    const messages = [...built.worldIssues.map((i) => `${i.path}: ${i.message}`), ...built.controllerIssues.map((i) => i.message)];
+    const messages = [
+      ...built.worldIssues.map((i) => `${i.path}: ${i.message}`),
+      ...built.controllerIssues.map((i) => i.message),
+    ];
     throw new Error(`Sessão inválida:\n${messages.join('\n')}`);
   }
   return fresh({}, built, worldText, controllers, exampleId);
@@ -82,7 +95,13 @@ export function applyWorld(
   modalities: ModalityRegistry = modalityRegistry,
 ): SessionState {
   const built = build(worldText, controllers, modalities);
-  if (!built.ok) return { ...session, running: false, worldIssues: built.worldIssues, controllerIssues: built.controllerIssues };
+  if (!built.ok)
+    return {
+      ...session,
+      running: false,
+      worldIssues: built.worldIssues,
+      controllerIssues: built.controllerIssues,
+    };
   return fresh({ speed: session.speed }, built, worldText, controllers, exampleId);
 }
 
@@ -95,7 +114,13 @@ export function applyController(
 ): SessionState {
   const controllers = { ...session.controllers, [robotId]: source };
   const built = build(session.worldText, controllers, modalities);
-  if (!built.ok) return { ...session, running: false, worldIssues: built.worldIssues, controllerIssues: built.controllerIssues };
+  if (!built.ok)
+    return {
+      ...session,
+      running: false,
+      worldIssues: built.worldIssues,
+      controllerIssues: built.controllerIssues,
+    };
   return fresh({ speed: session.speed }, built, session.worldText, controllers, session.exampleId);
 }
 
@@ -104,7 +129,8 @@ const isFinished = (session: SessionState): boolean => session.state.match?.phas
 export const play = (session: SessionState): SessionState =>
   isFinished(session) || session.running ? session : { ...session, running: true };
 
-export const pause = (session: SessionState): SessionState => (session.running ? { ...session, running: false } : session);
+export const pause = (session: SessionState): SessionState =>
+  session.running ? { ...session, running: false } : session;
 
 /** Avança um tick; disponível somente pausado (FR-005). */
 export const stepOnce = (session: SessionState): SessionState =>
@@ -123,4 +149,7 @@ export const reset = (session: SessionState): SessionState => ({
   running: false,
 });
 
-export const setSpeed = (session: SessionState, speed: number): SessionState => ({ ...session, speed });
+export const setSpeed = (session: SessionState, speed: number): SessionState => ({
+  ...session,
+  speed,
+});

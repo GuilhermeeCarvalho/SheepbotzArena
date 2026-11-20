@@ -5,7 +5,13 @@ import { SCENE_COLORS } from './palette';
  * Robô de tração diferencial: chassi com o diâmetro de colisão, duas rodas laterais,
  * indicador de frente (+x local) e anel de destaque quando selecionado.
  */
-export function RobotMesh({ robot, onSelect }: { robot: RobotDescriptor; onSelect?: (id: string) => void }) {
+export function RobotMesh({
+  robot,
+  onSelect,
+}: {
+  robot: RobotDescriptor;
+  onSelect?: (id: string) => void;
+}) {
   const { radius: r, bodyHeight: h } = robot;
   const wheelRadius = h * 0.45;
   const wheelWidth = r * 0.22;
@@ -46,10 +52,18 @@ export function RobotMesh({ robot, onSelect }: { robot: RobotDescriptor; onSelec
       {/* Indicador de frente */}
       <mesh name="front-marker" position={[r * 0.62, h * 0.48, 0]} rotation={[0, 0, -Math.PI / 2]}>
         <coneGeometry args={[r * 0.18, r * 0.42, 3]} />
-        <meshStandardMaterial color={SCENE_COLORS.frontMarker} emissive={SCENE_COLORS.frontMarker} emissiveIntensity={0.35} />
+        <meshStandardMaterial
+          color={SCENE_COLORS.frontMarker}
+          emissive={SCENE_COLORS.frontMarker}
+          emissiveIntensity={0.35}
+        />
       </mesh>
       {robot.selected && (
-        <mesh name="selection-ring" position={[0, -h / 2 + 0.003, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <mesh
+          name="selection-ring"
+          position={[0, -h / 2 + 0.003, 0]}
+          rotation={[-Math.PI / 2, 0, 0]}
+        >
           <ringGeometry args={[r * 1.25, r * 1.42, 64]} />
           <meshBasicMaterial color={SCENE_COLORS.selection} transparent opacity={0.9} />
         </mesh>

@@ -1,6 +1,10 @@
 // Spec 002 — US2: relógio de reprodução (FR-006).
 import { describe, expect, it } from 'vitest';
-import { createPlaybackClock, MAX_TICKS_PER_FRAME, PLAYBACK_SPEEDS } from 'src/app/session/playbackClock';
+import {
+  createPlaybackClock,
+  MAX_TICKS_PER_FRAME,
+  PLAYBACK_SPEEDS,
+} from 'src/app/session/playbackClock';
 
 describe('relógio de reprodução', () => {
   it('US2-AC2: 100 ms a 1× com dt 0,05 → 2 ticks; a 2× → 4', () => {

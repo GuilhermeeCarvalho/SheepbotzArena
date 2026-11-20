@@ -7,7 +7,11 @@ import type { DynamicScene, StaticScene } from './sceneModel';
 import { SensorRays } from './SensorRays';
 
 /** Parte estática da cena, recriada apenas quando o mundo muda. */
-export const StaticSceneContent = memo(function StaticSceneContent({ scene }: { scene: StaticScene }) {
+export const StaticSceneContent = memo(function StaticSceneContent({
+  scene,
+}: {
+  scene: StaticScene;
+}) {
   return (
     <>
       <ArenaMesh arena={scene.arena} />
@@ -22,7 +26,13 @@ export const StaticSceneContent = memo(function StaticSceneContent({ scene }: { 
 });
 
 /** Robôs e raios, redesenhados a cada tick. */
-export function DynamicSceneContent({ scene, onSelectRobot }: { scene: DynamicScene; onSelectRobot?: (id: string) => void }) {
+export function DynamicSceneContent({
+  scene,
+  onSelectRobot,
+}: {
+  scene: DynamicScene;
+  onSelectRobot?: (id: string) => void;
+}) {
   return (
     <>
       <group name="robots">

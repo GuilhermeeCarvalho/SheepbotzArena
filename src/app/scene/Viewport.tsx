@@ -27,17 +27,37 @@ function CameraRig({ camera, signal }: { camera: StaticScene['camera']; signal: 
     controls.current?.target.set(...camera.target);
     controls.current?.update();
   }, [camera, signal, three.camera]);
-  return <OrbitControls ref={controls} makeDefault enableDamping dampingFactor={0.12} maxPolarAngle={Math.PI / 2.05} />;
+  return (
+    <OrbitControls
+      ref={controls}
+      makeDefault
+      enableDamping
+      dampingFactor={0.12}
+      maxPolarAngle={Math.PI / 2.05}
+    />
+  );
 }
 
 /** Cena 3D da simulação (FR-001 a FR-004). Apenas desenha o estado do núcleo. */
-export function Viewport({ world, state, showRays, selectedRobotId, onSelectRobot, resetViewSignal }: ViewportProps) {
+export function Viewport({
+  world,
+  state,
+  showRays,
+  selectedRobotId,
+  onSelectRobot,
+  resetViewSignal,
+}: ViewportProps) {
   const staticScene = useMemo(() => buildStaticScene(world), [world]);
   const dynamicScene = buildDynamicScene(world, state, { showRays, selectedRobotId });
   const span = Math.max(world.arena.width, world.arena.height);
   return (
     <div className={styles.viewport} data-testid="viewport">
-      <Canvas shadows dpr={[1, 2]} camera={{ fov: 45, near: 0.01, far: 500, position: staticScene.camera.position }} onPointerMissed={() => onSelectRobot?.(null)}>
+      <Canvas
+        shadows
+        dpr={[1, 2]}
+        camera={{ fov: 45, near: 0.01, far: 500, position: staticScene.camera.position }}
+        onPointerMissed={() => onSelectRobot?.(null)}
+      >
         <color attach="background" args={[SCENE_COLORS.background]} />
         <fog attach="fog" args={[SCENE_COLORS.background, span * 2, span * 6]} />
         <hemisphereLight args={['#cfe7ff', '#1a222c', 0.75]} />

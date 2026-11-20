@@ -10,7 +10,11 @@ export type SessionActions = {
   step(): void;
   reset(): void;
   setSpeed(speed: number): void;
-  applyWorld(worldText: string, controllers?: Record<string, string>, exampleId?: string | null): boolean;
+  applyWorld(
+    worldText: string,
+    controllers?: Record<string, string>,
+    exampleId?: string | null,
+  ): boolean;
   applyController(robotId: string, source: string): boolean;
 };
 
