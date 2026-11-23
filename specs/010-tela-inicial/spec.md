@@ -1,6 +1,6 @@
 # Especificação da feature: Tela inicial
 
-Feature: `010-tela-inicial` | Criada em: 2026-11-23 | Status: Planejada
+Feature: `010-tela-inicial` | Criada em: 2026-11-23 | Status: Implementada
 
 Requisitos do briefing atendidos: RB-27.
 
