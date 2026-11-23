@@ -15,6 +15,7 @@ Commits: `feat(008/<ID>): <descrição> [FR-xxx]`.
 - [x] T007 [US5] Campo, exemplo 2 × 1 e estratégias; testes `US5-AC1` e `US5-AC2` (FR-008)
 - [x] T008 Interface: `BallMesh` no modelo de cena e teste (FR-009)
 - [x] T009 Acabamento: README, HANDOFF, cobertura
+- [x] T010 Exemplos adicionais: 1 × 1, 2 × 2 e 3 × 3; teste em `tests/acceptance/all-examples.test.ts` (FR-008)
 
 ## Rastreabilidade
 

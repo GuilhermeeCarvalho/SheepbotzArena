@@ -1,7 +1,7 @@
 # SheepBotz Arena
 
 <!-- stats:start -->
-**310 testes · 94,8% de cobertura** (linhas; relatório em [`coverage/`](coverage/index.html))
+**335 testes · 94,8% de cobertura** (linhas; relatório em [`coverage/`](coverage/index.html))
 <!-- stats:end -->
 
 Simulador web de robôs móveis para a equipe Univille SheepBotz, no espírito do
@@ -21,6 +21,7 @@ Projeto desenvolvido com **Spec-Driven Development** (GitHub SpecKit).
 | Requisitos extraídos do briefing, perguntas e decisões | [`docs/briefing/requisitos-extraidos.md`](docs/briefing/requisitos-extraidos.md) |
 | Regras oficiais por modalidade | [`docs/references/robocore/`](docs/references/robocore/) |
 | Especificações, planos e tarefas por feature | [`specs/`](specs/) |
+| Roteiro de exemplos para a apresentação | [`docs/apresentacao-exemplos.md`](docs/apresentacao-exemplos.md) |
 
 ### Features
 

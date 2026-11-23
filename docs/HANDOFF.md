@@ -26,7 +26,9 @@ Leia este arquivo inteiro antes de mudar qualquer coisa. Depois leia, nesta orde
 | 008 — Futebol Mini / VSS | ✅ 9/9 tarefas: núcleo ganhou bola, câmera global e reposição pedida pelo árbitro; gols, bola livre, exemplo 2 × 1 |
 | 009 — Controlador remoto via WebSocket | bônus |
 
-Testes e cobertura: **310 testes · 94,8% de cobertura de linhas**.
+Testes e cobertura: **335 testes · 94,8% de cobertura de linhas**
+
+Exemplos: 21 mundos (≥ 3 por categoria); roteiro da demo em `docs/apresentacao-exemplos.md`..
 
 Interface: tema claro e tema escuro (preto e verde da SheepBotz, botão sol/lua); logo sem
 fundo em `public/brand/sheepbotz-mark.png`, gerado por `scripts/brand/cutout-logo.py`

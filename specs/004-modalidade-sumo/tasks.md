@@ -44,6 +44,7 @@ Formato: `[ID] [P?] [História] Descrição (requisitos)`. Commits:
 ## Fase 7: Acabamento
 
 - [x] T015 Validar `quickstart.md` (CLI e interface), atualizar README, HANDOFF e cobertura
+- [x] T016 Exemplos adicionais para a apresentação: estratégias invertidas, par de massa (300 g × 500 g) e motores no Mega; teste em `tests/acceptance/all-examples.test.ts` (FR-008, FR-009)
 
 ## Dependências
 

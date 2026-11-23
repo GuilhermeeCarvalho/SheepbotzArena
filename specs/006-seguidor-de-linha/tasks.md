@@ -13,6 +13,7 @@ Commits: `feat(006/<ID>): <descrição> [FR-xxx]`. Testes obrigatórios.
 - [x] T005 [US3] `arena.ts`, registro em `src/modalities/index.ts`, gerador e mundos de exemplo; testes `US3-AC1` e `US3-AC2` (FR-007, FR-008, FR-009)
 - [x] T006 [US4] `examples/controllers/line-follower-pd.js` e teste `US4-AC1` (FR-008)
 - [x] T007 Acabamento: README, HANDOFF, cobertura
+- [x] T008 Exemplos adicionais: zigue-zague, curvas fechadas (0,12 m) e PD agressivo gerado do controlador-base; teste em `tests/acceptance/all-examples.test.ts` (FR-007, FR-008)
 
 ## Rastreabilidade
 
