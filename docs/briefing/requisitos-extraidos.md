@@ -126,6 +126,7 @@ Cada feature é uma pasta `specs/NNN-nome/` com `spec.md`, `plan.md` e `tasks.md
 | 007     | Modalidade Trekking                    | RB-23, 25, 26                   | Além do completo |
 | 008     | Modalidade Futebol de robôs            | RB-20, 23, 25, 26               | Além do completo |
 | 009     | Controlador remoto via WebSocket       | RB-31                           | Bônus         |
+| —       | Combate (RoboCore)                     | RB-23                           | Por último, a pedido da equipe (exige dano/impacto, fora do modelo atual) |
 
 Ordem de entrega: 001 → 002 → 003 → 004 → 005 fecham o escopo completo. 006 a 009 só
 começam com o escopo completo entregue e a cobertura ≥ 80%.
