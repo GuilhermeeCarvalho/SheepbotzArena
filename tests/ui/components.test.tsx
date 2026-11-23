@@ -245,3 +245,19 @@ describe('SegmentedControl', () => {
     expect(onChange).toHaveBeenCalledTimes(1);
   });
 });
+
+describe('CodeEditor no tema escuro', () => {
+  it('renderiza com o tema escuro', () => {
+    const { container } = render(
+      <CodeEditor
+        value="let a = 1;"
+        onChange={() => {}}
+        language="javascript"
+        ariaLabel="Escuro"
+        theme="dark"
+      />,
+    );
+    expect(container.querySelector('.cm-editor')).not.toBeNull();
+    expect(container.textContent).toContain('let a = 1;');
+  });
+});

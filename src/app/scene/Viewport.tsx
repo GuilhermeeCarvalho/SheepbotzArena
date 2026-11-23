@@ -3,7 +3,8 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { type ComponentRef, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Vector3 } from 'three';
 import type { SimulationState, World } from '../../core/index';
-import { SCENE_COLORS } from './palette';
+import { SCENE_PALETTES, type ThemeName } from './palette';
+import { ScenePaletteContext } from './ScenePaletteContext';
 import { RobotLabelProjector } from './RobotLabels';
 import { DynamicSceneContent, StaticSceneContent } from './SceneContent';
 import {
@@ -27,6 +28,8 @@ export type ViewportProps = {
   cameraMode: CameraMode;
   /** Incrementar este número recentraliza a câmera no modo atual (FR-003). */
   resetViewSignal: number;
+  /** Tema da interface; define a paleta da cena (FR-017). */
+  theme?: ThemeName;
 };
 
 /** Suavização exponencial por quadro (independe da taxa de quadros). */
@@ -102,7 +105,9 @@ export function Viewport({
   onSelectRobot,
   cameraMode,
   resetViewSignal,
+  theme = 'light',
 }: ViewportProps) {
+  const palette = SCENE_PALETTES[theme];
   const staticScene = useMemo(() => buildStaticScene(world), [world]);
   const dynamicScene = buildDynamicScene(world, state, { showRays, selectedRobotId });
   const span = Math.max(world.arena.width, world.arena.height);
@@ -128,9 +133,11 @@ export function Viewport({
         camera={{ fov: 45, near: 0.01, far: 500, position: staticScene.camera.position }}
         onPointerMissed={() => onSelectRobot?.(null)}
       >
-        <color attach="background" args={[SCENE_COLORS.background]} />
-        <fog attach="fog" args={[SCENE_COLORS.background, span * 2.5, span * 7]} />
-        <hemisphereLight args={['#ffffff', '#b8bcc4', 1.1]} />
+        <color attach="background" args={[palette.background]} />
+        <fog attach="fog" args={[palette.background, span * 2.5, span * 7]} />
+        <hemisphereLight
+          args={[palette.skyLight, palette.groundLight, theme === 'dark' ? 0.9 : 1.1]}
+        />
         <directionalLight
           position={[span * 0.5, span * 1.5, span * 0.7]}
           intensity={1.8}
@@ -147,19 +154,21 @@ export function Viewport({
           args={[span * 4, span * 4]}
           cellSize={0.5}
           cellThickness={0.7}
-          cellColor={SCENE_COLORS.grid}
+          cellColor={palette.grid}
           sectionSize={2}
           sectionThickness={1}
-          sectionColor={SCENE_COLORS.gridSection}
+          sectionColor={palette.gridSection}
           fadeDistance={span * 4}
           infiniteGrid
         />
-        <StaticSceneContent scene={staticScene} />
-        <DynamicSceneContent
-          scene={dynamicScene}
-          onSelectRobot={(id) => onSelectRobot?.(id)}
-          onHoverRobot={onHoverRobot}
-        />
+        <ScenePaletteContext.Provider value={palette}>
+          <StaticSceneContent scene={staticScene} />
+          <DynamicSceneContent
+            scene={dynamicScene}
+            onSelectRobot={(id) => onSelectRobot?.(id)}
+            onHoverRobot={onHoverRobot}
+          />
+        </ScenePaletteContext.Provider>
         <RobotLabelProjector robots={robotsRef} elements={labelElements} />
         <CameraRig
           mode={cameraMode}

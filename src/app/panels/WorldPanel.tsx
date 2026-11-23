@@ -8,10 +8,11 @@ export type WorldPanelProps = {
   worldText: string;
   issues: ValidationIssue[];
   onApply: (worldText: string) => void;
+  theme?: 'light' | 'dark';
 };
 
 /** Edição do JSON do mundo e abertura de arquivo (FR-010). O pai remonta o painel quando o mundo vigente muda. */
-export function WorldPanel({ worldText, issues, onApply }: WorldPanelProps) {
+export function WorldPanel({ worldText, issues, onApply, theme }: WorldPanelProps) {
   const [draft, setDraft] = useState(worldText);
   const fileInput = useRef<HTMLInputElement>(null);
   const dirty = draft !== worldText;
@@ -66,7 +67,13 @@ export function WorldPanel({ worldText, issues, onApply }: WorldPanelProps) {
         }))}
       />
       <div className={styles.editorArea}>
-        <CodeEditor value={draft} onChange={setDraft} language="json" ariaLabel="JSON do mundo" />
+        <CodeEditor
+          value={draft}
+          onChange={setDraft}
+          language="json"
+          ariaLabel="JSON do mundo"
+          theme={theme}
+        />
       </div>
     </div>
   );

@@ -28,6 +28,7 @@ export type ControllerPanelProps = {
   issues: ControllerIssue[];
   onSelectRobot: (id: string) => void;
   onApply: (robotId: string, source: string) => void;
+  theme?: 'light' | 'dark';
 };
 
 /**
@@ -41,6 +42,7 @@ export function ControllerPanel({
   issues,
   onSelectRobot,
   onApply,
+  theme,
 }: ControllerPanelProps) {
   const current = source ?? CONTROLLER_TEMPLATE;
   const [draft, setDraft] = useState(current);
@@ -99,6 +101,7 @@ export function ControllerPanel({
           onChange={setDraft}
           language="javascript"
           ariaLabel={`Controlador do robô ${robotId}`}
+          theme={theme}
         />
       </div>
       <details className={styles.apiReference}>

@@ -1,4 +1,4 @@
-import { PanelRightClose, PanelRightOpen } from 'lucide-react';
+import { Moon, PanelRightClose, PanelRightOpen, Sun } from 'lucide-react';
 import { IconButton, Kbd, Select } from '../../ui/index';
 import styles from './TopBar.module.css';
 
@@ -8,17 +8,24 @@ export type TopBarProps = {
   onSelectExample: (id: string) => void;
   sidePanelOpen: boolean;
   onToggleSidePanel: () => void;
+  theme: 'light' | 'dark';
+  onToggleTheme: () => void;
 };
+
+/** Logo oficial da SheepBotz sem fundo (public/brand; FR-017). */
+export const LOGO_SRC = '/brand/sheepbotz-mark.png';
 
 const CUSTOM_WORLD = '__custom__';
 
-/** Barra superior enxuta: marca, escolha do mundo e painel lateral (FR-009, FR-014). */
+/** Barra superior: logo, escolha do mundo, tema e painel lateral (FR-009, FR-014, FR-017). */
 export function TopBar({
   examples,
   exampleId,
   onSelectExample,
   sidePanelOpen,
   onToggleSidePanel,
+  theme,
+  onToggleTheme,
 }: TopBarProps) {
   const options = [
     ...examples.map((e) => ({ value: e.id, label: e.name })),
@@ -26,6 +33,7 @@ export function TopBar({
   ];
   return (
     <header className={styles.topBar}>
+      <img className={styles.logo} src={LOGO_SRC} alt="SheepBotz" width={30} height={30} />
       <span className={styles.wordmark}>
         SheepBotz <span className={styles.wordmarkLight}>Arena</span>
       </span>
@@ -42,6 +50,11 @@ export function TopBar({
       <span className={styles.shortcuts} aria-label="Atalhos de teclado">
         <Kbd>Espaço</Kbd> executar <Kbd>→</Kbd> avançar <Kbd>R</Kbd> reiniciar
       </span>
+      <IconButton
+        label={theme === 'dark' ? 'Tema claro' : 'Tema escuro'}
+        icon={theme === 'dark' ? <Sun /> : <Moon />}
+        onClick={onToggleTheme}
+      />
       <IconButton
         label={sidePanelOpen ? 'Recolher painel' : 'Mostrar painel'}
         icon={sidePanelOpen ? <PanelRightClose /> : <PanelRightOpen />}

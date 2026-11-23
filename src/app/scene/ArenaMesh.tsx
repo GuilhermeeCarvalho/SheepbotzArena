@@ -1,8 +1,9 @@
 import type { StaticScene } from './sceneModel';
-import { SCENE_COLORS } from './palette';
+import { useScenePalette } from './ScenePaletteContext';
 
 /** Chão da arena e paredes de borda. */
 export function ArenaMesh({ arena }: { arena: StaticScene['arena'] }) {
+  const palette = useScenePalette();
   return (
     <group name="arena">
       <mesh name="arena-floor" rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
@@ -19,7 +20,7 @@ export function ArenaMesh({ arena }: { arena: StaticScene['arena'] }) {
           receiveShadow
         >
           <boxGeometry args={wall.size} />
-          <meshStandardMaterial color={SCENE_COLORS.wall} roughness={0.7} />
+          <meshStandardMaterial color={palette.wall} roughness={0.7} />
         </mesh>
       ))}
     </group>

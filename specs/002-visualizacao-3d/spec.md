@@ -238,6 +238,27 @@ a partir do mundo e da pose do robô.
 
 ---
 
+### História de usuário 8 — Modo escuro com a identidade SheepBotz (Prioridade: P3)
+
+O usuário alterna entre o tema claro e um tema escuro nas cores da equipe (preto e verde,
+com o azul de apoio do escudo). O logo da SheepBotz aparece na barra superior e como ícone
+da aba. A escolha é lembrada; sem escolha, segue a preferência do sistema.
+
+**Por que esta prioridade**: identidade da equipe na demo e conforto em apresentações em
+salas escuras. Pedido da equipe após a revisão visual.
+
+**Cenários de aceitação**:
+
+1. **Dado** o sistema em modo escuro e nenhuma escolha salva, **quando** a interface abre,
+   **então** o tema escuro está ativo.
+2. **Dado** o tema claro, **quando** o usuário aciona "Tema escuro", **então** a interface,
+   a cena 3D e o editor passam ao tema escuro, e o botão passa a oferecer "Tema claro".
+3. **Dado** uma escolha feita, **quando** a página é recarregada, **então** a escolha é mantida.
+4. **Dado** qualquer tema, **quando** a interface é exibida, **então** o logo da SheepBotz
+   (sem fundo) aparece ao lado do nome na barra superior.
+
+---
+
 ### Casos de borda
 
 - Mundo sem robôs: a cena mostra a arena; os controles funcionam e o tempo avança.
@@ -304,6 +325,10 @@ a partir do mundo e da pose do robô.
   (robô selecionado), conforme a história 7. *(RB-19)*
 - **FR-016**: O sistema DEVE exibir o nome do robô sob o mouse e selecionar o robô
   clicado, abrindo seu controlador. *(RB-19)*
+- **FR-017**: O sistema DEVE oferecer tema claro e tema escuro (preto e verde da SheepBotz),
+  alternáveis pelo usuário, com a escolha lembrada e, na ausência dela, a preferência do
+  sistema; o logo da equipe sem fundo DEVE aparecer na barra superior e como ícone da aba.
+  *(constitution, princípio V; identidade da equipe)*
 
 ### Entidades-chave
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { SCENE_COLORS } from './palette';
+import { useScenePalette } from './ScenePaletteContext';
 import type { RobotMesh as RobotDescriptor } from './sceneModel';
 
 /**
@@ -17,13 +17,14 @@ export function RobotMesh({
   onHoverChange?: (id: string | null) => void;
 }) {
   const { radius: r, bodyHeight: h } = robot;
+  const palette = useScenePalette();
   const [hovered, setHovered] = useState(false);
   useEffect(() => {
     onHoverChange?.(hovered ? robot.id : null);
   }, [hovered, onHoverChange, robot.id]);
   const wheelRadius = h * 0.45;
   const wheelWidth = r * 0.22;
-  const chassisColor = robot.status === 'error' ? SCENE_COLORS.error : robot.color;
+  const chassisColor = robot.status === 'error' ? palette.error : robot.color;
   return (
     <group
       name={`robot-${robot.id}`}
@@ -59,15 +60,15 @@ export function RobotMesh({
           castShadow
         >
           <cylinderGeometry args={[wheelRadius, wheelRadius, wheelWidth, 24]} />
-          <meshStandardMaterial color={SCENE_COLORS.wheel} roughness={0.9} />
+          <meshStandardMaterial color={palette.wheel} roughness={0.9} />
         </mesh>
       ))}
       {/* Indicador de frente */}
       <mesh name="front-marker" position={[r * 0.62, h * 0.48, 0]} rotation={[0, 0, -Math.PI / 2]}>
         <coneGeometry args={[r * 0.18, r * 0.42, 3]} />
         <meshStandardMaterial
-          color={SCENE_COLORS.frontMarker}
-          emissive={SCENE_COLORS.frontMarker}
+          color={palette.frontMarker}
+          emissive={palette.frontMarker}
           emissiveIntensity={0.35}
         />
       </mesh>
@@ -78,7 +79,7 @@ export function RobotMesh({
           rotation={[-Math.PI / 2, 0, 0]}
         >
           <ringGeometry args={[r * 1.25, r * 1.42, 64]} />
-          <meshBasicMaterial color={SCENE_COLORS.selection} transparent opacity={0.95} />
+          <meshBasicMaterial color={palette.selection} transparent opacity={0.95} />
         </mesh>
       )}
     </group>

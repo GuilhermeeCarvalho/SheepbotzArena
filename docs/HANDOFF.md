@@ -24,7 +24,11 @@ Leia este arquivo inteiro antes de mudar qualquer coisa. Depois leia, nesta orde
 | 006 Seguidor de Linha · 007 Trekking · 008 Futebol | planejadas; regras em `docs/references/robocore/` |
 | 009 — Controlador remoto via WebSocket | bônus |
 
-Testes e cobertura: **241 testes · 93,1% de cobertura de linhas**. Lint e TypeScript passam sem erros.
+Testes e cobertura: **250 testes · 93,2% de cobertura de linhas**.
+
+Interface: tema claro e tema escuro (preto e verde da SheepBotz, botão sol/lua); logo sem
+fundo em `public/brand/sheepbotz-mark.png`, gerado por `scripts/brand/cutout-logo.py`
+(rodar com `uv run --with pillow --with numpy --with scipy python scripts/brand/cutout-logo.py <logo.jpg> <saída>`). Lint e TypeScript passam sem erros.
 
 ### Comandos
 

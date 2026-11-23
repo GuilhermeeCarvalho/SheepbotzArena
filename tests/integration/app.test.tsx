@@ -4,6 +4,7 @@ import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { App } from 'src/app/App';
+import { THEME_STORAGE_KEY } from 'src/app/theme/useTheme';
 import type { Example } from 'src/app/examples/examples';
 import { constantSpeed, robotData, worldData } from '../helpers';
 
@@ -16,11 +17,12 @@ vi.mock('src/app/scene/Viewport', () => ({
     selectedRobotId: string | null;
     cameraMode: string;
     resetViewSignal: number;
+    theme?: string;
     onSelectRobot?: (id: string | null) => void;
   }) => (
     <div data-testid="viewport">
       raios={String(props.showRays)} selecionado={String(props.selectedRobotId)} câmera=
-      {props.cameraMode} vista={props.resetViewSignal}
+      {props.cameraMode} vista={props.resetViewSignal} tema={props.theme}
       <button type="button" onClick={() => props.onSelectRobot?.('r2')}>
         clicar-robo-r2
       </button>
@@ -246,5 +248,56 @@ describe('App', () => {
     expect(screen.getByText('Nenhum robô para programar')).toBeInTheDocument();
     await userEvent.click(screen.getByRole('tab', { name: /Robôs/ }));
     expect(screen.getByText('Nenhum robô neste mundo')).toBeInTheDocument();
+  });
+
+  describe('US8 — tema escuro e marca SheepBotz', () => {
+    /** Dublê de `matchMedia` compatível com o CodeMirror (que escuta mudanças). */
+    const mediaQuery = (darkPreferred: boolean) => (query: string) => ({
+      matches: darkPreferred && query.includes('dark'),
+      media: query,
+      addListener: () => {},
+      removeListener: () => {},
+      addEventListener: () => {},
+      removeEventListener: () => {},
+    });
+
+    afterEach(() => {
+      window.localStorage.clear();
+      vi.unstubAllGlobals();
+      delete document.documentElement.dataset.theme;
+    });
+
+    it('US8-AC1: segue a preferência do sistema quando não há escolha salva', () => {
+      vi.stubGlobal('matchMedia', mediaQuery(true));
+      render(<App examples={examples} />);
+      expect(document.documentElement.dataset.theme).toBe('dark');
+      expect(viewport()).toHaveTextContent('tema=dark');
+    });
+
+    it('US8-AC2/AC3: alterna o tema, atualiza cena e editor e lembra a escolha', async () => {
+      render(<App examples={examples} />);
+      expect(document.documentElement.dataset.theme).toBe('light');
+      await userEvent.click(screen.getByRole('button', { name: 'Tema escuro' }));
+      expect(document.documentElement.dataset.theme).toBe('dark');
+      expect(viewport()).toHaveTextContent('tema=dark');
+      expect(screen.getByRole('button', { name: 'Tema claro' })).toBeInTheDocument();
+      expect(window.localStorage.getItem(THEME_STORAGE_KEY)).toBe('dark');
+      expect(document.querySelector('.cm-editor')).not.toBeNull();
+    });
+
+    it('US8-AC3: escolha salva tem precedência sobre o sistema', () => {
+      window.localStorage.setItem(THEME_STORAGE_KEY, 'light');
+      vi.stubGlobal('matchMedia', mediaQuery(true));
+      render(<App examples={examples} />);
+      expect(document.documentElement.dataset.theme).toBe('light');
+    });
+
+    it('US8-AC4: logo da SheepBotz na barra superior', () => {
+      render(<App examples={examples} />);
+      expect(screen.getByRole('img', { name: 'SheepBotz' })).toHaveAttribute(
+        'src',
+        '/brand/sheepbotz-mark.png',
+      );
+    });
   });
 });

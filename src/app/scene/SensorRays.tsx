@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from 'react';
 import { BufferGeometry, Float32BufferAttribute } from 'three';
 import type { RayMesh } from './sceneModel';
-import { SCENE_COLORS } from './palette';
+import { useScenePalette } from './ScenePaletteContext';
 
 function segmentsGeometry(rays: RayMesh[]): BufferGeometry {
   const positions = new Float32Array(rays.length * 6);
@@ -21,6 +21,7 @@ function endpointsGeometry(rays: RayMesh[]): BufferGeometry {
 
 /** Raios de laser/sonar: detecção em destaque, alcance máximo discreto (FR-004). */
 export function SensorRays({ rays }: { rays: RayMesh[] }) {
+  const palette = useScenePalette();
   const hits = useMemo(() => rays.filter((r) => r.hit), [rays]);
   const free = useMemo(() => rays.filter((r) => !r.hit), [rays]);
   const hitLines = useMemo(() => segmentsGeometry(hits), [hits]);
@@ -39,13 +40,13 @@ export function SensorRays({ rays }: { rays: RayMesh[] }) {
   return (
     <group name="sensor-rays">
       <lineSegments name="rays-hit" geometry={hitLines}>
-        <lineBasicMaterial color={SCENE_COLORS.rayHit} transparent opacity={0.9} />
+        <lineBasicMaterial color={palette.rayHit} transparent opacity={0.9} />
       </lineSegments>
       <lineSegments name="rays-free" geometry={freeLines}>
-        <lineBasicMaterial color={SCENE_COLORS.rayFree} transparent opacity={0.3} />
+        <lineBasicMaterial color={palette.rayFree} transparent opacity={0.3} />
       </lineSegments>
       <points name="rays-hit-points" geometry={hitPoints}>
-        <pointsMaterial color={SCENE_COLORS.rayHit} size={0.035} sizeAttenuation />
+        <pointsMaterial color={palette.rayHit} size={0.035} sizeAttenuation />
       </points>
     </group>
   );

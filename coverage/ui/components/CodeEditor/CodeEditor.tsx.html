@@ -41,9 +41,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">87.5% </span>
+                <span class="strong">90.9% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>7/8</span>
+                <span class='fraction'>10/11</span>
             </div>
         
             
@@ -148,7 +148,21 @@
 <a name='L72'></a><a href='#L72'>72</a>
 <a name='L73'></a><a href='#L73'>73</a>
 <a name='L74'></a><a href='#L74'>74</a>
-<a name='L75'></a><a href='#L75'>75</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a>
+<a name='L78'></a><a href='#L78'>78</a>
+<a name='L79'></a><a href='#L79'>79</a>
+<a name='L80'></a><a href='#L80'>80</a>
+<a name='L81'></a><a href='#L81'>81</a>
+<a name='L82'></a><a href='#L82'>82</a>
+<a name='L83'></a><a href='#L83'>83</a>
+<a name='L84'></a><a href='#L84'>84</a>
+<a name='L85'></a><a href='#L85'>85</a>
+<a name='L86'></a><a href='#L86'>86</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -182,13 +196,21 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">64x</span>
-<span class="cline-any cline-yes">64x</span>
-<span class="cline-any cline-yes">64x</span>
-<span class="cline-any cline-yes">64x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">64x</span>
-<span class="cline-any cline-yes">19x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">70x</span>
+<span class="cline-any cline-yes">70x</span>
+<span class="cline-any cline-yes">70x</span>
+<span class="cline-any cline-yes">70x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">70x</span>
+<span class="cline-any cline-yes">25x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -203,28 +225,29 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">19x</span>
-<span class="cline-any cline-yes">19x</span>
-<span class="cline-any cline-yes">19x</span>
-<span class="cline-any cline-yes">19x</span>
+<span class="cline-any cline-yes">25x</span>
+<span class="cline-any cline-yes">25x</span>
+<span class="cline-any cline-yes">25x</span>
+<span class="cline-any cline-yes">25x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">64x</span>
-<span class="cline-any cline-yes">45x</span>
-<span class="cline-any cline-yes">45x</span>
-<span class="cline-any cline-yes">45x</span>
-<span class="cline-any cline-yes">45x</span>
+<span class="cline-any cline-yes">70x</span>
+<span class="cline-any cline-yes">50x</span>
+<span class="cline-any cline-yes">50x</span>
+<span class="cline-any cline-yes">50x</span>
+<span class="cline-any cline-yes">50x</span>
 <span class="cline-any cline-yes">26x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">64x</span>
+<span class="cline-any cline-yes">70x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { javascript } from '@codemirror/lang-javascript';
 import { json } from '@codemirror/lang-json';
 import { EditorState } from '@codemirror/state';
+import { oneDark } from '@codemirror/theme-one-dark';
 import { EditorView } from '@codemirror/view';
 import { basicSetup } from 'codemirror';
 import { useEffect, useRef } from 'react';
@@ -236,18 +259,20 @@ export type CodeEditorProps = {
   onChange: (value: string) =&gt; void;
   language: 'javascript' | 'json';
   ariaLabel: string;
+  /** Tema do editor; no escuro usa a sintaxe "One Dark" sobre o fundo dos tokens. */
+  theme?: 'light' | 'dark';
   className?: string;
 };
 &nbsp;
 const editorTheme = EditorView.theme({
-  '&amp;': { height: '100%', fontSize: '12.5px', backgroundColor: 'transparent' },
+  '&amp;': { height: '100%', fontSize: '12.5px', backgroundColor: 'transparent !important' },
   '.cm-scroller': { fontFamily: 'var(--font-mono)', lineHeight: '1.6' },
   '.cm-gutters': {
-    backgroundColor: 'transparent',
+    backgroundColor: 'transparent !important',
     border: 'none',
     color: 'var(--color-text-subtle)',
   },
-  '.cm-activeLine, .cm-activeLineGutter': { backgroundColor: 'rgba(27, 27, 25, 0.035)' },
+  '.cm-activeLine, .cm-activeLineGutter': { backgroundColor: 'var(--color-primary-soft)' },
   '.cm-selectionBackground, &amp;.cm-focused .cm-selectionBackground': {
     backgroundColor: 'rgba(28, 126, 214, 0.16) !important',
   },
@@ -255,7 +280,14 @@ const editorTheme = EditorView.theme({
 });
 &nbsp;
 /** Editor de código (CodeMirror 6) com valor controlado. */
-export function CodeEditor({ value, onChange, language, ariaLabel, className }: CodeEditorProps) {
+export function CodeEditor({
+  value,
+  onChange,
+  language,
+  ariaLabel,
+  theme = 'light',
+  className,
+}: CodeEditorProps) {
   const hostRef = useRef&lt;HTMLDivElement&gt;(null);
   const viewRef = useRef&lt;EditorView | null&gt;(null);
   const onChangeRef = useRef(onChange);
@@ -269,6 +301,7 @@ export function CodeEditor({ value, onChange, language, ariaLabel, className }: 
         extensions: [
           basicSetup,
           language === 'json' ? json() : javascript(),
+          ...(theme === 'dark' ? [oneDark] : []),
           editorTheme,
           EditorView.contentAttributes.of({ 'aria-label': ariaLabel }),
           EditorView.updateListener.of((update) =&gt; {
@@ -283,7 +316,7 @@ export function CodeEditor({ value, onChange, language, ariaLabel, className }: 
       viewRef.current = null;
     };
     // O editor é recriado só quando a linguagem muda; o valor é sincronizado no efeito abaixo.
-  }, [language, ariaLabel]);
+  }, [language, ariaLabel, theme]);
 &nbsp;
   useEffect(() =&gt; {
     const view = viewRef.current;
@@ -303,7 +336,7 @@ export function CodeEditor({ value, onChange, language, ariaLabel, className }: 
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://vitest.dev/" target="_blank" rel="noopener noreferrer">Vitest</a>
-                at 2026-11-23T02:05:38.561Z
+                at 2026-11-23T02:17:31.959Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

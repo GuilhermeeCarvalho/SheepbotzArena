@@ -15,6 +15,7 @@ import type { CameraMode } from './scene/sceneModel';
 import { Viewport } from './scene/Viewport';
 import { createSession } from './session/session';
 import { useSimulationSession } from './session/useSimulationSession';
+import { useTheme } from './theme/useTheme';
 
 type SideTab = 'controller' | 'world' | 'robots';
 
@@ -32,6 +33,7 @@ export function App({ examples = loadBundledExamples() }: { examples?: Example[]
     const first = examples[0]!;
     return createSession(first.worldText, first.controllers, first.id);
   });
+  const [theme, toggleTheme] = useTheme();
   const [tab, setTab] = useState<SideTab>('controller');
   const [sidePanelOpen, setSidePanelOpen] = useState(true);
   const [showRays, setShowRays] = useState(true);
@@ -94,6 +96,7 @@ export function App({ examples = loadBundledExamples() }: { examples?: Example[]
         issues={controllerIssues}
         onSelectRobot={setSelected}
         onApply={(robotId, source) => actions.applyController(robotId, source)}
+        theme={theme}
       />
     ),
     world: (
@@ -102,6 +105,7 @@ export function App({ examples = loadBundledExamples() }: { examples?: Example[]
         worldText={session.worldText}
         issues={session.worldIssues}
         onApply={(text) => actions.applyWorld(text)}
+        theme={theme}
       />
     ),
     robots: (
@@ -123,6 +127,8 @@ export function App({ examples = loadBundledExamples() }: { examples?: Example[]
           onSelectExample={selectExample}
           sidePanelOpen={sidePanelOpen}
           onToggleSidePanel={() => setSidePanelOpen((open) => !open)}
+          theme={theme}
+          onToggleTheme={toggleTheme}
         />
       }
     >
@@ -138,6 +144,7 @@ export function App({ examples = loadBundledExamples() }: { examples?: Example[]
               onSelectRobot={selectRobotFromScene}
               cameraMode={effectiveCameraMode}
               resetViewSignal={resetViewSignal}
+              theme={theme}
             />
             <SceneHud
               worldName={session.world.name}

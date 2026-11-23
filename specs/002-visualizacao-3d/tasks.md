@@ -109,6 +109,13 @@ Commits: `<tipo>(002/<ID>): <descrição> [<FR>, ...]`.
 - [x] T035 [US7] Rótulo do robô ao passar o mouse e seleção por clique abrindo o controlador; modo "Seguir" no `CameraRig` (FR-015, FR-016)
 - [x] T036 Atualizar testes de componentes e de integração para o novo layout e validar no navegador (FR-013 a FR-016)
 
+## Fase 11: Tema escuro e marca SheepBotz (história 8)
+
+- [x] T037 [US8] Recortar o logo sem fundo (`scripts/brand/cutout-logo.py`) e publicar `public/brand/sheepbotz-mark.png` e `public/favicon.png` (FR-017)
+- [x] T038 [US8] Tokens escuros em `src/ui/tokens.css`, `CodeEditor` com prop `theme` e overlays por token (FR-013, FR-017)
+- [x] T039 [US8] `useTheme`, botão de tema e logo na `TopBar`, paletas da cena por tema (FR-017)
+- [x] T040 [US8] Testes `US8-AC1` a `US8-AC4` e validação visual nos dois temas (FR-017)
+
 ## Dependências
 
 Preparação → Fundação (biblioteca) → US1 → US2 → US3 → US4 → US5 → US6 → Acabamento.
@@ -134,3 +141,4 @@ US4 e US5 dependem da sessão (US2). Tarefas [P] da fundação podem rodar em pa
 | FR-014 | T006, T029, T034 |
 | FR-015 | T033, T034, T035 |
 | FR-016 | T035, T036 |
+| FR-017 | T037, T038, T039, T040 |

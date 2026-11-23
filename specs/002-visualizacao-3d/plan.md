@@ -134,6 +134,22 @@ uma interface mais limpa e neutra, no estilo de ferramentas de engenharia:
   superior esquerdo); painel lateral branco recolhível com abas sublinhadas.
 - Cena: fundo cinza-claro, grade suave, sombras, piso da arena com a cor do mundo.
 
+## Tema escuro e marca (FR-017, revisão de 2026-11-22)
+
+- Tokens escuros em `src/ui/tokens.css` sob `:root[data-theme='dark']`: fundo `#0a0c0a`,
+  superfícies `#111411`/`#161a16`, bordas `#252b25`, texto `#ecf2e8`; primária e estado
+  "executando" no verde da SheepBotz `#65b033` (texto preto sobre o verde); informação no
+  azul do escudo clareado `#4c7fd9`. Cores medidas no logo oficial (verde médio
+  `rgb(101,176,51)`, azul médio `rgb(32,75,152)`).
+- `useTheme` (`src/app/theme/useTheme.ts`): lê `localStorage['sheepbotz-theme']`, senão
+  `prefers-color-scheme`; grava `data-theme` em `<html>`. Botão sol/lua na barra superior.
+- Cena 3D: `SCENE_PALETTES.light/dark` em `palette.ts`; o `Viewport` recebe o tema.
+- Editor: `CodeEditor` recebe `theme`; no escuro usa `@codemirror/theme-one-dark` com o
+  fundo dos tokens.
+- Logo: `public/brand/sheepbotz-mark.png` (512 px, sem fundo) e `public/favicon.png`,
+  gerados a partir do logo oficial pelo script `scripts/brand/cutout-logo.py` (silhueta colorida
+  com frestas fechadas e buracos preenchidos; o preto fora dela vira transparente).
+
 ## Modos de câmera (FR-015)
 
 Funções puras em `sceneModel.ts`: `perspectiveCamera(span)`, `topCamera(span)` e
