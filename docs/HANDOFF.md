@@ -19,12 +19,12 @@ Leia este arquivo inteiro antes de mudar qualquer coisa. Depois leia, nesta orde
 | 001 — Núcleo de simulação headless | ✅ 58/58 tarefas |
 | 002 — Visualização 3D e controles | ✅ 36/36 tarefas, incluindo a revisão visual (T032–T036) |
 | 003 — Catálogo de componentes reais e montador de robôs | ⏳ **próxima**; referências prontas em `docs/references/componentes/` |
-| 004 — Modalidade Sumô (Mega, Mini, LEGO) | planejada; regras em `docs/references/robocore/sumo.md` |
+| 004 — Modalidade Sumô (Mega, Mini, LEGO) | ✅ 15/15 tarefas (branch `feat/004-modalidade-sumo`) |
 | 005 — Painel de inspeção e replay | planejada (escopo completo do briefing: RB-21, RB-22) |
 | 006 Seguidor de Linha · 007 Trekking · 008 Futebol | planejadas; regras em `docs/references/robocore/` |
 | 009 — Controlador remoto via WebSocket | bônus |
 
-Testes e cobertura: **204 testes · 92,4% de cobertura de linhas**. Lint e TypeScript passam sem erros.
+Testes e cobertura: **241 testes · 93,1% de cobertura de linhas**. Lint e TypeScript passam sem erros.
 
 ### Comandos
 
@@ -93,7 +93,12 @@ Contratos que valem como referência: `specs/001-nucleo-simulacao/contracts/*.md
 
 ---
 
-## 4. Próximo passo: feature 003 (catálogo de componentes e montador de robôs)
+## 4. Próximo passo: feature 005 (inspeção e replay) ou 003 (catálogo de componentes)
+
+Recomendação: **005** fecha o escopo completo do briefing (RB-21, RB-22). A 003 abaixo
+continua válida.
+
+### Feature 003 (catálogo de componentes e montador de robôs)
 
 **Pedido da equipe (RB-24 a RB-26)**: em cada modalidade, o usuário monta o próprio robô (chassi, rodas, motores, sensores e itens) a partir de **componentes reais**, para aproximar o simulador do robô físico. A montagem respeita os limites da categoria, e cada modalidade traz estratégias de exemplo em código.
 
@@ -135,22 +140,17 @@ Valores estimados estão marcados como hipótese nos arquivos. Não invente núm
 
 ---
 
-## 5. Depois: feature 004 (Sumô)
+## 5. Feature 004 (Sumô) — concluída
 
-- Implementar `Modality` em `src/modalities/sumo/` e registrar em `src/modalities/index.ts`.
-- Presets de mundo Mega, Mini e LEGO:
-  - Dohyo como região `disc` preta mais `ring` branco (Tawara) no piso;
-  - arena sem paredes;
-  - robôs atrás das linhas Shikiri-sen.
-- Árbitro:
-  - robô "fora" quando o disco sai do Dohyo (hipótese 2D a documentar);
-  - Yuko;
-  - rounds;
-  - tempo limite;
-  - regra dos 5 s só no LEGO (Nota 11).
-- Estratégias de exemplo em JS: busca e ataque com laser/sonar, fuga de borda com sensor de piso.
-- O empurrão por massa já existe no núcleo (US4-AC5/AC6 da 001).
-- A UI já mostra `match` no `SceneHud` e pausa no fim da partida (FR-008 da 002).
+- `src/modalities/sumo/`: categorias (Art. 3 e 4), árbitro (saída do Dohyo, tempo limite,
+  regra dos 5 s do LEGO®), validação (Art. 4 e 10) e `createSumoWorld` (arena oficial).
+- Registrada em `src/modalities/index.ts` — a CLI e a interface já a usam.
+- Exemplos: `examples/worlds/sumo-{mini,mega,lego}.json`, gerados por
+  `npx tsx scripts/generate-sumo-examples.ts` (robôs de componentes reais). Estratégias em
+  `examples/controllers/sumo-search-attack.js` e `sumo-flank.js`; a versão LEGO® é gerada.
+- Hipóteses 2D H-01 a H-06 na spec; ajustes de estratégia em `research.md` D-07.
+- Próximas melhorias possíveis: partida de 3 rounds na interface (placar acumulado),
+  robôs quadrados no desenho 3D.
 
 ## 6. Pendências e observações
 
