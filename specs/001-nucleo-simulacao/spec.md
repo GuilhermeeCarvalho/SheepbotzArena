@@ -220,8 +220,10 @@ verificar poses finais e estado do bumper.
    ambos está acionado.
 6. **Dado** o cenário anterior com A de massa 3,0, **quando** executado por 20 ticks,
    **então** A termina em (0,400; 0,000) e B em (0,600; 0,000).
-7. **Dado** os robôs A e B de mesma massa frente a frente, **quando** ambos são comandados
-   com v = 0,5 um contra o outro, **então** após o contato nenhum dos dois avança.
+7. **Dado** os robôs A (raio 0,1, massa 1,0) em (0, 0, 0) e B (raio 0,1, massa 1,0) em
+   (0,3; 0; π), **quando** ambos são comandados com v = 0,5 um contra o outro, **então** eles
+   se encostam no tick 2 com A em (0,050; 0,000) e B em (0,250; 0,000), e após mais 20 ticks
+   continuam nessas posições (nenhum dos dois avança).
 8. **Dado** um robô sem obstáculos ao redor, **quando** executa qualquer comando, **então**
    seus bumpers permanecem desacionados.
 
