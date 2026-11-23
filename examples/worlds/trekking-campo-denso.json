@@ -1,0 +1,149 @@
+{
+  "version": 1,
+  "name": "Trekking — campo denso (obstáculos entre todos os marcos)",
+  "seed": 31,
+  "dt": 0.05,
+  "modality": "trekking",
+  "modalityOptions": {
+    "marks": [
+      [-5.5, -3.5],
+      [5, -2.5],
+      [3.5, 3.5],
+      [-5, 2.5]
+    ]
+  },
+  "arena": {
+    "width": 14,
+    "height": 10,
+    "walls": false
+  },
+  "floor": {
+    "reflectance": 0.3,
+    "color": "#7d8471",
+    "regions": [
+      {
+        "type": "rect",
+        "center": [-5.5, -3.5],
+        "width": 1,
+        "height": 1,
+        "reflectance": 0.7,
+        "color": "#f2c200"
+      },
+      {
+        "type": "rect",
+        "center": [5, -2.5],
+        "width": 1,
+        "height": 1,
+        "reflectance": 0.7,
+        "color": "#f2c200"
+      },
+      {
+        "type": "rect",
+        "center": [3.5, 3.5],
+        "width": 1,
+        "height": 1,
+        "reflectance": 0.7,
+        "color": "#f2c200"
+      },
+      {
+        "type": "rect",
+        "center": [-5, 2.5],
+        "width": 1,
+        "height": 1,
+        "reflectance": 0.7,
+        "color": "#f2c200"
+      }
+    ]
+  },
+  "obstacles": [
+    {
+      "id": "pedra-1",
+      "type": "box",
+      "center": [-2, -3.2],
+      "width": 0.7,
+      "height": 0.7,
+      "angle": 0.3,
+      "color": "#8a817c"
+    },
+    {
+      "id": "pedra-2",
+      "type": "disc",
+      "center": [1.5, -2.7],
+      "radius": 0.35,
+      "color": "#8a817c"
+    },
+    {
+      "id": "arvore-1",
+      "type": "disc",
+      "center": [4.5, 0.5],
+      "radius": 0.4,
+      "color": "#4a6b3a"
+    },
+    {
+      "id": "banco",
+      "type": "box",
+      "center": [0, 3],
+      "width": 1.4,
+      "height": 0.5,
+      "angle": -0.2,
+      "color": "#9c6b3e"
+    },
+    {
+      "id": "arvore-2",
+      "type": "disc",
+      "center": [-2.5, 2.7],
+      "radius": 0.35,
+      "color": "#4a6b3a"
+    },
+    {
+      "id": "cerca",
+      "type": "wall",
+      "from": [-1, -0.5],
+      "to": [1, 0.5],
+      "color": "#6b7280"
+    }
+  ],
+  "robots": [
+    {
+      "id": "trekker",
+      "name": "Trekker (odometria + lidar)",
+      "color": "#65b033",
+      "pose": {
+        "x": -5.5,
+        "y": -3.5,
+        "theta": 0.1
+      },
+      "radius": 0.2,
+      "mass": 3,
+      "maxLinearSpeed": 0.83,
+      "maxAngularSpeed": 5.5,
+      "odometry": {
+        "noise": 0.01
+      },
+      "controller": "../controllers/trekking-navigator-campo-denso.js",
+      "sensors": [
+        {
+          "id": "lidar",
+          "type": "laser",
+          "position": [0.15, 0],
+          "rays": 9,
+          "fov": 3.141592653589793,
+          "maxRange": 4,
+          "noise": 0.0025
+        },
+        {
+          "id": "piso",
+          "type": "floor",
+          "position": [0, 0],
+          "noise": 0.02
+        },
+        {
+          "id": "frente",
+          "type": "bumper",
+          "from": -1.5707963267948966,
+          "to": 1.5707963267948966
+        }
+      ]
+    }
+  ]
+}

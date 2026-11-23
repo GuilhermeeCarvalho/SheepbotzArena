@@ -1,0 +1,168 @@
+/*
+ * Tokens de design da biblioteca de componentes SheepBotz (plan 002, "Identidade visual").
+ * Única fonte de cores, espaçamentos, raios, sombras e tipografia da interface.
+ */
+:root {
+  /* Superfícies (tema claro neutro — plan 002, "Identidade visual") */
+  --color-bg: #f3f3f1;
+  --color-surface: #ffffff;
+  --color-surface-raised: #fafaf9;
+  --color-surface-hover: #f0f0ed;
+  --color-border: #e3e3df;
+  --color-border-strong: #cfcfca;
+
+  /* Texto */
+  --color-text: #1b1b19;
+  --color-text-muted: #6b6b66;
+  --color-text-subtle: #9a9a94;
+  --color-text-inverse: #ffffff;
+
+  /* Ação primária em grafite; cor só com significado */
+  --color-primary: #1b1b19;
+  --color-primary-hover: #000000;
+  --color-primary-soft: rgba(27, 27, 25, 0.06);
+  --color-live: #e8590c;
+  --color-live-soft: rgba(232, 89, 12, 0.1);
+  --color-info: #1c7ed6;
+  --color-info-soft: rgba(28, 126, 214, 0.1);
+  --color-success: #2f9e44;
+  --color-success-soft: rgba(47, 158, 68, 0.1);
+  --color-warning: #e67700;
+  --color-warning-soft: rgba(230, 119, 0, 0.1);
+  --color-danger: #e03131;
+  --color-danger-soft: rgba(224, 49, 49, 0.08);
+  --color-danger-border: rgba(224, 49, 49, 0.3);
+
+  /* Espaçamento (base 4 px) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+
+  /* Raios e sombras */
+  --radius-sm: 7px;
+  --radius-md: 12px;
+  --radius-full: 999px;
+  --shadow-sm: 0 1px 2px rgba(20, 20, 18, 0.06);
+  --shadow-md: 0 1px 2px rgba(20, 20, 18, 0.06), 0 6px 20px rgba(20, 20, 18, 0.08);
+  --shadow-float: 0 1px 2px rgba(20, 20, 18, 0.08), 0 10px 30px rgba(20, 20, 18, 0.12);
+  --focus-ring: 0 0 0 2px var(--color-surface), 0 0 0 4px rgba(28, 126, 214, 0.55);
+
+  /* Tipografia */
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SFMono-Regular', Menlo, Consolas, monospace;
+  --text-xs: 11.5px;
+  --text-sm: 12.5px;
+  --text-md: 13.5px;
+  --text-lg: 15px;
+  --text-xl: 18px;
+
+  /* Camadas flutuantes sobre a cena */
+  --color-overlay: rgba(255, 255, 255, 0.92);
+  --color-scene: #e8e9ec;
+  --color-ray-hit: #e03131;
+  --color-ray-free: rgba(28, 126, 214, 0.6);
+
+  /* Movimento */
+  --transition-fast: 120ms ease;
+
+  color-scheme: light;
+}
+
+/*
+ * Tema escuro nas cores da SheepBotz (plan 002, "Tema escuro e marca"): preto e verde do
+ * logo oficial (verde médio rgb(101,176,51)), com o azul do escudo clareado para informação.
+ */
+:root[data-theme='dark'] {
+  --color-bg: #0a0c0a;
+  --color-surface: #111411;
+  --color-surface-raised: #161a16;
+  --color-surface-hover: #1c221c;
+  --color-border: #252b25;
+  --color-border-strong: #343d34;
+
+  --color-text: #ecf2e8;
+  --color-text-muted: #9aa597;
+  --color-text-subtle: #6c766a;
+  --color-text-inverse: #0a0c0a;
+
+  --color-primary: #65b033;
+  --color-primary-hover: #7cc94a;
+  --color-primary-soft: rgba(101, 176, 51, 0.16);
+  --color-live: #65b033;
+  --color-live-soft: rgba(101, 176, 51, 0.16);
+  --color-info: #4c7fd9;
+  --color-info-soft: rgba(76, 127, 217, 0.16);
+  --color-success: #65b033;
+  --color-success-soft: rgba(101, 176, 51, 0.16);
+  --color-warning: #f2a33a;
+  --color-warning-soft: rgba(242, 163, 58, 0.14);
+  --color-danger: #f25f5c;
+  --color-danger-soft: rgba(242, 95, 92, 0.12);
+  --color-danger-border: rgba(242, 95, 92, 0.35);
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 1px 2px rgba(0, 0, 0, 0.5), 0 6px 20px rgba(0, 0, 0, 0.45);
+  --shadow-float: 0 1px 2px rgba(0, 0, 0, 0.6), 0 10px 30px rgba(0, 0, 0, 0.55);
+  --focus-ring: 0 0 0 2px var(--color-bg), 0 0 0 4px rgba(101, 176, 51, 0.7);
+
+  --color-overlay: rgba(17, 20, 17, 0.9);
+  --color-scene: #0b0d0b;
+  --color-ray-hit: #ff5c5c;
+  --color-ray-free: rgba(101, 176, 51, 0.6);
+
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: var(--text-md);
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+::selection {
+  background: var(--color-info-soft);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: var(--radius-full);
+  border: 2px solid var(--color-surface);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-border-strong);
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}

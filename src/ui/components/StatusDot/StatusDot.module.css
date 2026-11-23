@@ -1,0 +1,36 @@
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+.neutral {
+  background: var(--color-text-subtle);
+}
+.success {
+  background: var(--color-success);
+}
+.warning {
+  background: var(--color-warning);
+}
+.danger {
+  background: var(--color-danger);
+}
+.info {
+  background: var(--color-live);
+}
+.pulse {
+  animation: pulse 1.4s ease-in-out infinite;
+}
+@keyframes pulse {
+  50% {
+    opacity: 0.3;
+  }
+}

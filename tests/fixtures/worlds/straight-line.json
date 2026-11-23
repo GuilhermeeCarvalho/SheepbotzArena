@@ -1,0 +1,7 @@
+{
+  "version": 1,
+  "name": "Linha reta",
+  "dt": 0.05,
+  "arena": { "width": 10, "height": 10 },
+  "robots": [{ "id": "r1", "pose": { "x": 0, "y": 0, "theta": 0 }, "radius": 0.1 }]
+}

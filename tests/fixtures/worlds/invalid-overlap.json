@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "arena": { "width": 4, "height": 4 },
+  "obstacles": [{ "id": "pilar", "type": "disc", "center": [0.15, 0], "radius": 0.1 }],
+  "robots": [
+    { "id": "r1", "pose": { "x": 0, "y": 0, "theta": 0 }, "radius": 0.1 },
+    { "id": "r2", "pose": { "x": -0.15, "y": 0, "theta": 0 }, "radius": 0.1 }
+  ]
+}

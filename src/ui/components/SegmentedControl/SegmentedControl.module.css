@@ -1,0 +1,42 @@
+.segmented {
+  display: inline-flex;
+  gap: 2px;
+  padding: 2px;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-hover);
+}
+.segment {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 26px;
+  padding: 0 9px;
+  border: none;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+.segment svg {
+  width: 14px;
+  height: 14px;
+}
+.segment:hover:not(:disabled) {
+  color: var(--color-text);
+}
+.segment:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+.segment:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+.selected {
+  background: var(--color-surface);
+  color: var(--color-text);
+  box-shadow: var(--shadow-sm);
+}

@@ -1,0 +1,12 @@
+.editor {
+  height: 100%;
+  min-height: 160px;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-raised);
+}
+.editor:focus-within {
+  border-color: var(--color-border-strong);
+  box-shadow: var(--focus-ring);
+}

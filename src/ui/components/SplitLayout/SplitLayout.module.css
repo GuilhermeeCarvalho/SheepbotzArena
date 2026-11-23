@@ -1,0 +1,17 @@
+.split {
+  display: grid;
+  height: 100%;
+  min-height: 0;
+}
+.main,
+.aside {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.aside {
+  background: var(--color-surface);
+  border-left: 1px solid var(--color-border);
+}
