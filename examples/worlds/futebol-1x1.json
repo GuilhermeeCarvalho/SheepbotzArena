@@ -1,0 +1,242 @@
+{
+  "version": 1,
+  "name": "Futebol VSS — 1 × 1 (só atacantes)",
+  "seed": 8,
+  "dt": 0.01,
+  "modality": "futebol-vss",
+  "modalityOptions": {
+    "teams": [
+      {
+        "name": "Verde",
+        "robots": ["verde-atacante"]
+      },
+      {
+        "name": "Azul",
+        "robots": ["azul-atacante"]
+      }
+    ],
+    "timeLimit": 120
+  },
+  "arena": {
+    "width": 1.8,
+    "height": 1.4000000000000001,
+    "walls": false
+  },
+  "floor": {
+    "reflectance": 0.05,
+    "color": "#101010",
+    "regions": [
+      {
+        "type": "line",
+        "points": [
+          [0, -0.65],
+          [0, 0.65]
+        ],
+        "width": 0.003,
+        "reflectance": 0.95,
+        "color": "#f1f3f5"
+      },
+      {
+        "type": "ring",
+        "center": [0, 0],
+        "innerRadius": 0.1985,
+        "outerRadius": 0.2015,
+        "reflectance": 0.95,
+        "color": "#f1f3f5"
+      },
+      {
+        "type": "line",
+        "points": [
+          [-0.75, 0.35],
+          [-0.6, 0.35],
+          [-0.6, -0.35],
+          [-0.75, -0.35]
+        ],
+        "width": 0.003,
+        "reflectance": 0.95,
+        "color": "#f1f3f5"
+      },
+      {
+        "type": "line",
+        "points": [
+          [0.75, 0.35],
+          [0.6, 0.35],
+          [0.6, -0.35],
+          [0.75, -0.35]
+        ],
+        "width": 0.003,
+        "reflectance": 0.95,
+        "color": "#f1f3f5"
+      }
+    ]
+  },
+  "obstacles": [
+    {
+      "id": "lateral-superior",
+      "type": "wall",
+      "from": [-0.68, 0.65],
+      "to": [0.68, 0.65],
+      "color": "#e9ecef"
+    },
+    {
+      "id": "lateral-inferior",
+      "type": "wall",
+      "from": [-0.68, -0.65],
+      "to": [0.68, -0.65],
+      "color": "#e9ecef"
+    },
+    {
+      "id": "canto-1",
+      "type": "wall",
+      "from": [-0.75, 0.58],
+      "to": [-0.68, 0.65],
+      "color": "#e9ecef"
+    },
+    {
+      "id": "canto-2",
+      "type": "wall",
+      "from": [0.68, 0.65],
+      "to": [0.75, 0.58],
+      "color": "#e9ecef"
+    },
+    {
+      "id": "canto-3",
+      "type": "wall",
+      "from": [0.75, -0.58],
+      "to": [0.68, -0.65],
+      "color": "#e9ecef"
+    },
+    {
+      "id": "canto-4",
+      "type": "wall",
+      "from": [-0.68, -0.65],
+      "to": [-0.75, -0.58],
+      "color": "#e9ecef"
+    },
+    {
+      "id": "fundo-esq-sup",
+      "type": "wall",
+      "from": [-0.75, 0.58],
+      "to": [-0.75, 0.2],
+      "color": "#e9ecef"
+    },
+    {
+      "id": "fundo-esq-inf",
+      "type": "wall",
+      "from": [-0.75, -0.2],
+      "to": [-0.75, -0.58],
+      "color": "#e9ecef"
+    },
+    {
+      "id": "fundo-dir-sup",
+      "type": "wall",
+      "from": [0.75, 0.58],
+      "to": [0.75, 0.2],
+      "color": "#e9ecef"
+    },
+    {
+      "id": "fundo-dir-inf",
+      "type": "wall",
+      "from": [0.75, -0.2],
+      "to": [0.75, -0.58],
+      "color": "#e9ecef"
+    },
+    {
+      "id": "gol-esq-fundo",
+      "type": "wall",
+      "from": [-0.85, -0.2],
+      "to": [-0.85, 0.2],
+      "color": "#e9ecef"
+    },
+    {
+      "id": "gol-esq-sup",
+      "type": "wall",
+      "from": [-0.75, 0.2],
+      "to": [-0.85, 0.2],
+      "color": "#e9ecef"
+    },
+    {
+      "id": "gol-esq-inf",
+      "type": "wall",
+      "from": [-0.75, -0.2],
+      "to": [-0.85, -0.2],
+      "color": "#e9ecef"
+    },
+    {
+      "id": "gol-dir-fundo",
+      "type": "wall",
+      "from": [0.85, -0.2],
+      "to": [0.85, 0.2],
+      "color": "#e9ecef"
+    },
+    {
+      "id": "gol-dir-sup",
+      "type": "wall",
+      "from": [0.75, 0.2],
+      "to": [0.85, 0.2],
+      "color": "#e9ecef"
+    },
+    {
+      "id": "gol-dir-inf",
+      "type": "wall",
+      "from": [0.75, -0.2],
+      "to": [0.85, -0.2],
+      "color": "#e9ecef"
+    }
+  ],
+  "balls": [
+    {
+      "id": "bola",
+      "position": [0, 0],
+      "radius": 0.02135,
+      "mass": 0.046,
+      "color": "#ff7a1a"
+    }
+  ],
+  "robots": [
+    {
+      "id": "verde-atacante",
+      "name": "Verde · atacante",
+      "color": "#65b033",
+      "pose": {
+        "x": -0.3,
+        "y": 0.12,
+        "theta": 0
+      },
+      "radius": 0.0375,
+      "mass": 0.18,
+      "maxLinearSpeed": 1.34,
+      "maxAngularSpeed": 44.8,
+      "sensors": [
+        {
+          "id": "camera",
+          "type": "camera",
+          "noise": 0.002
+        }
+      ],
+      "controller": "../controllers/soccer-striker.js"
+    },
+    {
+      "id": "azul-atacante",
+      "name": "Azul · atacante",
+      "color": "#204b98",
+      "pose": {
+        "x": 0.3,
+        "y": -0.2,
+        "theta": 3.141592653589793
+      },
+      "radius": 0.0375,
+      "mass": 0.18,
+      "maxLinearSpeed": 1.34,
+      "maxAngularSpeed": 44.8,
+      "sensors": [
+        {
+          "id": "camera",
+          "type": "camera",
+          "noise": 0.002
+        }
+      ],
+      "controller": "../controllers/soccer-striker.js"
+    }
+  ]
+}

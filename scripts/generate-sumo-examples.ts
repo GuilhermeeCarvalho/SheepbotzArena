@@ -154,7 +154,108 @@ const examples = {
   ),
 };
 
-for (const [file, world] of Object.entries(examples)) {
+/** Variações para a apresentação: trocar estratégia, peso e motor e ver o resultado mudar. */
+const variations = {
+  'sumo-mini-estrategias-invertidas': createSumoWorld(
+    SUMO_CATEGORIES.mini,
+    [
+      miniRobot({
+        id: 'sheep',
+        name: 'Sheep (flanco)',
+        color: '#e8590c',
+        side: 'left',
+        theta: -HALF_PI,
+        controller: '../controllers/sumo-flank.js',
+      }),
+      miniRobot({
+        id: 'rival',
+        name: 'Rival (busca e ataque)',
+        color: '#1c7ed6',
+        side: 'right',
+        controller: '../controllers/sumo-search-attack.js',
+      }),
+    ],
+    { name: 'Mini Sumô — estratégias invertidas (flanco × busca e ataque)', seed: 17 },
+  ),
+  // Mesmo duelo, só a massa do Sheep muda: 300 g perde, 500 g vence (empurrão por massa).
+  'sumo-mini-peso-300g': createSumoWorld(
+    SUMO_CATEGORIES.mini,
+    [
+      {
+        ...miniRobot({
+          id: 'sheep',
+          name: 'Sheep (flanco, 300 g)',
+          color: '#e8590c',
+          side: 'left',
+          theta: HALF_PI,
+          controller: '../controllers/sumo-flank.js',
+        }),
+        mass: 0.3,
+      },
+      miniRobot({
+        id: 'rival',
+        name: 'Rival (busca e ataque, 500 g)',
+        color: '#1c7ed6',
+        side: 'right',
+        theta: -HALF_PI,
+        controller: '../controllers/sumo-search-attack.js',
+      }),
+    ],
+    { name: 'Mini Sumô — mesmo duelo com o Sheep de 300 g', seed: 5 },
+  ),
+  'sumo-mini-peso-500g': createSumoWorld(
+    SUMO_CATEGORIES.mini,
+    [
+      {
+        ...miniRobot({
+          id: 'sheep',
+          name: 'Sheep (flanco, 500 g)',
+          color: '#e8590c',
+          side: 'left',
+          theta: HALF_PI,
+          controller: '../controllers/sumo-flank.js',
+        }),
+        mass: 0.5,
+      },
+      miniRobot({
+        id: 'rival',
+        name: 'Rival (busca e ataque, 500 g)',
+        color: '#1c7ed6',
+        side: 'right',
+        theta: -HALF_PI,
+        controller: '../controllers/sumo-search-attack.js',
+      }),
+    ],
+    { name: 'Mini Sumô — mesmo duelo com o Sheep de 500 g', seed: 5 },
+  ),
+  'sumo-mega-motores': createSumoWorld(
+    SUMO_CATEGORIES.mega,
+    [
+      megaRobot({
+        id: 'titan',
+        name: 'JSumo Titan (2,3 m/s)',
+        color: '#e8590c',
+        side: 'left',
+        controller: '../controllers/sumo-search-attack.js',
+      }),
+      // Pololu 37D 12V 50:1 + roda 55 mm, bitola 0,17 m → 80% de 0,58 m/s e 6,8 rad/s.
+      {
+        ...megaRobot({
+          id: 'pololu',
+          name: 'Pololu 37D 50:1 (0,46 m/s)',
+          color: '#1c7ed6',
+          side: 'right',
+          controller: '../controllers/sumo-search-attack.js',
+        }),
+        maxLinearSpeed: 0.46,
+        maxAngularSpeed: 5.4,
+      },
+    ],
+    { name: 'Mega Sumô — motor rápido × motor lento (frente a frente)', seed: 5 },
+  ),
+};
+
+for (const [file, world] of Object.entries({ ...examples, ...variations })) {
   writeFileSync(
     new URL(`../examples/worlds/${file}.json`, import.meta.url),
     `${JSON.stringify(world, null, 2)}\n`,

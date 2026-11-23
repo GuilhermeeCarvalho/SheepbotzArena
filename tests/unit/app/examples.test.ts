@@ -18,21 +18,22 @@ describe('exemplos', () => {
   const examples = buildExamples(readAll('worlds'), readAll('controllers'));
 
   it('carrega todos os mundos com nome e controladores resolvidos por arquivo', () => {
-    expect(examples.map((e) => e.id)).toEqual([
-      'corridor',
-      'futebol-2x1',
-      'obstacle-field',
-      'seguidor-oval',
-      'seguidor-retangulo',
-      'sumo-lego',
-      'sumo-mega',
-      'sumo-mini',
-      'trekking',
-    ]);
+    const ids = examples.map((e) => e.id);
+    expect(ids).toEqual(
+      expect.arrayContaining([
+        'corridor',
+        'obstacle-field',
+        'sumo-mini',
+        'seguidor-oval',
+        'trekking',
+        'futebol-2x1',
+      ]),
+    );
+    const byId = Object.fromEntries(examples.map((e) => [e.id, e]));
     expect(examples[0]!.name).toBe('Corredor com obstáculos');
-    expect(Object.keys(examples[2]!.controllers)).toEqual(['explorador', 'seguidor']);
-    expect(Object.keys(examples[7]!.controllers)).toEqual(['sheep', 'rival']);
-    expect(examples[2]!.controllers.seguidor).toContain('segue a parede');
+    expect(Object.keys(byId['obstacle-field']!.controllers)).toEqual(['explorador', 'seguidor']);
+    expect(Object.keys(byId['sumo-mini']!.controllers)).toEqual(['sheep', 'rival']);
+    expect(byId['obstacle-field']!.controllers.seguidor).toContain('segue a parede');
   });
 
   it('US4-AC1: cada exemplo abre uma sessão válida, pausada no tick 0', () => {

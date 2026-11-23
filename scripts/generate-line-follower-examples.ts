@@ -2,8 +2,9 @@
  * Gera as pistas de exemplo do Seguidor de Linha (spec 006, T005) com `createLineFollowerWorld`.
  * Robô derivado de componentes reais (plan 006, D-06). Uso: npx tsx scripts/generate-line-follower-examples.ts
  */
-import { writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import {
+  buildTrack,
   createLineFollowerWorld,
   LINE_FOLLOWER_CATEGORIES,
   type LineFollowerRobotInput,
@@ -71,7 +72,117 @@ const examples = {
   }),
 };
 
-for (const [file, world] of Object.entries(examples)) {
+/**
+ * Fecha a pista: depois do trecho `prefix` (que deve terminar apontando para −x), acrescenta
+ * curva à esquerda, reta descendo, curva à esquerda e a reta final até a partida, com os
+ * comprimentos calculados para voltar exatamente ao ponto inicial.
+ */
+function closeTrack(prefix: TrackSegment[], radius: number): TrackSegment[] {
+  const probe = buildTrack({ x: 0, y: 0, theta: 0 }, [
+    ...prefix,
+    { arc: { radius, angle: PI / 2 } },
+    { arc: { radius, angle: PI / 2 } },
+  ]);
+  const [ex, ey] = probe[probe.length - 1]!;
+  const down = Number(ey.toFixed(6));
+  const back = Number((-ex).toFixed(6));
+  if (down <= 0 || back <= 1.2)
+    throw new Error(`pista não fecha bem (descida ${down}, reta final ${back})`);
+  return [
+    ...prefix,
+    { arc: { radius, angle: PI / 2 } },
+    { straight: down },
+    { arc: { radius, angle: PI / 2 } },
+    { straight: back },
+  ];
+}
+
+// Zigue-zague: curvas em S (para os dois lados) na reta superior.
+const zigzag = closeTrack(
+  [
+    { straight: 0.4 },
+    { arc: { radius: 0.25, angle: PI / 2 } },
+    { straight: 0.5 },
+    { arc: { radius: 0.25, angle: PI / 2 } },
+    { straight: 0.2 },
+    { arc: { radius: 0.2, angle: -PI / 2 } },
+    { arc: { radius: 0.2, angle: PI / 2 } },
+    { arc: { radius: 0.2, angle: PI / 2 } },
+    { arc: { radius: 0.2, angle: -PI / 2 } },
+    { straight: 0.2 },
+    { arc: { radius: 0.2, angle: -PI / 2 } },
+    { arc: { radius: 0.2, angle: PI / 2 } },
+    { arc: { radius: 0.2, angle: PI / 2 } },
+    { arc: { radius: 0.2, angle: -PI / 2 } },
+    { straight: 1.1 },
+  ],
+  0.25,
+);
+
+// Curvas fechadas: raio de 0,12 m, perto do mínimo de 0,10 m (Art. 4.14).
+const tight = closeTrack(
+  [
+    { straight: 0.4 },
+    { arc: { radius: 0.12, angle: PI / 2 } },
+    { straight: 0.5 },
+    { arc: { radius: 0.12, angle: PI / 2 } },
+    { straight: 0.3 },
+    { arc: { radius: 0.12, angle: -PI / 2 } },
+    { arc: { radius: 0.12, angle: PI / 2 } },
+    { straight: 1.1 },
+  ],
+  0.12,
+);
+
+/**
+ * Variação do controlador PD para a apresentação: mais rápido, ganho menor e sem reduzir nas
+ * curvas — completa a volta, mas não consegue parar dentro da área de chegada (volta inválida,
+ * Art. 5.7). Gerado a partir do arquivo-base para manter uma única fonte.
+ */
+const base = readFileSync(
+  new URL('../examples/controllers/line-follower-pd.js', import.meta.url),
+  'utf8',
+);
+const aggressive = base
+  .replace(
+    /^const VELOCIDADE = .*$/m,
+    'const VELOCIDADE = 1.3; // m/s — rápido demais para as curvas',
+  )
+  .replace(/^const KP = .*$/m, 'const KP = 25; // ganho baixo: corrige devagar')
+  .replace(/^const REDUCAO_EM_CURVA = .*$/m, 'const REDUCAO_EM_CURVA = 0; // não reduz nas curvas');
+if (aggressive === base) throw new Error('constantes do PD não encontradas');
+writeFileSync(
+  new URL('../examples/controllers/line-follower-pd-agressivo.js', import.meta.url),
+  '// Arquivo gerado por scripts/generate-line-follower-examples.ts a partir de line-follower-pd.js — não edite.\n' +
+    aggressive,
+);
+
+const variations = {
+  'seguidor-zigue-zague': createLineFollowerWorld(LINE_FOLLOWER_CATEGORIES.junior, zigzag, robot, {
+    name: 'Seguidor de Linha Júnior — zigue-zague (curvas em S)',
+    seed: 13,
+  }),
+  'seguidor-curvas-fechadas': createLineFollowerWorld(LINE_FOLLOWER_CATEGORIES.pro, tight, robot, {
+    name: 'Seguidor de Linha Pro — curvas fechadas (raio 0,12 m)',
+    seed: 14,
+  }),
+  'seguidor-pd-agressivo': createLineFollowerWorld(
+    LINE_FOLLOWER_CATEGORIES.junior,
+    oval,
+    {
+      ...robot,
+      name: 'Seguidor PD agressivo',
+      color: '#f25f5c',
+      controller: '../controllers/line-follower-pd-agressivo.js',
+    },
+    {
+      name: 'Seguidor de Linha Júnior — PD agressivo (rápido demais para parar na chegada)',
+      seed: 15,
+    },
+  ),
+};
+
+for (const [file, world] of Object.entries({ ...examples, ...variations })) {
   writeFileSync(
     new URL(`../examples/worlds/${file}.json`, import.meta.url),
     `${JSON.stringify(world, null, 2)}\n`,
