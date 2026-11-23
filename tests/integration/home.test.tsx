@@ -53,13 +53,14 @@ describe('HomeScreen', () => {
     expect(onOpenSimulator).toHaveBeenCalledOnce();
   });
 
-  it('US2-AC1/AC4: modalidades na ordem, com quantidade e Sumô em destaque', () => {
+  it('US2-AC1/AC4: modalidades na ordem, com quantidade e sem destaque', () => {
     renderHome();
     const cards = screen
       .getAllByRole('button', { pressed: false })
       .map((card) => card.textContent ?? '');
     expect(cards).toHaveLength(3);
-    expect(cards[0]).toMatch(/^Sumô.*Foco da equipe.*2 exemplos$/);
+    expect(cards[0]).toMatch(/^Sumô.*2 exemplos$/);
+    expect(screen.queryByText('Foco da equipe')).not.toBeInTheDocument();
     expect(cards[1]).toMatch(/^Seguidor de Linha.*1 exemplo$/);
     expect(cards[2]).toMatch(/^Livre.*1 exemplo$/);
     expect(screen.queryByText('Trekking')).not.toBeInTheDocument();

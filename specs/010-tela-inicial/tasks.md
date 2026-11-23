@@ -10,6 +10,7 @@ Commits: `feat(010/<ID>): <descrição> [FR-xxx]`.
 - [x] T002 [US1] [US2] `HomeScreen` com apresentação, "Abrir simulador", modalidades, lista de exemplos e tema; testes `US1-AC1`, `US1-AC3` e `US2-AC3` (FR-001, FR-003, FR-006)
 - [x] T003 [US1] [US3] `Root` alternando as telas, `App` com exemplo inicial e botão "Tela inicial" na barra superior; testes `US1-AC2`, `US2-AC3`, `US3-AC1` e `US3-AC2` (FR-002, FR-004, FR-005)
 - [x] T004 Acabamento: README e cobertura
+- [x] T005 [US2] Remover o destaque "Foco da equipe" do Sumô; todas as modalidades aparecem iguais (FR-003)
 
 ## Rastreabilidade
 
@@ -17,7 +18,7 @@ Commits: `feat(010/<ID>): <descrição> [FR-xxx]`.
 |----|---------|
 | FR-001 | T002 |
 | FR-002 | T003 |
-| FR-003 | T001, T002 |
+| FR-003 | T001, T002, T005 |
 | FR-004 | T003 |
 | FR-005 | T003 |
 | FR-006 | T002 |

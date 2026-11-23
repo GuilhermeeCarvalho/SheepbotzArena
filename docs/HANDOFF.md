@@ -25,7 +25,7 @@ Leia este arquivo inteiro antes de mudar qualquer coisa. Depois leia, nesta orde
 | 007 — Trekking | ✅ 6/6 tarefas: marcos em ordem, colisão/saída do campo, false start, navegação por odometria + lidar |
 | 008 — Futebol Mini / VSS | ✅ 9/9 tarefas: núcleo ganhou bola, câmera global e reposição pedida pelo árbitro; gols, bola livre, exemplo 2 × 1 |
 | 009 — Controlador remoto via WebSocket | bônus |
-| 010 — Tela inicial | ✅ 4/4 tarefas: apresentação, modalidades com quantidade de exemplos, entrada direta no exemplo e botão "Tela inicial" no simulador; sem login (Q-16) |
+| 010 — Tela inicial | ✅ 5/5 tarefas: apresentação, modalidades com quantidade de exemplos, entrada direta no exemplo e botão "Tela inicial" no simulador; sem login (Q-16) |
 
 Testes e cobertura: **373 testes · 94,6% de cobertura de linhas**
 

@@ -9,8 +9,6 @@ export type ModalityGroup = {
   id: ModalityGroupId;
   name: string;
   description: string;
-  /** Sumô: foco da equipe (constitution, "Escopo e restrições do produto"). */
-  featured: boolean;
   examples: Example[];
 };
 
@@ -22,35 +20,30 @@ const GROUPS: GroupInfo[] = [
     id: 'sumo',
     name: 'Sumô',
     description: 'Dois robôs no Dohyo: vence quem empurrar o outro para fora.',
-    featured: true,
     matches: (m) => m.startsWith('sumo-'),
   },
   {
     id: 'line-follower',
     name: 'Seguidor de Linha',
     description: 'Uma volta completa na pista no menor tempo, sem sair da linha.',
-    featured: false,
     matches: (m) => m.startsWith('seguidor-'),
   },
   {
     id: 'trekking',
     name: 'Trekking',
     description: 'Navegação autônoma até quatro marcos, desviando de obstáculos.',
-    featured: false,
     matches: (m) => m === 'trekking',
   },
   {
     id: 'soccer',
     name: 'Futebol de robôs',
     description: 'Times de robôs, bola e gols no campo do Mini / VSS.',
-    featured: false,
     matches: (m) => m.startsWith('futebol-'),
   },
   {
     id: 'free',
     name: 'Livre',
     description: 'Arenas sem regras de modalidade para testar sensores e controladores.',
-    featured: false,
     matches: () => true,
   },
 ];
@@ -62,13 +55,10 @@ export function groupExamples(examples: Example[]): ModalityGroup[] {
     const group = GROUPS.find((g) => example.modality !== undefined && g.matches(example.modality));
     buckets.get(group?.id ?? 'free')!.push(example);
   }
-  return GROUPS.filter((g) => buckets.get(g.id)!.length > 0).map(
-    ({ id, name, description, featured }) => ({
-      id,
-      name,
-      description,
-      featured,
-      examples: buckets.get(id)!,
-    }),
-  );
+  return GROUPS.filter((g) => buckets.get(g.id)!.length > 0).map(({ id, name, description }) => ({
+    id,
+    name,
+    description,
+    examples: buckets.get(id)!,
+  }));
 }

@@ -41,7 +41,7 @@ O usuário vê as modalidades disponíveis e entra direto num exemplo de uma del
 
 1. **Dado** a tela inicial, **então** as modalidades aparecem nesta ordem: Sumô, Seguidor de
    Linha, Trekking, Futebol de robôs e Livre (mundos sem modalidade), cada uma com uma
-   descrição curta e a quantidade de exemplos. O Sumô aparece marcado como foco da equipe.
+   descrição curta e a quantidade de exemplos.
 2. **Dado** os exemplos do repositório, **então** as quantidades exibidas são: Sumô 7,
    Seguidor de Linha 5, Trekking 3, Futebol de robôs 4 e Livre 2.
 3. **Dado** a tela inicial, **quando** o usuário escolhe uma modalidade, **então** vê a lista
@@ -74,7 +74,7 @@ uma modalidade que a tela inicial não conhece, entra em Livre.
 - **FR-002**: "Abrir simulador" DEVE abrir o simulador no primeiro exemplo, pausado no
   tick 0. *(RB-27)*
 - **FR-003**: A tela inicial DEVE listar as modalidades com exemplos, na ordem e com as
-  quantidades da US2, destacando o Sumô como foco da equipe. *(RB-23, RB-27)*
+  quantidades da US2. *(RB-23, RB-27)*
 - **FR-004**: Escolher um exemplo de uma modalidade DEVE abrir o simulador nesse exemplo,
   pausado no tick 0. *(RB-27)*
 - **FR-005**: O simulador DEVE oferecer a ação "Tela inicial", que volta à tela inicial sem
