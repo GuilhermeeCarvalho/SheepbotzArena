@@ -1,4 +1,4 @@
-import { Bot, Code2, Globe2 } from 'lucide-react';
+import { Bot, Code2, Gauge, Globe2 } from 'lucide-react';
 import { type ReactNode, useCallback, useEffect, useState } from 'react';
 import { SplitLayout, Tabs } from '../ui/index';
 import { type Example, loadBundledExamples } from './examples/examples';
@@ -6,18 +6,21 @@ import { AppShell } from './layout/AppShell';
 import shellStyles from './layout/AppShell.module.css';
 import { CameraControls } from './layout/CameraControls';
 import { SceneHud } from './layout/SceneHud';
+import { Timeline } from './layout/Timeline';
 import { TopBar } from './layout/TopBar';
 import { TransportBar } from './layout/TransportBar';
 import { ControllerPanel } from './panels/ControllerPanel';
 import { RobotList } from './panels/RobotList';
+import { SensorPanel } from './panels/SensorPanel';
 import { WorldPanel } from './panels/WorldPanel';
 import type { CameraMode } from './scene/sceneModel';
 import { Viewport } from './scene/Viewport';
-import { createSession } from './session/session';
+import { serializeRecording } from './recording/recording';
+import { createSession, displayedState } from './session/session';
 import { useSimulationSession } from './session/useSimulationSession';
 import { useTheme } from './theme/useTheme';
 
-type SideTab = 'controller' | 'world' | 'robots';
+type SideTab = 'controller' | 'world' | 'robots' | 'sensors';
 
 const SIDE_PANEL_WIDTH = 420;
 
@@ -40,12 +43,17 @@ export function App({ examples = loadBundledExamples() }: { examples?: Example[]
   const [cameraMode, setCameraMode] = useState<CameraMode>('perspective');
   const [selected, setSelected] = useState<string | null>(session.world.robots[0]?.id ?? null);
   const [resetViewSignal, setResetViewSignal] = useState(0);
+  const [recordingError, setRecordingError] = useState<string | null>(null);
+  const shown = displayedState(session);
 
   // Mantém a seleção válida quando o mundo muda.
   const robotIds = session.world.robots.map((r) => r.id);
   const selectedRobotId =
     selected !== null && robotIds.includes(selected) ? selected : (robotIds[0] ?? null);
-  const finished = session.state.match?.phase === 'finished';
+  const replaying = session.replayIndex !== null;
+  const finished = replaying
+    ? session.replayIndex === session.recording.frames.length - 1
+    : session.state.match?.phase === 'finished' || !session.liveAvailable;
   const effectiveCameraMode: CameraMode =
     cameraMode === 'follow' && selectedRobotId === null ? 'perspective' : cameraMode;
 
@@ -85,7 +93,23 @@ export function App({ examples = loadBundledExamples() }: { examples?: Example[]
   };
 
   const controllerIssues = session.controllerIssues;
-  const errorCount = session.state.robots.filter((r) => r.status === 'error').length;
+  const errorCount = shown.robots.filter((r) => r.status === 'error').length;
+
+  /** Baixa a gravação atual como JSON (spec 005, US3-AC1). */
+  const exportRecording = () => {
+    const blob = new Blob(
+      [serializeRecording(session.worldText, session.controllers, session.recording)],
+      {
+        type: 'application/json',
+      },
+    );
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `gravacao-${session.exampleId ?? 'mundo'}-tick-${session.recording.frames.length - 1}.json`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
   const sidePanels: Record<SideTab, ReactNode> = {
     controller: (
       <ControllerPanel
@@ -108,10 +132,18 @@ export function App({ examples = loadBundledExamples() }: { examples?: Example[]
         theme={theme}
       />
     ),
+    sensors: (
+      <SensorPanel
+        world={session.world}
+        state={shown}
+        robotId={selectedRobotId}
+        onSelectRobot={setSelected}
+      />
+    ),
     robots: (
       <RobotList
         world={session.world}
-        robots={session.state.robots}
+        robots={shown.robots}
         selectedRobotId={selectedRobotId}
         onSelect={setSelected}
       />
@@ -138,7 +170,7 @@ export function App({ examples = loadBundledExamples() }: { examples?: Example[]
           <div className={shellStyles.stage}>
             <Viewport
               world={session.world}
-              state={session.state}
+              state={shown}
               showRays={showRays}
               selectedRobotId={selectedRobotId}
               onSelectRobot={selectRobotFromScene}
@@ -150,7 +182,7 @@ export function App({ examples = loadBundledExamples() }: { examples?: Example[]
               worldName={session.world.name}
               running={session.running}
               robotCount={session.world.robots.length}
-              match={session.state.match}
+              match={shown.match}
             />
             <CameraControls
               mode={effectiveCameraMode}
@@ -160,12 +192,24 @@ export function App({ examples = loadBundledExamples() }: { examples?: Example[]
               onShowRaysChange={setShowRays}
               onResetView={() => setResetViewSignal((n) => n + 1)}
             />
+            <Timeline
+              frameCount={session.recording.frames.length}
+              index={session.replayIndex ?? session.recording.frames.length - 1}
+              replaying={replaying}
+              liveAvailable={session.liveAvailable}
+              truncated={session.recording.truncated}
+              onSeek={actions.seek}
+              onGoLive={actions.goLive}
+              onExport={exportRecording}
+              onOpenFile={(text) => setRecordingError(actions.openRecording(text))}
+              error={recordingError}
+            />
             <TransportBar
               running={session.running}
               finished={finished}
               speed={session.speed}
-              tick={session.state.tick}
-              time={session.state.time}
+              tick={shown.tick}
+              time={shown.time}
               onPlay={actions.play}
               onPause={actions.pause}
               onStep={actions.step}
@@ -195,6 +239,7 @@ export function App({ examples = loadBundledExamples() }: { examples?: Example[]
                     icon: <Globe2 />,
                     badge: session.worldIssues.length || undefined,
                   },
+                  { id: 'sensors', label: 'Sensores', icon: <Gauge /> },
                   { id: 'robots', label: 'Robôs', icon: <Bot />, badge: errorCount || undefined },
                 ]}
               />

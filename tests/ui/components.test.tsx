@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 // Biblioteca de componentes (tasks 002 T009; FR-013).
-import { render, screen, within } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Play } from 'lucide-react';
 import { useState } from 'react';
@@ -18,6 +18,7 @@ import {
   Panel,
   SegmentedControl,
   Select,
+  Slider,
   SplitLayout,
   Stat,
   StatusDot,
@@ -259,5 +260,28 @@ describe('CodeEditor no tema escuro', () => {
     );
     expect(container.querySelector('.cm-editor')).not.toBeNull();
     expect(container.textContent).toContain('let a = 1;');
+  });
+});
+
+describe('Slider', () => {
+  it('emite o valor numérico e respeita desabilitado', () => {
+    const onChange = vi.fn();
+    const { rerender } = render(
+      <Slider label="Linha do tempo" min={0} max={10} value={3} onChange={onChange} />,
+    );
+    fireEvent.change(screen.getByLabelText('Linha do tempo'), { target: { value: '7' } });
+    expect(onChange).toHaveBeenCalledWith(7);
+    rerender(
+      <Slider
+        label="Linha do tempo"
+        hideLabel
+        min={0}
+        max={0}
+        value={0}
+        onChange={onChange}
+        disabled
+      />,
+    );
+    expect(screen.getByLabelText('Linha do tempo')).toBeDisabled();
   });
 });

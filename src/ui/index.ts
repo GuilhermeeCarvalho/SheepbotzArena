@@ -12,6 +12,7 @@ export { Tabs, type TabItem, type TabsProps } from './components/Tabs/Tabs';
 export { SplitLayout, type SplitLayoutProps } from './components/SplitLayout/SplitLayout';
 export { EmptyState } from './components/EmptyState/EmptyState';
 export { Select, type SelectOption, type SelectProps } from './components/Select/Select';
+export { Slider, type SliderProps } from './components/Slider/Slider';
 export { Toggle, type ToggleProps } from './components/Toggle/Toggle';
 export { Field } from './components/Field/Field';
 export { Badge, type Tone } from './components/Badge/Badge';

@@ -13,6 +13,12 @@ import {
   type World,
 } from '../../core/index';
 import { modalityRegistry } from '../../modalities/index';
+import {
+  appendFrame,
+  createRecording,
+  type ParsedRecording,
+  type Recording,
+} from '../recording/recording';
 
 export type SessionState = {
   readonly exampleId: string | null;
@@ -25,6 +31,12 @@ export type SessionState = {
   readonly speed: number;
   readonly worldIssues: ValidationIssue[];
   readonly controllerIssues: ControllerIssue[];
+  /** Quadros de todos os ticks desde o tick 0 (spec 005, FR-002). */
+  readonly recording: Recording;
+  /** Quadro exibido no modo replay; `null` = ao vivo (spec 005, FR-003). */
+  readonly replayIndex: number | null;
+  /** `false` para gravações abertas de arquivo: não há simulação para continuar. */
+  readonly liveAvailable: boolean;
 };
 
 type Built =
@@ -66,6 +78,9 @@ const fresh = (
   running: false,
   worldIssues: [],
   controllerIssues: [],
+  recording: createRecording(built.simulation.getState()),
+  replayIndex: null,
+  liveAvailable: true,
 });
 
 /** Cria a sessão inicial; lança erro se o mundo ou os controladores forem inválidos. */
@@ -124,30 +139,98 @@ export function applyController(
   return fresh({ speed: session.speed }, built, session.worldText, controllers, session.exampleId);
 }
 
+/** Estado exibido: o quadro do replay ou o estado ao vivo (spec 005, D-04). */
+export const displayedState = (session: SessionState): SimulationState =>
+  session.replayIndex === null ? session.state : session.recording.frames[session.replayIndex]!;
+
+const lastFrame = (session: SessionState): number => session.recording.frames.length - 1;
+const inReplay = (session: SessionState): boolean => session.replayIndex !== null;
 const isFinished = (session: SessionState): boolean => session.state.match?.phase === 'finished';
 
-export const play = (session: SessionState): SessionState =>
-  isFinished(session) || session.running ? session : { ...session, running: true };
+export function play(session: SessionState): SessionState {
+  if (session.running) return session;
+  if (inReplay(session))
+    return session.replayIndex! >= lastFrame(session) ? session : { ...session, running: true };
+  return isFinished(session) || !session.liveAvailable ? session : { ...session, running: true };
+}
 
 export const pause = (session: SessionState): SessionState =>
   session.running ? { ...session, running: false } : session;
 
-/** Avança um tick; disponível somente pausado (FR-005). */
-export const stepOnce = (session: SessionState): SessionState =>
-  session.running ? session : { ...session, state: session.simulation.step(1) };
+/** Simula um tick e o grava (ao vivo). */
+function simulateTicks(session: SessionState, ticks: number): SimulationState {
+  let state = session.state;
+  for (let i = 0; i < ticks; i++) {
+    const next = session.simulation.step(1);
+    if (next.tick === state.tick) break; // partida encerrada: o núcleo não avança mais
+    state = next;
+    appendFrame(session.recording, state);
+  }
+  return state;
+}
 
-/** Avança `ticks` (usado pelo laço de reprodução); pausa ao fim da partida (FR-008). */
+/** Avança um tick (ou um quadro no replay); disponível somente pausado (FR-005 da 002). */
+export function stepOnce(session: SessionState): SessionState {
+  if (session.running) return session;
+  if (inReplay(session))
+    return { ...session, replayIndex: Math.min(session.replayIndex! + 1, lastFrame(session)) };
+  if (!session.liveAvailable) return session;
+  return { ...session, state: simulateTicks(session, 1) };
+}
+
+/**
+ * Avança `ticks` (laço de reprodução). Ao vivo, simula e grava cada tick (spec 005, D-02);
+ * no replay, avança nos quadros gravados. Pausa ao fim da partida ou da gravação.
+ */
 export function advance(session: SessionState, ticks: number): SessionState {
   if (ticks <= 0) return session;
-  const state = session.simulation.step(ticks);
+  if (inReplay(session)) {
+    const replayIndex = Math.min(session.replayIndex! + ticks, lastFrame(session));
+    return {
+      ...session,
+      replayIndex,
+      running: session.running && replayIndex < lastFrame(session),
+    };
+  }
+  const state = simulateTicks(session, ticks);
   return { ...session, state, running: session.running && state.match?.phase !== 'finished' };
 }
 
-export const reset = (session: SessionState): SessionState => ({
+/** Ao vivo: reinicia a simulação (gravação nova). No replay: volta ao quadro 0. */
+export function reset(session: SessionState): SessionState {
+  if (inReplay(session)) return { ...session, replayIndex: 0, running: false };
+  const state = session.simulation.reset();
+  return { ...session, state, running: false, recording: createRecording(state) };
+}
+
+/** Vai ao quadro `index` da gravação, entrando no modo replay (spec 005, US2-AC1). */
+export const seek = (session: SessionState, index: number): SessionState => ({
   ...session,
-  state: session.simulation.reset(),
   running: false,
+  replayIndex: Math.max(0, Math.min(Math.round(index), lastFrame(session))),
 });
+
+/** Sai do replay e volta ao último estado simulado (spec 005, US2-AC3). */
+export const goLive = (session: SessionState): SessionState =>
+  session.liveAvailable ? { ...session, replayIndex: null, running: false } : session;
+
+/** Abre uma gravação de arquivo em modo replay, sem controladores (spec 005, US3-AC2). */
+export function openRecording(
+  session: SessionState,
+  parsed: ParsedRecording,
+  modalities: ModalityRegistry = modalityRegistry,
+): SessionState {
+  const built = build(parsed.worldText, {}, modalities);
+  if (!built.ok) return session;
+  const opened = fresh({ speed: session.speed }, built, parsed.worldText, parsed.controllers, null);
+  return {
+    ...opened,
+    controllers: parsed.controllers,
+    recording: { frames: parsed.frames, truncated: false },
+    replayIndex: 0,
+    liveAvailable: false,
+  };
+}
 
 export const setSpeed = (session: SessionState, speed: number): SessionState => ({
   ...session,

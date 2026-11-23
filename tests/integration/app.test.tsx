@@ -300,4 +300,59 @@ describe('App', () => {
       );
     });
   });
+
+  describe('feature 005 — inspeção e replay', () => {
+    it('US1: aba Sensores mostra leituras do robô selecionado no tick exibido', async () => {
+      render(<App examples={examples} />);
+      await userEvent.click(screen.getByRole('tab', { name: /Sensores/ }));
+      expect(screen.getByText('Comando')).toBeInTheDocument();
+      expect(screen.getByText('Este robô não tem sensores.')).toBeInTheDocument();
+      expect(screen.getByText('tick 0')).toBeInTheDocument();
+      await userEvent.click(screen.getByRole('button', { name: 'Avançar um tick' }));
+      expect(screen.getByText('tick 1')).toBeInTheDocument();
+    });
+
+    it('US2: a linha do tempo leva ao tick escolhido e "Ao vivo" volta', async () => {
+      render(<App examples={examples} />);
+      for (let i = 0; i < 5; i++)
+        await userEvent.click(screen.getByRole('button', { name: 'Avançar um tick' }));
+      expect(screen.getByTestId('timeline-count')).toHaveTextContent('5 / 5');
+      fireEvent.change(screen.getByLabelText('Linha do tempo'), { target: { value: '2' } });
+      expect(tickShown()).toBe('2');
+      expect(screen.getByText('replay')).toBeInTheDocument();
+      await userEvent.click(screen.getByRole('button', { name: 'Ao vivo' }));
+      expect(tickShown()).toBe('5');
+    });
+
+    it('US3: exporta a gravação e abre uma gravação (válida e inválida)', async () => {
+      const createObjectURL = vi.fn(() => 'blob:gravacao');
+      const revokeObjectURL = vi.fn();
+      vi.stubGlobal('URL', Object.assign(URL, { createObjectURL, revokeObjectURL }));
+      const click = vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {});
+      render(<App examples={examples} />);
+      await userEvent.click(screen.getByRole('button', { name: 'Avançar um tick' }));
+      await userEvent.click(screen.getByRole('button', { name: 'Exportar gravação' }));
+      expect(createObjectURL).toHaveBeenCalled();
+      expect(click).toHaveBeenCalled();
+
+      await userEvent.upload(
+        screen.getByTestId('recording-file-input'),
+        new File(['{'], 'x.json', { type: 'application/json' }),
+      );
+      expect(await screen.findByText('O arquivo não é um JSON válido.')).toBeInTheDocument();
+
+      const blob = (createObjectURL.mock.calls[0] as unknown as [Blob])[0];
+      const text = await blob.text();
+      await userEvent.upload(
+        screen.getByTestId('recording-file-input'),
+        new File([text], 'g.json', { type: 'application/json' }),
+      );
+      await vi.waitFor(() =>
+        expect(screen.getByTestId('timeline-count')).toHaveTextContent('0 / 1'),
+      );
+      expect(screen.getByText('replay')).toBeInTheDocument();
+      click.mockRestore();
+      vi.unstubAllGlobals();
+    });
+  });
 });

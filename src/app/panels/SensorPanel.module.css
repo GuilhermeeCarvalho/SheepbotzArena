@@ -1,0 +1,134 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+.top {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.robotSelect {
+  flex: 1;
+}
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.blockTitle {
+  margin: var(--space-1) 0 0;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+}
+.sensor {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+.sensorInline {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 6px var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+.sensorHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.sensorName {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  min-width: 64px;
+}
+.spacer {
+  flex: 1;
+}
+.hint {
+  margin: 0;
+  font-size: var(--text-xs);
+  color: var(--color-text-subtle);
+}
+.rays {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.ray {
+  display: grid;
+  grid-template-columns: 18px 1fr 56px;
+  align-items: center;
+  gap: var(--space-2);
+}
+.rayIndex {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-text-subtle);
+  text-align: right;
+}
+.rayTrack {
+  position: relative;
+  flex: 1;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: var(--color-surface-hover);
+  overflow: hidden;
+}
+.rayHit,
+.rayFree,
+.floorFill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: var(--radius-full);
+}
+.rayHit {
+  background: var(--color-ray-hit);
+}
+.rayFree {
+  background: var(--color-ray-free);
+}
+.floorFill {
+  background: var(--color-text-muted);
+}
+.rayValue {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.logs {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+}
+.logs li {
+  display: flex;
+  gap: var(--space-2);
+  overflow-wrap: anywhere;
+}
+.logTick {
+  color: var(--color-text-subtle);
+  min-width: 40px;
+}
+.error {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--color-danger);
+}

@@ -1,5 +1,7 @@
 /** Hook da sessão com laço de reprodução por requestAnimationFrame (research D-04; FR-006). */
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { modalityRegistry } from '../../modalities/index';
+import { parseRecording } from '../recording/recording';
 import { createPlaybackClock } from './playbackClock';
 import * as transitions from './session';
 import type { SessionState } from './session';
@@ -16,6 +18,10 @@ export type SessionActions = {
     exampleId?: string | null,
   ): boolean;
   applyController(robotId: string, source: string): boolean;
+  seek(index: number): void;
+  goLive(): void;
+  /** Abre uma gravação (texto do arquivo); devolve a mensagem de erro, se houver. */
+  openRecording(text: string): string | null;
 };
 
 export function useSimulationSession(initial: () => SessionState): [SessionState, SessionActions] {
@@ -55,6 +61,14 @@ export function useSimulationSession(initial: () => SessionState): [SessionState
       const next = transitions.applyWorld(sessionRef.current, worldText, controllers, exampleId);
       update(next);
       return next.worldIssues.length === 0 && next.controllerIssues.length === 0;
+    },
+    seek: (index) => update(transitions.seek(sessionRef.current, index)),
+    goLive: () => update(transitions.goLive(sessionRef.current)),
+    openRecording: (text) => {
+      const parsed = parseRecording(text, modalityRegistry);
+      if (!parsed.ok) return parsed.error;
+      update(transitions.openRecording(sessionRef.current, parsed.value));
+      return null;
     },
     applyController: (robotId, source) => {
       const next = transitions.applyController(sessionRef.current, robotId, source);
