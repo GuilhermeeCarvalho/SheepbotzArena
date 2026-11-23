@@ -23,10 +23,10 @@ Leia este arquivo inteiro antes de mudar qualquer coisa. Depois leia, nesta orde
 | 005 — Painel de inspeção e replay | planejada (escopo completo do briefing: RB-21, RB-22) |
 | 006 — Seguidor de Linha (Pro, Júnior) | ✅ 7/7 tarefas: pistas por retas/arcos, cronômetro, parada de 2 s, controlador PD com QTR-8A |
 | 007 — Trekking | ✅ 6/6 tarefas: marcos em ordem, colisão/saída do campo, false start, navegação por odometria + lidar |
-| 008 — Futebol | próxima (exige corpo passivo "bola" no núcleo — ver spec) |
+| 008 — Futebol Mini / VSS | ✅ 9/9 tarefas: núcleo ganhou bola, câmera global e reposição pedida pelo árbitro; gols, bola livre, exemplo 2 × 1 |
 | 009 — Controlador remoto via WebSocket | bônus |
 
-Testes e cobertura: **288 testes · 94,4% de cobertura de linhas**.
+Testes e cobertura: **310 testes · 94,8% de cobertura de linhas**.
 
 Interface: tema claro e tema escuro (preto e verde da SheepBotz, botão sol/lua); logo sem
 fundo em `public/brand/sheepbotz-mark.png`, gerado por `scripts/brand/cutout-logo.py`

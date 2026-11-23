@@ -47,5 +47,21 @@ src/core/simulation/{state.ts, tick.ts, simulation.ts} · src/core/controller/ro
 src/core/modality/contract.ts (+restart)
 src/modalities/soccer/{field.ts, referee.ts, validation.ts, index.ts}
 src/app/scene/{sceneModel.ts, BallMesh.tsx, SceneContent.tsx}
-examples/worlds/futebol-2x2.json · examples/controllers/soccer-{striker,goalkeeper}.js
+examples/worlds/futebol-2x1.json · examples/controllers/soccer-{striker,goalkeeper}.js
 ```
+
+## D-09 — Ajustes feitos ao validar o exemplo (2026-11-22)
+
+- **Bola presa contra a parede** atravessava a lateral sob empurrão contínuo: o robô que
+  ainda sobrepõe a bola contida pela parede passa a recuar (spec H-08).
+- **Bola livre por deslocamento** (< 1 cm em 5 s) em vez de velocidade: a bola presa entre
+  robôs "vibra" sem sair do lugar (spec H-03); dentro da área, a reposição modela o prazo
+  de 5 s do goleiro (spec H-09).
+- **Atacante junto à lateral**: o ponto atrás da bola caía fora do campo; a estratégia
+  empurra ao longo da parede e limita os alvos ao interior do campo.
+- **Exemplo 2 × 1 com montagens diferentes**: dois atacantes iguais se anulam. O Azul usa a
+  redução 50:1 (0,79 m/s), mostrando como a escolha de motor muda o jogo (RB-24). A câmera
+  tem ruído semeado de 2 mm para que os lances variem após cada reposição, mantendo o
+  determinismo.
+- **Desempenho**: testes longos com limites de tempo folgados (máquina com indexação pesada
+  chegou a load 33 durante a cobertura).

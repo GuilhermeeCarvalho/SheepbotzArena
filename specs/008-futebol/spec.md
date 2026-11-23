@@ -77,7 +77,7 @@ x = +0,75 m, boca do gol |y| ≤ 0,20 m.
 1. **Dado** o gerador de campo, **então** cria laterais com aberturas dos gols, gols de
    40 × 10 cm, triângulos de 7 cm nos cantos, piso preto com linhas brancas (centro, círculo
    de raio 0,20 m) e a bola no centro (Art. 2.1–2.4).
-2. **Dado** o exemplo 2 × 2 (goleiro + atacante por time), **quando** simulado, **então** sai
+2. **Dado** o exemplo 2 × 1 (Verde: goleiro + atacante; Azul: atacante), **quando** simulado, **então** sai
    pelo menos um gol dentro do tempo, de forma repetível, sem erro de controlador.
 
 ## Interpretações adotadas
@@ -86,12 +86,20 @@ x = +0,75 m, boca do gol |y| ≤ 0,20 m.
   e prorrogação ficam fora.
 - **H-02 — Reinício**: após gol ou bola livre, todos voltam às posições iniciais do mundo
   (o posicionamento livre do time atacante, Art. 7, não é modelado).
-- **H-03 — Bola livre**: velocidade da bola < 1 mm/s por 5 s, com o centro fora das duas
-  áreas de gol (retângulos de 15 × 70 cm à frente dos gols; o arco não é modelado).
+- **H-03 — Bola livre**: a bola se desloca menos de 1 cm durante 5 s (parada ou presa entre
+  robôs), com o centro fora das duas áreas de gol (retângulos de 15 × 70 cm à frente dos
+  gols; o arco não é modelado).
 - **H-04 — Lados**: o primeiro time defende o gol esquerdo; cada robô começa em x < 0
   (esquerdo) ou x > 0 (direito).
 - **H-05 — Faltas** (Art. 9) e pênaltis não são arbitrados.
 - **H-06 — Robôs como discos** de diâmetro ≤ 0,08 m (com uniforme).
+- **H-07 — Bola fora do campo**: salvaguarda do simulador; se a bola sair do campo sem ser
+  gol, as posições são repostas (no campo real as laterais impedem).
+- **H-09 — Bola presa na área**: bola parada 5 s dentro da área do gol também gera reposição,
+  modelando de forma simplificada o prazo de 5 s do goleiro para tirar a bola (Art. 9.1);
+  as faltas e o pênalti decorrentes não são marcados (H-05).
+- **H-08 — Bola presa**: quando a bola está contida por uma parede e um robô ainda a
+  sobrepõe, o robô é que recua (a bola presa age como obstáculo).
 
 ## Requisitos *(obrigatório)*
 
@@ -107,7 +115,7 @@ x = +0,75 m, boca do gol |y| ≤ 0,20 m.
 - **FR-006**: Modalidade `futebol-vss` com gol (Art. 8.1), bola livre (Art. 15), tempo
   (Art. 6) e resultado com placar por time. *(RB-23)*
 - **FR-007**: Validação de times, robôs e bola (Art. 2.5, 3.1, 3.2.1). *(RB-25)*
-- **FR-008**: Gerador do campo oficial e exemplo 2 × 2 com estratégias em código.
+- **FR-008**: Gerador do campo oficial e exemplo 2 × 1 com estratégias em código.
   *(RB-24, RB-26)*
 - **FR-009**: A interface desenha as bolas. *(feature 002)*
 
@@ -115,7 +123,7 @@ x = +0,75 m, boca do gol |y| ≤ 0,20 m.
 
 - **SC-001**: Cenários numéricos da US1 com erro ≤ 0,001.
 - **SC-002**: As suítes das features 001 a 007 continuam verdes.
-- **SC-003**: O exemplo 2 × 2 produz gol, de forma repetível.
+- **SC-003**: O exemplo 2 × 1 produz gol, de forma repetível.
 
 ## Premissas e limites
 
