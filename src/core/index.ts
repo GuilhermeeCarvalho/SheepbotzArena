@@ -35,5 +35,6 @@ export {
 } from './modality/contract';
 export { rayAngles, rayGeometry } from './sensors/rangefinder';
 export { castRay } from './sensors/raycast';
+export { buildStaticBodies, discPenetration, type StaticBody } from './collision/staticBodies';
 export { isPointInRegion } from './sensors/floor';
 export { normalizeAngle } from './math/angle';

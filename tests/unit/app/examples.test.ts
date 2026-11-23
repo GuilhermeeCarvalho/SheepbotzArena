@@ -26,6 +26,7 @@ describe('exemplos', () => {
       'sumo-lego',
       'sumo-mega',
       'sumo-mini',
+      'trekking',
     ]);
     expect(examples[0]!.name).toBe('Corredor com obstáculos');
     expect(Object.keys(examples[1]!.controllers)).toEqual(['explorador', 'seguidor']);

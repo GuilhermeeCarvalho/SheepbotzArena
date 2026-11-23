@@ -5,8 +5,10 @@
 import { createModalityRegistry } from '../core/index';
 import { LINE_FOLLOWER_MODALITIES } from './line-follower/index';
 import { SUMO_MODALITIES } from './sumo/index';
+import { TREKKING_MODALITY } from './trekking/index';
 
 export const modalityRegistry = createModalityRegistry([
   ...SUMO_MODALITIES,
   ...LINE_FOLLOWER_MODALITIES,
+  TREKKING_MODALITY,
 ]);
