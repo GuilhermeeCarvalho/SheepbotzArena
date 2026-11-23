@@ -60,6 +60,24 @@ export default tseslint.config(
     },
   },
   {
+    // Controlador remoto (spec 009): depende só do núcleo; roda no navegador e no Node.
+    files: ['src/remote/**/*.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['**/app/**', '**/ui/**', '**/modalities/**', '**/cli/**', 'react', 'three'],
+              message: 'src/remote depende só do núcleo.',
+            },
+            { group: ['node:*'], message: 'src/remote deve rodar também no navegador.' },
+          ],
+        },
+      ],
+    },
+  },
+  {
     // Biblioteca de componentes genérica (constitution v2.1.0)
     files: ['src/ui/**/*.{ts,tsx}'],
     rules: {
