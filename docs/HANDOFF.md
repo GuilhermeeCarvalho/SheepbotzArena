@@ -20,13 +20,13 @@ Leia este arquivo inteiro antes de mudar qualquer coisa. Depois leia, nesta orde
 | 002 — Visualização 3D e controles | ✅ 36/36 tarefas, incluindo a revisão visual (T032–T036) |
 | 003 — Catálogo de componentes reais e montador de robôs | ⏳ **próxima**; referências prontas em `docs/references/componentes/` |
 | 004 — Modalidade Sumô (Mega, Mini, LEGO) | ✅ 15/15 tarefas (branch `feat/004-modalidade-sumo`) |
-| 005 — Painel de inspeção e replay | planejada (escopo completo do briefing: RB-21, RB-22) |
+| 005 — Painel de inspeção e replay | ✅ 7/7 tarefas: aba Sensores, gravação de todos os ticks, linha do tempo, exportar/abrir gravação |
 | 006 — Seguidor de Linha (Pro, Júnior) | ✅ 7/7 tarefas: pistas por retas/arcos, cronômetro, parada de 2 s, controlador PD com QTR-8A |
 | 007 — Trekking | ✅ 6/6 tarefas: marcos em ordem, colisão/saída do campo, false start, navegação por odometria + lidar |
 | 008 — Futebol Mini / VSS | ✅ 9/9 tarefas: núcleo ganhou bola, câmera global e reposição pedida pelo árbitro; gols, bola livre, exemplo 2 × 1 |
 | 009 — Controlador remoto via WebSocket | bônus |
 
-Testes e cobertura: **335 testes · 94,8% de cobertura de linhas**
+Testes e cobertura: **359 testes · 94,5% de cobertura de linhas**
 
 Exemplos: 21 mundos (≥ 3 por categoria); roteiro da demo em `docs/apresentacao-exemplos.md`..
 
@@ -101,10 +101,9 @@ Contratos que valem como referência: `specs/001-nucleo-simulacao/contracts/*.md
 
 ---
 
-## 4. Próximo passo: feature 005 (inspeção e replay) ou 003 (catálogo de componentes)
+## 4. Próximo passo: feature 003 (catálogo de componentes)
 
-Recomendação: **005** fecha o escopo completo do briefing (RB-21, RB-22). A 003 abaixo
-continua válida.
+O escopo completo do briefing está fechado (005 entregue). A 003 abaixo é o pedido da equipe.
 
 ### Feature 003 (catálogo de componentes e montador de robôs)
 
