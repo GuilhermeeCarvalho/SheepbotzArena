@@ -173,6 +173,7 @@ de execução exige emenda desta seção.
 | Linguagem do controlador   | JavaScript, executado contra uma API limitada                  |
 | Análise sintática do controlador | acorn (apenas para relatar erros com linha e coluna)     |
 | Linha de comando           | Node.js com `tsx`                                              |
+| Controlador remoto         | `WebSocket` padrão do navegador e do Node.js 22+, sem dependência nova; o exemplo de programa externo usa Python 3.10+ com `websockets`, fora do build |
 
 O núcleo de simulação NÃO DEVE depender de React, Three.js, DOM ou APIs exclusivas do
 navegador, para rodar igualmente no Node.js (testes e linha de comando) e no navegador.
@@ -229,5 +230,6 @@ preservando a data da ratificação inicial, e registrar a mudança no históric
 | 1.2.0  | 2026-11-20 | Princípios VI (determinismo e física própria) e VII (rastreabilidade e cobertura) adicionados; escopo ampliado para simulador genérico com várias modalidades da RoboCore e foco da demo em Sumô; seção de stack adicionada; referências movidas para `docs/references/robocore/`; mensagens de commit em português. |
 | 2.0.0  | 2026-11-20 | Princípio III redefinido: TDD deixa de ser obrigatório; exige-se teste automatizado de todo comportamento e de todo critério de aceitação na mesma entrega, em qualquer ordem. |
 | 2.1.0  | 2026-11-20 | Stack ampliada para a interface: React Three Fiber/drei, biblioteca de componentes própria (`src/ui/`, CSS Modules, lucide-react), CodeMirror 6 e ferramentas de teste de componentes; regra de reutilização e independência da biblioteca de componentes. |
+| 2.2.0  | 2026-11-23 | Stack ampliada com o controlador remoto (feature 009): `WebSocket` padrão no simulador e exemplo de programa externo em Python com `websockets`. |
 
-**Versão**: 2.1.0 | **Ratificada em**: 2026-11-14 | **Última alteração**: 2026-11-20
+**Versão**: 2.2.0 | **Ratificada em**: 2026-11-14 | **Última alteração**: 2026-11-23

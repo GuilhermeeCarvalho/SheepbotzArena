@@ -6,7 +6,7 @@
 
 Leia este arquivo inteiro antes de mudar qualquer coisa. Depois leia, nesta ordem:
 
-1. `.specify/memory/constitution.md` (v2.1.0): regras do projeto. Prevalece sobre tudo.
+1. `.specify/memory/constitution.md` (v2.2.0): regras do projeto. Prevalece sobre tudo.
 2. `docs/briefing/requisitos-extraidos.md`: requisitos do briefing (RB-xx), perguntas e decisões (Q-xx) e mapa de features.
 3. `specs/001-nucleo-simulacao/` e `specs/002-visualizacao-3d/`: exemplos do padrão de spec, plan, tasks e contracts a seguir.
 
