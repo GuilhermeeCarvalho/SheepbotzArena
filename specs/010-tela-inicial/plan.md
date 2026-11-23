@@ -31,9 +31,9 @@ tela inicial e o simulador:
   como `modality` (opcional). `groupExamples` mapeia prefixos para grupos: `sumo-` → Sumô,
   `seguidor-` → Seguidor de Linha, `trekking` → Trekking, `futebol-` → Futebol de robôs;
   o resto vai para Livre. Grupos vazios são omitidos (US2-AC4).
-- **D-03 — Simulador remontado a cada entrada**: o `Root` monta o `App` com
-  `key = exemplo + contador de entradas`, então cada entrada começa uma sessão nova (US3-AC2).
-  O `App` ganha `initialExampleId` e `onGoHome`; a `TopBar` ganha o botão "Tela inicial".
+- **D-03 — Simulador remontado a cada entrada**: ao voltar à tela inicial o `Root` desmonta o
+  `App`, então cada entrada cria uma sessão nova no tick 0 (US3-AC2). O `App` ganha
+  `initialExampleId` e `onGoHome`; a `TopBar` ganha o botão "Tela inicial".
 - **D-04 — Tema**: a tela inicial usa o mesmo `useTheme`, que já persiste a escolha; como só
   uma tela fica montada por vez, as duas leem a mesma preferência (FR-006).
 

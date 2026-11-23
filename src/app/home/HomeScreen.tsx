@@ -1,5 +1,5 @@
 import { ArrowRight, Moon, Play, Sun } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Badge, Button, IconButton, cx } from '../../ui/index';
 import type { Example } from '../examples/examples';
 import { LOGO_SRC } from '../layout/TopBar';
@@ -21,6 +21,14 @@ export function HomeScreen({ examples, onOpenSimulator, onOpenExample }: HomeScr
   const groups = groupExamples(examples);
   const [selectedId, setSelectedId] = useState<ModalityGroupId | null>(null);
   const selected = groups.find((g) => g.id === selectedId) ?? null;
+  const examplesRef = useRef<HTMLDivElement>(null);
+
+  // A lista de exemplos fica abaixo dos cartões: rola até ela ao escolher a modalidade.
+  useEffect(() => {
+    if (selectedId !== null) {
+      examplesRef.current?.scrollIntoView?.({ behavior: 'smooth', block: 'nearest' });
+    }
+  }, [selectedId]);
 
   return (
     <div className={styles.home}>
@@ -77,6 +85,7 @@ export function HomeScreen({ examples, onOpenSimulator, onOpenExample }: HomeScr
 
           {selected && (
             <div
+              ref={examplesRef}
               className={styles.examples}
               role="region"
               aria-label={`Exemplos de ${selected.name}`}
