@@ -5,7 +5,12 @@ import { buildSimulation, constantSpeed, worldData } from '../../helpers';
 export { constantSpeed };
 
 /** Robô de Mini Sumô sem sensores (raio 0,05 m, 0,5 kg). */
-export const miniRobot = (id: string, x: number, theta: number, overrides: Record<string, unknown> = {}) => ({
+export const miniRobot = (
+  id: string,
+  x: number,
+  theta: number,
+  overrides: Record<string, unknown> = {},
+) => ({
   id,
   pose: { x, y: 0, theta },
   radius: 0.05,

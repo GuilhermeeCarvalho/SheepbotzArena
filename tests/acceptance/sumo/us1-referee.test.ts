@@ -39,7 +39,11 @@ describe('US1 — arbitragem do round (Mini Sumô)', () => {
     const world = sumoWorld('sumo-mini', [miniRobot('A', -0.3, PI), miniRobot('B', 0.3, 0)]);
     const state = runRound(world, { A: constantSpeed(0.5, 0), B: constantSpeed(0.5, 0) });
     expect(state.tick).toBe(4);
-    expect(state.match).toMatchObject({ phase: 'finished', winner: null, details: { outOfDohyo: ['A', 'B'] } });
+    expect(state.match).toMatchObject({
+      phase: 'finished',
+      winner: null,
+      details: { outOfDohyo: ['A', 'B'] },
+    });
   });
 
   it('US1-AC5: round encerrado não avança; reset volta a "em andamento"', () => {
@@ -48,6 +52,10 @@ describe('US1 — arbitragem do round (Mini Sumô)', () => {
     expect(simulation.getState().match?.phase).toBe('running');
     expect(simulation.step(50).tick).toBe(4);
     expect(simulation.step(10).tick).toBe(4);
-    expect(simulation.reset().match).toMatchObject({ phase: 'running', winner: null, details: { timeLimit: 60 } });
+    expect(simulation.reset().match).toMatchObject({
+      phase: 'running',
+      winner: null,
+      details: { timeLimit: 60 },
+    });
   });
 });

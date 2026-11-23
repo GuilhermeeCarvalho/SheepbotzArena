@@ -20,7 +20,11 @@ describe('US3 — validação do Sumô', () => {
   });
 
   it.each([[1], [3]])('US3-AC1: %i robôs → exige exatamente 2', (count) => {
-    const robots = [miniRobot('A', -0.2, 0), miniRobot('B', 0.2, PI), miniRobot('C', 0.2, PI, { pose: { x: -0.2, y: 0.3, theta: 0 } })].slice(0, count);
+    const robots = [
+      miniRobot('A', -0.2, 0),
+      miniRobot('B', 0.2, PI),
+      miniRobot('C', 0.2, PI, { pose: { x: -0.2, y: 0.3, theta: 0 } }),
+    ].slice(0, count);
     const errors = errorsOf(sumoWorld('sumo-mini', robots));
     expect(errors).toContainEqual({
       path: 'robots',
@@ -42,7 +46,11 @@ describe('US3 — validação do Sumô', () => {
 
   it('US3-AC3: massa 0,6 kg > 0,5 kg', () => {
     expect(errorsOf(sumoWorld('sumo-mini', pair({}, { mass: 0.6 })))).toEqual([
-      { path: 'robots[1].mass', code: 'MODALITY_RULE', message: 'massa de 0,6 kg excede o limite de 0,5 kg da categoria' },
+      {
+        path: 'robots[1].mass',
+        code: 'MODALITY_RULE',
+        message: 'massa de 0,6 kg excede o limite de 0,5 kg da categoria',
+      },
     ]);
   });
 
@@ -56,15 +64,25 @@ describe('US3 — validação do Sumô', () => {
   });
 
   it('US3-AC5: robô fora da extensão da Shikiri-sen', () => {
-    expect(errorsOf(sumoWorld('sumo-mini', pair({ pose: { x: -0.2, y: 0.11, theta: 0 } })))).toEqual([
-      { path: 'robots[0].pose', code: 'MODALITY_RULE', message: 'o robô está fora da extensão da Shikiri-sen (Art. 10)' },
+    expect(
+      errorsOf(sumoWorld('sumo-mini', pair({ pose: { x: -0.2, y: 0.11, theta: 0 } }))),
+    ).toEqual([
+      {
+        path: 'robots[0].pose',
+        code: 'MODALITY_RULE',
+        message: 'o robô está fora da extensão da Shikiri-sen (Art. 10)',
+      },
     ]);
     // encostar na extensão é permitido (Art. 10)
-    expect(errorsOf(sumoWorld('sumo-mini', pair({ pose: { x: -0.2, y: 0.1, theta: 0 } })))).toEqual([]);
+    expect(errorsOf(sumoWorld('sumo-mini', pair({ pose: { x: -0.2, y: 0.1, theta: 0 } })))).toEqual(
+      [],
+    );
   });
 
   it('US3-AC6: os dois robôs do mesmo lado', () => {
-    const errors = errorsOf(sumoWorld('sumo-mini', [miniRobot('A', -0.2, 0), miniRobot('B', -0.35, 0)]));
+    const errors = errorsOf(
+      sumoWorld('sumo-mini', [miniRobot('A', -0.2, 0), miniRobot('B', -0.35, 0)]),
+    );
     expect(errors).toContainEqual({
       path: 'robots',
       code: 'MODALITY_RULE',
@@ -73,14 +91,27 @@ describe('US3 — validação do Sumô', () => {
   });
 
   it('US3-AC7: roundTimeLimit inválido e opção desconhecida', () => {
-    const errors = errorsOf(sumoWorld('sumo-mini', pair(), { modalityOptions: { roundTimeLimit: 0, rounds: 3 } }));
+    const errors = errorsOf(
+      sumoWorld('sumo-mini', pair(), { modalityOptions: { roundTimeLimit: 0, rounds: 3 } }),
+    );
     expect(errors).toHaveLength(2);
-    expect(errors).toContainEqual({ path: 'modalityOptions.roundTimeLimit', code: 'MODALITY_RULE', message: 'deve ser maior que 0' });
-    expect(errors).toContainEqual({ path: 'modalityOptions.rounds', code: 'MODALITY_RULE', message: "opção desconhecida 'rounds' para o Sumô" });
+    expect(errors).toContainEqual({
+      path: 'modalityOptions.roundTimeLimit',
+      code: 'MODALITY_RULE',
+      message: 'deve ser maior que 0',
+    });
+    expect(errors).toContainEqual({
+      path: 'modalityOptions.rounds',
+      code: 'MODALITY_RULE',
+      message: "opção desconhecida 'rounds' para o Sumô",
+    });
   });
 
   it('US3-AC8: LEGO® aceita diâmetro 0,15 m e não verifica massa', () => {
-    const lego = [miniRobot('A', -0.2, 0, { radius: 0.075, mass: 5 }), miniRobot('B', 0.2, PI, { radius: 0.075, mass: 5 })];
+    const lego = [
+      miniRobot('A', -0.2, 0, { radius: 0.075, mass: 5 }),
+      miniRobot('B', 0.2, PI, { radius: 0.075, mass: 5 }),
+    ];
     expect(errorsOf(sumoWorld('sumo-lego', lego))).toEqual([]);
     const tooBig = [miniRobot('A', -0.2, 0, { radius: 0.08 }), miniRobot('B', 0.2, PI)];
     expect(errorsOf(sumoWorld('sumo-lego', tooBig))[0]!.path).toBe('robots[0].radius');
@@ -92,7 +123,11 @@ describe('US3 — validação do Sumô', () => {
       miniRobot('B', 0.3, PI, { radius: 0.1, mass: 3.2 }),
     ];
     expect(errorsOf(sumoWorld('sumo-mega', mega, { arena: { width: 3.6, height: 3.6 } }))).toEqual([
-      { path: 'robots[1].mass', code: 'MODALITY_RULE', message: 'massa de 3,2 kg excede o limite de 3 kg da categoria' },
+      {
+        path: 'robots[1].mass',
+        code: 'MODALITY_RULE',
+        message: 'massa de 3,2 kg excede o limite de 3 kg da categoria',
+      },
     ]);
   });
 });

@@ -8,6 +8,8 @@ export default defineConfig({
   test: {
     include: ['tests/**/*.test.{ts,tsx}'],
     setupFiles: ['tests/setup-dom.ts'],
+    // Testes da CLI (worker thread) e de exemplos longos ficam lentos sob cobertura.
+    testTimeout: 30_000,
     css: { modules: { classNameStrategy: 'non-scoped' } },
     exclude: ['tests/perf/**', 'node_modules/**'],
     reporters: ['default', ['json', { outputFile: 'coverage/test-results.json' }]],

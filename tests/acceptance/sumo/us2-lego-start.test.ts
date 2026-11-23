@@ -17,21 +17,33 @@ describe('US2 — largada no Sumô LEGO®', () => {
   it('girar no lugar antes de 5 s também queima a largada; os dois → sem vencedor', () => {
     const spin = runRound(sumoWorld('sumo-lego', robots), { B: constantSpeed(0, 1) });
     expect(spin.match).toMatchObject({ winner: 'A', details: { falseStart: ['B'] } });
-    const both = runRound(sumoWorld('sumo-lego', robots), { A: constantSpeed(0.3, 0), B: constantSpeed(0.3, 0) });
+    const both = runRound(sumoWorld('sumo-lego', robots), {
+      A: constantSpeed(0.3, 0),
+      B: constantSpeed(0.3, 0),
+    });
     expect(both.match).toMatchObject({ phase: 'finished', winner: null });
   });
 
   it('US2-AC2: esperar 5 s e depois avançar não é infração', () => {
-    const simulation = sumoSimulation(sumoWorld('sumo-lego', robots), { A: waitThenGo, B: waitThenGo });
+    const simulation = sumoSimulation(sumoWorld('sumo-lego', robots), {
+      A: waitThenGo,
+      B: waitThenGo,
+    });
     const state = simulation.step(120);
     expect(state.match).toMatchObject({ phase: 'running', details: { falseStart: [] } });
     expect(state.robots[0]!.pose.x).toBeGreaterThan(-0.2);
   });
 
   it('US2-AC3: no Mini Sumô não existe a regra dos 5 s', () => {
-    const state = sumoSimulation(sumoWorld('sumo-mini', robots.map((r) => ({ ...r, mass: 0.5 }))), {
-      A: constantSpeed(0.3, 0),
-    }).step(2);
+    const state = sumoSimulation(
+      sumoWorld(
+        'sumo-mini',
+        robots.map((r) => ({ ...r, mass: 0.5 })),
+      ),
+      {
+        A: constantSpeed(0.3, 0),
+      },
+    ).step(2);
     expect(state.match?.phase).toBe('running');
   });
 });

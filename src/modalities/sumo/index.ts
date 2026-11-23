@@ -13,7 +13,8 @@ export function createSumoModality(category: SumoCategory): Modality {
   };
 }
 
-export const SUMO_MODALITIES: readonly Modality[] = Object.values(SUMO_CATEGORIES).map(createSumoModality);
+export const SUMO_MODALITIES: readonly Modality[] =
+  Object.values(SUMO_CATEGORIES).map(createSumoModality);
 
 export { SUMO_CATEGORIES, type SumoCategory, type SumoCategoryId } from './categories';
 export { createSumoWorld, startPose, type SumoRobotInput } from './arena';

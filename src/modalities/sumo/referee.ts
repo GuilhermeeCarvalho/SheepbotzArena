@@ -2,7 +2,13 @@
  * Árbitro do round de Sumô (spec 004, US1 e US2; FR-002 a FR-005).
  * Avalia só o snapshot do estado e constantes do mundo (research D-02).
  */
-import { normalizeAngle, type MatchStatus, type Referee, type SimulationState, type World } from '../../core/index';
+import {
+  normalizeAngle,
+  type MatchStatus,
+  type Referee,
+  type SimulationState,
+  type World,
+} from '../../core/index';
 import {
   FALSE_START_DISTANCE,
   FALSE_START_ROTATION,
@@ -36,7 +42,13 @@ export function createSumoReferee(world: World, category: SumoCategory): Referee
       const elapsed = state.time;
       const opponentOf = (id: string) => ids.find((other) => other !== id) ?? null;
       const score = Object.fromEntries(ids.map((id) => [id, 0]));
-      const details = { category: category.id, elapsed, timeLimit, outOfDohyo: [] as string[], falseStart: [] as string[] };
+      const details = {
+        category: category.id,
+        elapsed,
+        timeLimit,
+        outOfDohyo: [] as string[],
+        falseStart: [] as string[],
+      };
 
       const finish = (winner: string | null, reason: string): MatchStatus => {
         if (winner) score[winner] = 1;
@@ -50,15 +62,23 @@ export function createSumoReferee(world: World, category: SumoCategory): Referee
           .map((r) => r.id);
         if (details.falseStart.length === 1) {
           const offender = details.falseStart[0]!;
-          return finish(opponentOf(offender), `${offender} se moveu antes de ${category.startDelay} s — largada queimada`);
+          return finish(
+            opponentOf(offender),
+            `${offender} se moveu antes de ${category.startDelay} s — largada queimada`,
+          );
         }
         if (details.falseStart.length > 1) {
-          return finish(null, `os dois robôs se moveram antes de ${category.startDelay} s — round sem vencedor`);
+          return finish(
+            null,
+            `os dois robôs se moveram antes de ${category.startDelay} s — round sem vencedor`,
+          );
         }
       }
 
       // 2. Saída do Dohyo (Art. 13, Nota 18; hipóteses H-01 e H-06).
-      details.outOfDohyo = state.robots.filter((r) => isOutOfDohyo(r.pose, category)).map((r) => r.id);
+      details.outOfDohyo = state.robots
+        .filter((r) => isOutOfDohyo(r.pose, category))
+        .map((r) => r.id);
       if (details.outOfDohyo.length === 1) {
         const loser = details.outOfDohyo[0]!;
         const winner = opponentOf(loser);

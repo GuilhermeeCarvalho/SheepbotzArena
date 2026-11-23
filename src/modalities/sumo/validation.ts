@@ -8,7 +8,11 @@ import type { SumoCategory } from './categories';
 const EPSILON = 1e-9;
 const KNOWN_OPTIONS = new Set(['roundTimeLimit']);
 
-const rule = (path: string, message: string): ValidationIssue => ({ path, code: 'MODALITY_RULE', message });
+const rule = (path: string, message: string): ValidationIssue => ({
+  path,
+  code: 'MODALITY_RULE',
+  message,
+});
 
 const format = (value: number) => String(Number(value.toFixed(4))).replace('.', ',');
 
@@ -24,7 +28,12 @@ export function validateSumoWorld(world: World, category: SumoCategory): Validat
   }
 
   if (world.robots.length !== 2) {
-    issues.push(rule('robots', `a partida de Sumô exige exatamente 2 robôs (encontrados: ${world.robots.length})`));
+    issues.push(
+      rule(
+        'robots',
+        `a partida de Sumô exige exatamente 2 robôs (encontrados: ${world.robots.length})`,
+      ),
+    );
   }
 
   const minDistanceFromCenter = category.shikiriOffset - category.shikiriWidth / 2;
@@ -50,14 +59,18 @@ export function validateSumoWorld(world: World, category: SumoCategory): Validat
     if (Math.abs(x) - robot.radius < minDistanceFromCenter - EPSILON) {
       issues.push(rule(`robots[${i}].pose`, 'o robô ultrapassa a Shikiri-sen (Art. 10)'));
     } else if (Math.abs(y) - robot.radius > category.shikiriLength / 2 + EPSILON) {
-      issues.push(rule(`robots[${i}].pose`, 'o robô está fora da extensão da Shikiri-sen (Art. 10)'));
+      issues.push(
+        rule(`robots[${i}].pose`, 'o robô está fora da extensão da Shikiri-sen (Art. 10)'),
+      );
     }
   });
 
   if (world.robots.length === 2) {
     const [a, b] = world.robots;
     if (Math.sign(a!.pose.x) === Math.sign(b!.pose.x)) {
-      issues.push(rule('robots', 'os robôs devem começar em lados opostos da Shikiri-sen (Art. 10)'));
+      issues.push(
+        rule('robots', 'os robôs devem começar em lados opostos da Shikiri-sen (Art. 10)'),
+      );
     }
   }
   return issues;

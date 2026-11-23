@@ -33,7 +33,12 @@ export type SumoRobotInput = {
   controller?: string;
 };
 
-export type SumoWorldOptions = { name?: string; seed?: number; dt?: number; roundTimeLimit?: number };
+export type SumoWorldOptions = {
+  name?: string;
+  seed?: number;
+  dt?: number;
+  roundTimeLimit?: number;
+};
 
 const round = (value: number) => Number(value.toFixed(6));
 
@@ -65,13 +70,21 @@ export function createSumoWorld(
     seed: options.seed ?? 1,
     dt: options.dt ?? SUMO_DEFAULT_DT,
     modality: category.modalityId,
-    ...(options.roundTimeLimit !== undefined ? { modalityOptions: { roundTimeLimit: options.roundTimeLimit } } : {}),
+    ...(options.roundTimeLimit !== undefined
+      ? { modalityOptions: { roundTimeLimit: options.roundTimeLimit } }
+      : {}),
     arena: { width: category.yochiSize, height: category.yochiSize, walls: false },
     floor: {
       ...SUMO_FLOOR.outside,
       regions: [
         { type: 'disc', center: [0, 0], radius: round(r), ...SUMO_FLOOR.dohyo },
-        { type: 'ring', center: [0, 0], innerRadius: round(r - category.tawaraWidth), outerRadius: round(r), ...SUMO_FLOOR.tawara },
+        {
+          type: 'ring',
+          center: [0, 0],
+          innerRadius: round(r - category.tawaraWidth),
+          outerRadius: round(r),
+          ...SUMO_FLOOR.tawara,
+        },
         shikiri(-1),
         shikiri(1),
       ],
