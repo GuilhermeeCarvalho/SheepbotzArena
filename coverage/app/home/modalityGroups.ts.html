@@ -57,7 +57,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>12/12</span>
+                <span class='fraction'>11/11</span>
             </div>
         
             
@@ -138,19 +138,7 @@
 <a name='L62'></a><a href='#L62'>62</a>
 <a name='L63'></a><a href='#L63'>63</a>
 <a name='L64'></a><a href='#L64'>64</a>
-<a name='L65'></a><a href='#L65'>65</a>
-<a name='L66'></a><a href='#L66'>66</a>
-<a name='L67'></a><a href='#L67'>67</a>
-<a name='L68'></a><a href='#L68'>68</a>
-<a name='L69'></a><a href='#L69'>69</a>
-<a name='L70'></a><a href='#L70'>70</a>
-<a name='L71'></a><a href='#L71'>71</a>
-<a name='L72'></a><a href='#L72'>72</a>
-<a name='L73'></a><a href='#L73'>73</a>
-<a name='L74'></a><a href='#L74'>74</a>
-<a name='L75'></a><a href='#L75'>75</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L65'></a><a href='#L65'>65</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -172,9 +160,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">49x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -186,16 +172,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -213,9 +196,6 @@
 <span class="cline-any cline-yes">64x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">80x</span>
-<span class="cline-any cline-yes">40x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -233,8 +213,6 @@ export type ModalityGroup = {
   id: ModalityGroupId;
   name: string;
   description: string;
-  /** Sumô: foco da equipe (constitution, "Escopo e restrições do produto"). */
-  featured: boolean;
   examples: Example[];
 };
 &nbsp;
@@ -246,35 +224,30 @@ const GROUPS: GroupInfo[] = [
     id: 'sumo',
     name: 'Sumô',
     description: 'Dois robôs no Dohyo: vence quem empurrar o outro para fora.',
-    featured: true,
     matches: (m) =&gt; m.startsWith('sumo-'),
   },
   {
     id: 'line-follower',
     name: 'Seguidor de Linha',
     description: 'Uma volta completa na pista no menor tempo, sem sair da linha.',
-    featured: false,
     matches: (m) =&gt; m.startsWith('seguidor-'),
   },
   {
     id: 'trekking',
     name: 'Trekking',
     description: 'Navegação autônoma até quatro marcos, desviando de obstáculos.',
-    featured: false,
     matches: (m) =&gt; m === 'trekking',
   },
   {
     id: 'soccer',
     name: 'Futebol de robôs',
     description: 'Times de robôs, bola e gols no campo do Mini / VSS.',
-    featured: false,
     matches: (m) =&gt; m.startsWith('futebol-'),
   },
   {
     id: 'free',
     name: 'Livre',
     description: 'Arenas sem regras de modalidade para testar sensores e controladores.',
-    featured: false,
     matches: () =&gt; true,
   },
 ];
@@ -286,15 +259,12 @@ export function groupExamples(examples: Example[]): ModalityGroup[] {
     const group = GROUPS.find((g) =&gt; example.modality !== undefined &amp;&amp; g.matches(example.modality));
     buckets.get(group?.id ?? 'free')!.push(example);
   }
-  return GROUPS.filter((g) =&gt; buckets.get(g.id)!.length &gt; 0).map(
-    ({ id, name, description, featured }) =&gt; ({
-      id,
-      name,
-      description,
-      featured,
-      examples: buckets.get(id)!,
-    }),
-  );
+  return GROUPS.filter((g) =&gt; buckets.get(g.id)!.length &gt; 0).map(({ id, name, description }) =&gt; ({
+    id,
+    name,
+    description,
+    examples: buckets.get(id)!,
+  }));
 }
 &nbsp;</pre></td></tr></table></pre>
 
@@ -303,7 +273,7 @@ export function groupExamples(examples: Example[]): ModalityGroup[] {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://vitest.dev/" target="_blank" rel="noopener noreferrer">Vitest</a>
-                at 2026-11-23T22:23:07.512Z
+                at 2026-11-23T22:28:03.477Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

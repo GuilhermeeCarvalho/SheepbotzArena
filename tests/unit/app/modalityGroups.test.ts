@@ -26,7 +26,7 @@ describe('groupExamples', () => {
   const examples = buildExamples(readAll('worlds'), readAll('controllers'));
   const groups = groupExamples(examples);
 
-  it('US2-AC1: ordem das modalidades e Sumô como foco da equipe', () => {
+  it('US2-AC1: ordem das modalidades com descrição', () => {
     expect(groups.map((g) => g.name)).toEqual([
       'Sumô',
       'Seguidor de Linha',
@@ -34,7 +34,6 @@ describe('groupExamples', () => {
       'Futebol de robôs',
       'Livre',
     ]);
-    expect(groups.filter((g) => g.featured).map((g) => g.id)).toEqual(['sumo']);
     for (const group of groups) expect(group.description).not.toBe('');
   });
 

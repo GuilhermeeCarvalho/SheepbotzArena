@@ -36,7 +36,7 @@ Projeto desenvolvido com **Spec-Driven Development** (GitHub SpecKit).
 | [007 — Trekking](specs/007-trekking/) | ✅ implementada (6/6 tarefas) |
 | [008 — Futebol Mini / VSS](specs/008-futebol/) (bola, câmera global, gols) | ✅ implementada (9/9 tarefas) |
 | 009 — Controlador remoto via WebSocket (bônus) | planejada |
-| [010 — Tela inicial](specs/010-tela-inicial/) (modalidades e exemplos) | ✅ implementada (4/4 tarefas) |
+| [010 — Tela inicial](specs/010-tela-inicial/) (modalidades e exemplos) | ✅ implementada (5/5 tarefas) |
 
 ## Como rodar
 

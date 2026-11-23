@@ -1,6 +1,6 @@
 import { ArrowRight, Moon, Play, Sun } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import { Badge, Button, IconButton, cx } from '../../ui/index';
+import { Button, IconButton, cx } from '../../ui/index';
 import type { Example } from '../examples/examples';
 import { LOGO_SRC } from '../layout/TopBar';
 import { useTheme } from '../theme/useTheme';
@@ -73,10 +73,7 @@ export function HomeScreen({ examples, onOpenSimulator, onOpenExample }: HomeScr
                 aria-pressed={group.id === selectedId}
                 onClick={() => setSelectedId(group.id)}
               >
-                <span className={styles.cardHeader}>
-                  <span className={styles.cardTitle}>{group.name}</span>
-                  {group.featured && <Badge tone="success">Foco da equipe</Badge>}
-                </span>
+                <span className={styles.cardTitle}>{group.name}</span>
                 <span className={styles.cardDescription}>{group.description}</span>
                 <span className={styles.cardCount}>{exampleCount(group.examples.length)}</span>
               </button>
