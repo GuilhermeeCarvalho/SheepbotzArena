@@ -21,10 +21,11 @@ Leia este arquivo inteiro antes de mudar qualquer coisa. Depois leia, nesta orde
 | 003 — Catálogo de componentes reais e montador de robôs | ⏳ **próxima**; referências prontas em `docs/references/componentes/` |
 | 004 — Modalidade Sumô (Mega, Mini, LEGO) | ✅ 15/15 tarefas (branch `feat/004-modalidade-sumo`) |
 | 005 — Painel de inspeção e replay | planejada (escopo completo do briefing: RB-21, RB-22) |
-| 006 Seguidor de Linha · 007 Trekking · 008 Futebol | planejadas; regras em `docs/references/robocore/` |
+| 006 — Seguidor de Linha (Pro, Júnior) | ✅ 7/7 tarefas: pistas por retas/arcos, cronômetro, parada de 2 s, controlador PD com QTR-8A |
+| 007 Trekking · 008 Futebol | em andamento / planejada |
 | 009 — Controlador remoto via WebSocket | bônus |
 
-Testes e cobertura: **250 testes · 93,2% de cobertura de linhas**.
+Testes e cobertura: **273 testes · 94,0% de cobertura de linhas**.
 
 Interface: tema claro e tema escuro (preto e verde da SheepBotz, botão sol/lua); logo sem
 fundo em `public/brand/sheepbotz-mark.png`, gerado por `scripts/brand/cutout-logo.py`
