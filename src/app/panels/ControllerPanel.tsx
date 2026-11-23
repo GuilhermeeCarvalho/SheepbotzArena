@@ -1,6 +1,6 @@
-import { Bot, Undo2, Upload } from 'lucide-react';
+import { Bot, Plug, Unplug, Undo2, Upload } from 'lucide-react';
 import { useState } from 'react';
-import { Button, CodeEditor, EmptyState, IssueList, Kbd, Select } from '../../ui/index';
+import { Badge, Button, CodeEditor, EmptyState, IssueList, Kbd, Select } from '../../ui/index';
 import type { ControllerIssue, World } from '../../core/index';
 import styles from './panels.module.css';
 
@@ -29,7 +29,14 @@ export type ControllerPanelProps = {
   onSelectRobot: (id: string) => void;
   onApply: (robotId: string, source: string) => void;
   theme?: 'light' | 'dark';
+  /** Endereço do programa externo, se o robô estiver remoto (spec 009). */
+  remoteUrl?: string | null;
+  remoteError?: string | null;
+  onConnectRemote?: (robotId: string, url: string) => Promise<string | null>;
+  onDisconnectRemote?: (robotId: string) => void;
 };
+
+export const DEFAULT_REMOTE_URL = 'ws://localhost:8765';
 
 /**
  * Edição do controlador do robô selecionado (FR-011). O pai remonta o painel quando o
@@ -43,9 +50,16 @@ export function ControllerPanel({
   onSelectRobot,
   onApply,
   theme,
+  remoteUrl = null,
+  remoteError = null,
+  onConnectRemote,
+  onDisconnectRemote,
 }: ControllerPanelProps) {
   const current = source ?? CONTROLLER_TEMPLATE;
   const [draft, setDraft] = useState(current);
+  const [url, setUrl] = useState(remoteUrl ?? DEFAULT_REMOTE_URL);
+  const [connecting, setConnecting] = useState(false);
+  const [connectError, setConnectError] = useState<string | null>(null);
   if (robotId === null) {
     return (
       <EmptyState
@@ -56,8 +70,56 @@ export function ControllerPanel({
     );
   }
   const dirty = draft !== current || source === undefined;
+  const connect = async () => {
+    if (!onConnectRemote) return;
+    setConnecting(true);
+    setConnectError(await onConnectRemote(robotId, url.trim()));
+    setConnecting(false);
+  };
+  const remoteProblem = connectError ?? remoteError;
   return (
     <div className={styles.editorPanel}>
+      {onConnectRemote && (
+        <section className={styles.remote} aria-label="Controle remoto">
+          <div className={styles.remoteHeader}>
+            <span className={styles.remoteTitle}>Controle remoto (WebSocket)</span>
+            {remoteUrl !== null && <Badge tone="info">remoto</Badge>}
+          </div>
+          {remoteUrl === null ? (
+            <div className={styles.remoteRow}>
+              <input
+                className={styles.remoteInput}
+                aria-label="Endereço do controlador remoto"
+                value={url}
+                onChange={(event) => setUrl(event.target.value)}
+                spellCheck={false}
+              />
+              <Button size="sm" icon={<Plug />} loading={connecting} onClick={() => void connect()}>
+                Conectar
+              </Button>
+            </div>
+          ) : (
+            <div className={styles.remoteRow}>
+              <span className={styles.remoteStatus}>
+                Comandado pelo programa em <code>{remoteUrl}</code>
+              </span>
+              <Button
+                size="sm"
+                variant="ghost"
+                icon={<Unplug />}
+                onClick={() => onDisconnectRemote?.(robotId)}
+              >
+                Desconectar
+              </Button>
+            </div>
+          )}
+          {remoteProblem && (
+            <p className={styles.remoteError} role="alert">
+              {remoteProblem}
+            </p>
+          )}
+        </section>
+      )}
       <div className={styles.editorActions}>
         <Select
           label="Robô"

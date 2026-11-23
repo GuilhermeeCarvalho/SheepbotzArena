@@ -13,6 +13,7 @@ import {
   type World,
 } from '../../core/index';
 import { modalityRegistry } from '../../modalities/index';
+import type { RemoteLink } from '../../remote/index';
 import {
   appendFrame,
   createRecording,
@@ -37,6 +38,10 @@ export type SessionState = {
   readonly replayIndex: number | null;
   /** `false` para gravações abertas de arquivo: não há simulação para continuar. */
   readonly liveAvailable: boolean;
+  /** Robôs comandados por um programa externo (spec 009, US2). */
+  readonly remotes: Readonly<Record<string, RemoteLink>>;
+  /** Falha do controlador remoto que pausou a simulação (spec 009, US2-AC3). */
+  readonly remoteError: string | null;
 };
 
 type Built =
@@ -47,13 +52,23 @@ function build(
   worldText: string,
   controllers: Record<string, string>,
   modalities: ModalityRegistry,
+  remotes: Readonly<Record<string, RemoteLink>> = {},
 ): Built {
   const world = loadWorld(worldText, { modalities });
   if (!world.ok) return { ok: false, worldIssues: world.errors, controllerIssues: [] };
   const known = Object.fromEntries(
     Object.entries(controllers).filter(([id]) => world.value.robots.some((r) => r.id === id)),
   );
-  const simulation = createSimulation(world.value, { controllers: known, modalities });
+  const nativeControllers = Object.fromEntries(
+    Object.values(remotes)
+      .filter((link) => world.value.robots.some((r) => r.id === link.robotId))
+      .map((link) => [link.robotId, link.onTick]),
+  );
+  const simulation = createSimulation(world.value, {
+    controllers: known,
+    nativeControllers,
+    modalities,
+  });
   if (!simulation.ok) return { ok: false, worldIssues: [], controllerIssues: simulation.errors };
   return { ok: true, world: world.value, simulation: simulation.value };
 }
@@ -66,6 +81,7 @@ const fresh = (
   exampleId: string | null,
 ): SessionState => ({
   speed: 1,
+  remotes: {},
   ...base,
   exampleId,
   worldText,
@@ -81,7 +97,11 @@ const fresh = (
   recording: createRecording(built.simulation.getState()),
   replayIndex: null,
   liveAvailable: true,
+  remoteError: null,
 });
+
+const closeRemotes = (session: SessionState): void =>
+  Object.values(session.remotes).forEach((link) => link.close());
 
 /** Cria a sessão inicial; lança erro se o mundo ou os controladores forem inválidos. */
 export function createSession(
@@ -117,6 +137,7 @@ export function applyWorld(
       worldIssues: built.worldIssues,
       controllerIssues: built.controllerIssues,
     };
+  closeRemotes(session);
   return fresh({ speed: session.speed }, built, worldText, controllers, exampleId);
 }
 
@@ -128,7 +149,7 @@ export function applyController(
   modalities: ModalityRegistry = modalityRegistry,
 ): SessionState {
   const controllers = { ...session.controllers, [robotId]: source };
-  const built = build(session.worldText, controllers, modalities);
+  const built = build(session.worldText, controllers, modalities, session.remotes);
   if (!built.ok)
     return {
       ...session,
@@ -136,7 +157,79 @@ export function applyController(
       worldIssues: built.worldIssues,
       controllerIssues: built.controllerIssues,
     };
-  return fresh({ speed: session.speed }, built, session.worldText, controllers, session.exampleId);
+  Object.values(session.remotes).forEach((link) => link.start(built.world));
+  return fresh(
+    { speed: session.speed, remotes: session.remotes },
+    built,
+    session.worldText,
+    controllers,
+    session.exampleId,
+  );
+}
+
+/** Recria a simulação com outro conjunto de robôs remotos, no tick 0 (spec 009, US2). */
+function withRemotes(
+  session: SessionState,
+  remotes: Record<string, RemoteLink>,
+  modalities: ModalityRegistry,
+): SessionState {
+  const built = build(session.worldText, { ...session.controllers }, modalities, remotes);
+  if (!built.ok) return session;
+  Object.values(remotes).forEach((link) => link.start(built.world));
+  return fresh(
+    { speed: session.speed, remotes },
+    built,
+    session.worldText,
+    { ...session.controllers },
+    session.exampleId,
+  );
+}
+
+/** Liga um robô ao programa externo e reinicia no tick 0 (US2-AC1). */
+export function attachRemote(
+  session: SessionState,
+  link: RemoteLink,
+  modalities: ModalityRegistry = modalityRegistry,
+): SessionState {
+  session.remotes[link.robotId]?.close();
+  return withRemotes(session, { ...session.remotes, [link.robotId]: link }, modalities);
+}
+
+/** Desliga o robô remoto; ele volta ao controlador em JavaScript, no tick 0 (US2-AC4). */
+export function detachRemote(
+  session: SessionState,
+  robotId: string,
+  modalities: ModalityRegistry = modalityRegistry,
+): SessionState {
+  const link = session.remotes[robotId];
+  if (!link) return session;
+  link.close();
+  const remotes = { ...session.remotes };
+  delete remotes[robotId];
+  return withRemotes(session, remotes, modalities);
+}
+
+export const hasRemotes = (session: SessionState): boolean =>
+  Object.keys(session.remotes).length > 0;
+
+/** Espera as respostas do próximo tick e o simula; pausa com a falha, se houver (US2-AC2/AC3). */
+export async function advanceRemote(
+  current: () => SessionState,
+  ticks: number,
+): Promise<SessionState> {
+  let session = current();
+  for (let i = 0; i < ticks; i++) {
+    const links = Object.values(session.remotes);
+    await Promise.all(links.map((link) => link.exchange(session.state)));
+    session = current();
+    session = session.running
+      ? advance(session, 1)
+      : { ...session, state: simulateTicks(session, 1) };
+    const failure = links.find((link) => link.failure !== null)?.failure ?? null;
+    if (failure !== null) return { ...session, running: false, remoteError: failure };
+    if (!session.running) return session;
+  }
+  return session;
 }
 
 /** Estado exibido: o quadro do replay ou o estado ao vivo (spec 005, D-04). */
@@ -200,7 +293,14 @@ export function advance(session: SessionState, ticks: number): SessionState {
 export function reset(session: SessionState): SessionState {
   if (inReplay(session)) return { ...session, replayIndex: 0, running: false };
   const state = session.simulation.reset();
-  return { ...session, state, running: false, recording: createRecording(state) };
+  Object.values(session.remotes).forEach((link) => link.start(session.world));
+  return {
+    ...session,
+    state,
+    running: false,
+    remoteError: null,
+    recording: createRecording(state),
+  };
 }
 
 /** Vai ao quadro `index` da gravação, entrando no modo replay (spec 005, US2-AC1). */
@@ -222,6 +322,7 @@ export function openRecording(
 ): SessionState {
   const built = build(parsed.worldText, {}, modalities);
   if (!built.ok) return session;
+  closeRemotes(session);
   const opened = fresh({ speed: session.speed }, built, parsed.worldText, parsed.controllers, null);
   return {
     ...opened,

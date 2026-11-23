@@ -17,7 +17,7 @@ import type { CameraMode } from './scene/sceneModel';
 import { Viewport } from './scene/Viewport';
 import { serializeRecording } from './recording/recording';
 import { createSession, displayedState } from './session/session';
-import { useSimulationSession } from './session/useSimulationSession';
+import { type ConnectRemote, useSimulationSession } from './session/useSimulationSession';
 import { useTheme } from './theme/useTheme';
 
 type SideTab = 'controller' | 'world' | 'robots' | 'sensors';
@@ -36,14 +36,22 @@ export type AppProps = {
   initialExampleId?: string;
   /** Volta à tela inicial (spec 010, FR-005). */
   onGoHome?: () => void;
+  /** Conexão com o controlador remoto; padrão: WebSocket (spec 009). */
+  connectRemote?: ConnectRemote;
 };
 
 /** Tela principal do simulador (spec 002). */
-export function App({ examples = loadBundledExamples(), initialExampleId, onGoHome }: AppProps) {
+export function App({
+  examples = loadBundledExamples(),
+  initialExampleId,
+  onGoHome,
+  connectRemote,
+}: AppProps) {
   const [session, actions] = useSimulationSession(() => {
     const initial = examples.find((e) => e.id === initialExampleId) ?? examples[0]!;
     return createSession(initial.worldText, initial.controllers, initial.id);
-  });
+  }, connectRemote);
+  const [remoteUrls, setRemoteUrls] = useState<Record<string, string>>({});
   const [theme, toggleTheme] = useTheme();
   const [tab, setTab] = useState<SideTab>('controller');
   const [sidePanelOpen, setSidePanelOpen] = useState(true);
@@ -129,6 +137,18 @@ export function App({ examples = loadBundledExamples(), initialExampleId, onGoHo
         onSelectRobot={setSelected}
         onApply={(robotId, source) => actions.applyController(robotId, source)}
         theme={theme}
+        remoteUrl={
+          selectedRobotId && session.remotes[selectedRobotId]
+            ? (remoteUrls[selectedRobotId] ?? null)
+            : null
+        }
+        remoteError={session.remoteError}
+        onConnectRemote={async (robotId, url) => {
+          const error = await actions.connectRemote(robotId, url);
+          if (error === null) setRemoteUrls((urls) => ({ ...urls, [robotId]: url }));
+          return error;
+        }}
+        onDisconnectRemote={actions.disconnectRemote}
       />
     ),
     world: (

@@ -106,3 +106,56 @@
   font-size: var(--text-xs);
   color: var(--color-danger);
 }
+.remote {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+.remoteHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.remoteTitle {
+  font-size: var(--text-sm);
+  font-weight: 550;
+}
+.remoteRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.remoteInput {
+  flex: 1;
+  min-width: 0;
+  height: 28px;
+  padding: 0 var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+.remoteInput:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+.remoteStatus {
+  flex: 1;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+.remoteStatus code {
+  font-family: var(--font-mono);
+  color: var(--color-text);
+}
+.remoteError {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--color-danger);
+}
