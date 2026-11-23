@@ -24,6 +24,7 @@ describe('parseArgs', () => {
         worldPath: 'm.json',
         ticks: 7,
         controllers: { a: 'x.js' },
+        remotes: {},
         timeoutMs: 50,
         pretty: true,
       },

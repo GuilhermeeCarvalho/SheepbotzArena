@@ -4,7 +4,7 @@
 
 **Criada em**: 2026-11-20
 
-**Status**: Rascunho
+**Status**: Implementada
 
 **Entrada**: "Interface web do SheepBotz Arena: visualização 3D da simulação com câmera
 orbital e raios dos sensores visíveis, controles de play, pause, step e reset, edição do

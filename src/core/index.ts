@@ -25,7 +25,7 @@ export type {
   SensorReading,
   SimulationState,
 } from './simulation/state';
-export type { ControllerIssue, ControllerIssueCode } from './controller/compile';
+export type { ControllerIssue, ControllerIssueCode, OnTick } from './controller/compile';
 export type { CameraReading, RobotApi } from './controller/robotApi';
 export {
   createModalityRegistry,

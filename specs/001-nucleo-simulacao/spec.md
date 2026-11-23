@@ -4,7 +4,7 @@
 
 **Criada em**: 2026-11-20
 
-**Status**: Rascunho
+**Status**: Implementada
 
 **Entrada**: "Núcleo de simulação headless e determinístico do SheepBotz Arena: mundo
 descrito em arquivo, robôs de tração diferencial com colisão simples, sensores laser,

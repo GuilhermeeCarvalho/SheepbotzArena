@@ -9,6 +9,11 @@ import { advanceTick, createRuntime, simulationTime, type SimulationRuntime } fr
 export type SimulationOptions = {
   /** id do robô → código-fonte do controlador. Robôs ausentes ficam "no-controller". */
   controllers?: Readonly<Record<string, string>>;
+  /**
+   * id do robô → `onTick` já pronto (ex.: controlador remoto, spec 009). Tratado como qualquer
+   * controlador; tem precedência sobre `controllers` para o mesmo robô.
+   */
+  nativeControllers?: Readonly<Record<string, OnTick>>;
   modalities?: ModalityRegistry;
 };
 
@@ -70,7 +75,12 @@ export function createSimulation(
   world: World,
   options: SimulationOptions = {},
 ): Result<Simulation, ControllerIssue> {
-  const sources = options.controllers ?? {};
+  const sources = Object.fromEntries(
+    Object.entries(options.controllers ?? {}).filter(
+      ([id]) => options.nativeControllers?.[id] === undefined,
+    ),
+  );
+  const natives = options.nativeControllers ?? {};
   const modalities = options.modalities ?? EMPTY_REGISTRY;
   const modality = world.modality !== undefined ? modalities.get(world.modality) : undefined;
   if (world.modality !== undefined && modality === undefined) {
@@ -82,7 +92,12 @@ export function createSimulation(
   const first = compileAll(world, sources);
   if (!first.ok) return first;
 
-  const build = (controllers: Map<string, OnTick>): SimulationRuntime => {
+  const build = (compiled: Map<string, OnTick>): SimulationRuntime => {
+    const controllers = new Map(compiled);
+    for (const robot of world.robots) {
+      const native = natives[robot.id];
+      if (native !== undefined) controllers.set(robot.id, native);
+    }
     const runtime = createRuntime(
       world,
       controllers,

@@ -1,6 +1,6 @@
 # Especificação da feature: Modalidade Trekking
 
-**Feature**: `007-trekking` | **Criada em**: 2026-11-22 | **Status**: Rascunho
+**Feature**: `007-trekking` | **Criada em**: 2026-11-22 | **Status**: Implementada
 
 **Entrada**: "Modalidade Trekking da RoboCore: campo com 4 marcos e obstáculos, navegação
 autônoma na ordem dos marcos, arbitragem da tomada de tempo e estratégia de exemplo."

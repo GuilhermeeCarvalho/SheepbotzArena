@@ -6,7 +6,7 @@
 
 Leia este arquivo inteiro antes de mudar qualquer coisa. Depois leia, nesta ordem:
 
-1. `.specify/memory/constitution.md` (v2.1.0): regras do projeto. Prevalece sobre tudo.
+1. `.specify/memory/constitution.md` (v2.2.0): regras do projeto. Prevalece sobre tudo.
 2. `docs/briefing/requisitos-extraidos.md`: requisitos do briefing (RB-xx), perguntas e decisões (Q-xx) e mapa de features.
 3. `specs/001-nucleo-simulacao/` e `specs/002-visualizacao-3d/`: exemplos do padrão de spec, plan, tasks e contracts a seguir.
 
@@ -24,10 +24,10 @@ Leia este arquivo inteiro antes de mudar qualquer coisa. Depois leia, nesta orde
 | 006 — Seguidor de Linha (Pro, Júnior) | ✅ 7/7 tarefas: pistas por retas/arcos, cronômetro, parada de 2 s, controlador PD com QTR-8A |
 | 007 — Trekking | ✅ 6/6 tarefas: marcos em ordem, colisão/saída do campo, false start, navegação por odometria + lidar |
 | 008 — Futebol Mini / VSS | ✅ 9/9 tarefas: núcleo ganhou bola, câmera global e reposição pedida pelo árbitro; gols, bola livre, exemplo 2 × 1 |
-| 009 — Controlador remoto via WebSocket | bônus |
+| 009 — Controlador remoto via WebSocket | ✅ 6/6 tarefas (bônus RB-31): núcleo aceita controlador pronto, `src/remote` em lockstep, `--remote` na CLI, painel "Controle remoto", exemplo em Python |
 | 010 — Tela inicial | ✅ 5/5 tarefas: apresentação, modalidades com quantidade de exemplos, entrada direta no exemplo e botão "Tela inicial" no simulador; sem login (Q-16) |
 
-Testes e cobertura: **373 testes · 94,6% de cobertura de linhas**
+Testes e cobertura: **397 testes · 94,8% de cobertura de linhas**
 
 Exemplos: 21 mundos (≥ 3 por categoria); roteiro da demo em `docs/apresentacao-exemplos.md`..
 
@@ -162,7 +162,7 @@ Valores estimados estão marcados como hipótese nos arquivos. Não invente núm
 
 ## 6. Pendências e observações
 
-- Escopo completo do briefing fechado com a feature 005. Pendências opcionais: 003 (catálogo), 009 (WebSocket, bônus), Portugol/meuPiá (bônus) e Combate (por último).
+- Escopo completo do briefing fechado com a feature 005. Pendências opcionais: 003 (catálogo), Portugol/meuPiá (bônus) e Combate (por último).
 - O README precisa de "N testes · X% de cobertura" atualizado a cada entrega: rode `npm run test:coverage && npm run readme:stats` e versione `coverage/`.
 - Viewport e Canvas não são testáveis em jsdom. Mantenha a lógica em funções puras (`sceneModel.ts`) e componentes testáveis com `@react-three/test-renderer`.
 - Os PDFs do pitch não fazem parte do repositório; slides sem código, demo ao vivo com `npm run dev`.

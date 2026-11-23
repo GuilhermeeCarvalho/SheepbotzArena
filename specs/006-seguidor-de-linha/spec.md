@@ -1,6 +1,6 @@
 # Especificação da feature: Modalidade Seguidor de Linha
 
-**Feature**: `006-seguidor-de-linha` | **Criada em**: 2026-11-22 | **Status**: Rascunho
+**Feature**: `006-seguidor-de-linha` | **Criada em**: 2026-11-22 | **Status**: Implementada
 
 **Entrada**: "Modalidade Seguidor de Linha da RoboCore (Pro e Júnior): pistas oficiais,
 validação do robô e da pista, cronometragem e validação da volta, e estratégia de exemplo."

@@ -7,6 +7,13 @@ import { dirname, resolve } from 'node:path';
 import { Worker } from 'node:worker_threads';
 import { createSimulation, formatIssues, loadWorld } from '../core/index';
 import { modalityRegistry } from '../modalities/index';
+import {
+  connectWebSocket,
+  createRemoteLink,
+  stepRemote,
+  type RemoteLink,
+  type Transport,
+} from '../remote/index';
 import type { WorkerMessage } from './worker';
 
 export const DEFAULT_CLI_TIMEOUT_MS = 10_000;
@@ -16,12 +23,17 @@ export const EXIT = { ok: 0, usage: 1, invalidWorld: 2, invalidController: 3, ti
 export type CliResult = { code: number; stdout: string; stderr: string };
 
 export const USAGE =
-  'Uso: npm run sim -- <mundo.json> --ticks <N> [--controller <robô>=<arquivo.js>]... [--timeout-ms <ms>] [--pretty]';
+  'Uso: npm run sim -- <mundo.json> --ticks <N> [--controller <robô>=<arquivo.js>]... [--remote <robô>=<ws://endereço>]... [--timeout-ms <ms>] [--pretty]';
+
+/** Dependências externas, substituíveis nos testes. */
+export type CliDeps = { connect: (url: string) => Promise<Transport> };
 
 type CliArgs = {
   worldPath: string;
   ticks: number;
   controllers: Record<string, string>;
+  /** robô → endereço do controlador remoto (spec 009). */
+  remotes: Record<string, string>;
   timeoutMs: number;
   pretty: boolean;
 };
@@ -38,8 +50,12 @@ const isNonNegativeInteger = (text: string | undefined): boolean =>
 export function parseArgs(
   argv: readonly string[],
 ): { ok: true; args: CliArgs } | { ok: false; message: string } {
-  const args: Partial<CliArgs> & { controllers: Record<string, string> } = {
+  const args: Partial<CliArgs> & {
+    controllers: Record<string, string>;
+    remotes: Record<string, string>;
+  } = {
     controllers: {},
+    remotes: {},
     timeoutMs: DEFAULT_CLI_TIMEOUT_MS,
     pretty: false,
   };
@@ -65,6 +81,14 @@ export function parseArgs(
         if (!match)
           return { ok: false, message: '--controller exige o formato <robô>=<arquivo.js>' };
         args.controllers[match[1]!] = match[2]!;
+        i++;
+        break;
+      }
+      case '--remote': {
+        const match = value === undefined ? null : /^([^=]+)=(wss?:\/\/.+)$/.exec(value);
+        if (!match)
+          return { ok: false, message: '--remote exige o formato <robô>=<ws://endereço>' };
+        args.remotes[match[1]!] = match[2]!;
         i++;
         break;
       }
@@ -123,7 +147,55 @@ function runInWorker(
   });
 }
 
-export async function run(argv: readonly string[]): Promise<CliResult> {
+/** Executa com robôs remotos, tick a tick, na thread principal (spec 009, plan D-02). */
+async function runRemote(
+  worldText: string,
+  controllers: Record<string, string>,
+  remotes: Record<string, string>,
+  ticks: number,
+  timeoutMs: number,
+  connect: CliDeps['connect'],
+): Promise<{ kind: 'done'; state: unknown } | CliResult> {
+  const world = loadWorld(worldText, { modalities: modalityRegistry });
+  if (!world.ok) return fail(EXIT.invalidWorld, formatIssues(world.errors));
+  const links: RemoteLink[] = [];
+  const closeAll = () => links.forEach((link) => link.close());
+  for (const [robotId, url] of Object.entries(remotes)) {
+    try {
+      links.push(createRemoteLink(robotId, await connect(url)));
+    } catch (error) {
+      closeAll();
+      return fail(EXIT.invalidController, (error as Error).message);
+    }
+  }
+  const simulation = createSimulation(world.value, {
+    controllers,
+    nativeControllers: Object.fromEntries(links.map((link) => [link.robotId, link.onTick])),
+    modalities: modalityRegistry,
+  });
+  if (!simulation.ok) {
+    closeAll();
+    return fail(EXIT.invalidController, simulation.errors.map((e) => e.message).join('\n'));
+  }
+  links.forEach((link) => link.start(world.value));
+  const deadline = Date.now() + timeoutMs;
+  let state = simulation.value.getState();
+  for (let i = 0; i < ticks && state.match?.phase !== 'finished'; i++) {
+    if (Date.now() > deadline) {
+      closeAll();
+      return fail(EXIT.timeout, `Tempo limite de ${timeoutMs} ms excedido no tick ${state.tick}`);
+    }
+    state = await stepRemote(simulation.value, links, 1);
+  }
+  links.forEach((link) => link.end(state));
+  closeAll();
+  return { kind: 'done', state };
+}
+
+export async function run(
+  argv: readonly string[],
+  deps: CliDeps = { connect: (url) => connectWebSocket(url) },
+): Promise<CliResult> {
   const parsed = parseArgs(argv);
   if (!parsed.ok) return fail(EXIT.usage, `${parsed.message}\n${USAGE}`);
   const { worldPath, ticks, timeoutMs, pretty } = parsed.args;
@@ -153,10 +225,21 @@ export async function run(argv: readonly string[]): Promise<CliResult> {
     controllers[robotId] = source;
   }
 
+  for (const robotId of Object.keys(parsed.args.remotes)) {
+    if (!world.value.robots.some((r) => r.id === robotId)) {
+      return fail(EXIT.usage, `O mundo não tem robô '${robotId}' (informado em --remote)`);
+    }
+    delete controllers[robotId];
+  }
+
   const check = createSimulation(world.value, { controllers, modalities: modalityRegistry });
   if (!check.ok) return fail(EXIT.invalidController, check.errors.map((e) => e.message).join('\n'));
 
-  const outcome = await runInWorker({ worldText, controllers, ticks }, timeoutMs);
+  const outcome =
+    Object.keys(parsed.args.remotes).length > 0
+      ? await runRemote(worldText, controllers, parsed.args.remotes, ticks, timeoutMs, deps.connect)
+      : await runInWorker({ worldText, controllers, ticks }, timeoutMs);
+  if ('code' in outcome) return outcome;
   if (outcome.kind === 'timeout') {
     return fail(EXIT.timeout, `Tempo limite de ${timeoutMs} ms excedido no tick ${outcome.tick}`);
   }
