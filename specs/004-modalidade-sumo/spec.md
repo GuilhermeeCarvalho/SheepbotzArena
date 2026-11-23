@@ -4,7 +4,7 @@
 
 **Criada em**: 2026-11-22
 
-**Status**: Rascunho
+**Status**: Implementada
 
 **Entrada**: "Modalidade Sumô da RoboCore (Mega Sumô 3 kg, Mini Sumô 500 g e Sumô LEGO®):
 arenas oficiais, validação dos robôs pelas regras da categoria, arbitragem do round e

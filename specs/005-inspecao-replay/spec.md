@@ -1,6 +1,6 @@
 # Especificação da feature: Painel de inspeção e replay
 
-**Feature**: `005-inspecao-replay` | **Criada em**: 2026-11-23 | **Status**: Rascunho
+**Feature**: `005-inspecao-replay` | **Criada em**: 2026-11-23 | **Status**: Implementada
 
 **Entrada**: "Painel de inspeção com as leituras dos sensores e gravação e replay de
 simulações" (escopo completo da Trilha 4).

@@ -1,6 +1,6 @@
 # Especificação da feature: Modalidade Futebol (Futebol Mini / VSS)
 
-**Feature**: `008-futebol` | **Criada em**: 2026-11-22 | **Status**: Rascunho
+**Feature**: `008-futebol` | **Criada em**: 2026-11-22 | **Status**: Implementada
 
 **Entrada**: "Futebol de robôs autônomos da RoboCore (Futebol Mini / VSS): bola, campo
 oficial com gols, times de 1 a 3 robôs, gols, bola livre, tempo de jogo e estratégias de
