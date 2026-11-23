@@ -61,7 +61,7 @@ npm run sim -- examples/worlds/corridor.json --ticks 600 --pretty   # CLI headle
   - `setup-plan.sh --json`
   - `setup-tasks.sh --json`
 - **Separação**: a spec traz o quê e o porquê, sem tecnologia, mas com critérios numéricos. O plan traz a tecnologia e a arquitetura. As tasks são fatias verticais por história e citam os FR.
-- **Rastreabilidade**: RB → FR → T → commit. Formato do commit: `feat(003/T012): <descrição em pt-BR> [FR-004, FR-005]`. Documentação sem tarefa usa `docs: ...`. Termine o commit com a linha de coautoria.
+- **Rastreabilidade**: RB → FR → T → commit. Formato do commit: `feat(003/T012): <descrição em pt-BR> [FR-004, FR-005]`. Documentação sem tarefa usa `docs: ...`. **Não** adicione linhas de coautoria (`Co-Authored-By`) nos commits.
 - **Idioma**: documentação, comentários, mensagens de erro, textos da UI e commits em **português**. Identificadores e campos JSON em **inglês**.
 - **Testes**: TDD não é obrigatório (constituição v2.0.0), mas todo comportamento sai com testes e todo critério numérico da spec tem um teste que cita `USx-ACy`. Cobertura ≥ 80%.
 - **Arquitetura**, verificada por lint:
@@ -161,7 +161,7 @@ Valores estimados estão marcados como hipótese nos arquivos. Não invente núm
 
 ## 6. Pendências e observações
 
-- O escopo completo do briefing ainda pede a **feature 005** (inspeção de sensores e gravação/replay). Não deixe para o fim: ela vale nota.
+- Escopo completo do briefing fechado com a feature 005. Pendências opcionais: 003 (catálogo), 009 (WebSocket, bônus), Portugol/meuPiá (bônus) e Combate (por último).
 - O README precisa de "N testes · X% de cobertura" atualizado a cada entrega: rode `npm run test:coverage && npm run readme:stats` e versione `coverage/`.
 - Viewport e Canvas não são testáveis em jsdom. Mantenha a lógica em funções puras (`sceneModel.ts`) e componentes testáveis com `@react-three/test-renderer`.
 - Os PDFs do pitch não fazem parte do repositório; slides sem código, demo ao vivo com `npm run dev`.
