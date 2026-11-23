@@ -20,6 +20,7 @@ export type RobotApi = {
   readBumper(id?: string): boolean;
   readFloor(id?: string): number;
   readOdometry(): OdometryReading;
+  readCamera(id?: string): CameraReading;
   setSpeed(v: number, w: number): void;
   random(): number;
   time(): number;
@@ -28,11 +29,20 @@ export type RobotApi = {
 
 type SensorType = SensorSpec['type'];
 
+/** Leitura da câmera de visão global (feature 008). */
+export type CameraReading = {
+  x: number;
+  y: number;
+  theta: number;
+  ball: { x: number; y: number } | null;
+};
+
 const TYPE_LABEL: Record<SensorType, string> = {
   laser: 'laser',
   sonar: 'sonar',
   bumper: 'bumper',
   floor: 'sensor de piso',
+  camera: 'câmera',
 };
 
 export function createRobotApi(ctx: RobotApiContext): RobotApi {
@@ -58,6 +68,15 @@ export function createRobotApi(ctx: RobotApiContext): RobotApi {
     readBumper: (id?: string) => read('bumper', id) as boolean,
     readFloor: (id?: string) => read('floor', id) as number,
     readOdometry: () => ({ ...ctx.odometry() }),
+    readCamera: (id?: string): CameraReading => {
+      const [x, y, theta, ballX, ballY] = read('camera', id) as number[];
+      return {
+        x: x!,
+        y: y!,
+        theta: theta!,
+        ball: Number.isNaN(ballX) ? null : { x: ballX!, y: ballY! },
+      };
+    },
     setSpeed: (v: number, w: number) => {
       if (
         typeof v !== 'number' ||

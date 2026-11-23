@@ -44,6 +44,7 @@ export function findDuplicateIds(data: unknown): ValidationIssue[] {
   const issues = [
     ...duplicatesIn(robots, (i) => ['robots', i]),
     ...duplicatesIn(asArray(root.obstacles), (i) => ['obstacles', i]),
+    ...duplicatesIn(asArray((root as { balls?: unknown }).balls), (i) => ['balls', i]),
   ];
   robots.forEach((robot, r) => {
     const sensors =

@@ -2,6 +2,13 @@
  * Estado interno da simulação e pipeline de um tick (plan 001, "Pipeline de um tick").
  * O estado interno é mutável por desempenho; para fora saem apenas snapshots (snapshot.ts).
  */
+import {
+  type BallRuntime,
+  collideBallWithBodies,
+  collideBallWithRobots,
+  createBall,
+  integrateBall,
+} from '../ball/ball';
 import { type CollisionDisc, findContacts, resolveCollisions } from '../collision/resolve';
 import { buildStaticBodies, type StaticBody } from '../collision/staticBodies';
 import { errorMessage, type OnTick } from '../controller/compile';
@@ -53,6 +60,7 @@ export type SimulationRuntime = {
   readonly bodies: readonly StaticBody[];
   tick: number;
   robots: RobotRuntime[];
+  balls: BallRuntime[];
   referee: Referee | null;
   match: MatchStatus | null;
 };
@@ -71,6 +79,7 @@ export function createRuntime(
     bodies: buildStaticBodies(world),
     tick: 0,
     robots: [],
+    balls: world.balls.map(createBall),
     referee,
     match: null,
   };
@@ -121,10 +130,15 @@ export function createRuntime(
 
 /** Calcula as leituras de todos os sensores a partir do estado atual (passo 6). */
 export function updateReadings(runtime: SimulationRuntime): void {
+  // Bolas entram depois dos robôs: o índice do próprio robô continua válido (FR-002 da 008).
   const scene: RaycastScene = {
     bodies: runtime.bodies,
-    robots: runtime.robots.map((r) => ({ x: r.pose.x, y: r.pose.y, radius: r.spec.radius })),
+    robots: [
+      ...runtime.robots.map((r) => ({ x: r.pose.x, y: r.pose.y, radius: r.spec.radius })),
+      ...runtime.balls.map((b) => ({ x: b.x, y: b.y, radius: b.spec.radius })),
+    ],
   };
+  const ball = runtime.balls[0];
   for (const robot of runtime.robots) {
     const readings: Record<string, SensorReading> = {};
     for (const sensor of robot.spec.sensors) {
@@ -142,6 +156,19 @@ export function updateReadings(runtime: SimulationRuntime): void {
         case 'floor': {
           const point = localToWorld(robot.pose, { x: sensor.position[0], y: sensor.position[1] });
           readings[sensor.id] = readFloor(runtime.world.floor, point, sensor.noise, rng);
+          break;
+        }
+        case 'camera': {
+          // Visão global (feature 008): [x, y, θ, bolaX, bolaY]; NaN quando não há bola.
+          const noisy = (value: number) =>
+            sensor.noise > 0 ? value + rng.gaussian(sensor.noise) : value;
+          readings[sensor.id] = [
+            noisy(robot.pose.x),
+            noisy(robot.pose.y),
+            normalizeAngle(noisy(robot.pose.theta)),
+            ball ? noisy(ball.x) : Number.NaN,
+            ball ? noisy(ball.y) : Number.NaN,
+          ];
           break;
         }
       }
@@ -164,11 +191,25 @@ function runControllers(runtime: SimulationRuntime): void {
   }
 }
 
-/** Número de subpassos para que nenhum robô avance mais que metade do menor raio (D-04). */
-export function substepCount(robots: readonly RobotRuntime[], dt: number): number {
-  if (robots.length === 0) return 1;
-  const maxDisplacement = Math.max(...robots.map((r) => Math.abs(r.command.v) * dt));
-  const minRadius = Math.min(...robots.map((r) => r.spec.radius));
+/**
+ * Número de subpassos para que nenhum corpo (robô ou bola) avance mais que metade do menor
+ * raio (D-04 da 001; D-03 da 008).
+ */
+export function substepCount(
+  robots: readonly RobotRuntime[],
+  dt: number,
+  balls: readonly BallRuntime[] = [],
+): number {
+  if (robots.length === 0 && balls.length === 0) return 1;
+  const maxDisplacement = Math.max(
+    0,
+    ...robots.map((r) => Math.abs(r.command.v) * dt),
+    ...balls.map((b) => Math.hypot(b.vx, b.vy) * dt),
+  );
+  const minRadius = Math.min(
+    ...robots.map((r) => r.spec.radius),
+    ...balls.map((b) => b.spec.radius),
+  );
   return Math.max(1, Math.ceil(maxDisplacement / (minRadius / 2)));
 }
 
@@ -176,7 +217,7 @@ export function substepCount(robots: readonly RobotRuntime[], dt: number): numbe
 function moveRobots(runtime: SimulationRuntime): void {
   const { dt } = runtime.world;
   const robots = runtime.robots;
-  const n = substepCount(robots, dt);
+  const n = substepCount(robots, dt, runtime.balls);
   const h = dt / n;
   const contacts: number[][] = robots.map(() => []);
   for (let step = 0; step < n; step++) {
@@ -201,10 +242,40 @@ function moveRobots(runtime: SimulationRuntime): void {
         ...stepContacts[i]!.map((angle) => normalizeAngle(angle - robot.pose.theta)),
       );
     });
+    moveBalls(runtime, h);
   }
   robots.forEach((robot, i) => {
     robot.contacts = contacts[i]!;
   });
+}
+
+/** Bolas no subpasso: movimento, choque com robôs e com corpos estáticos (008, D-03). */
+function moveBalls(runtime: SimulationRuntime, h: number): void {
+  if (runtime.balls.length === 0) return;
+  const movers = runtime.robots.map((r) => ({
+    x: r.pose.x,
+    y: r.pose.y,
+    radius: r.spec.radius,
+    vx: r.command.v * Math.cos(r.pose.theta),
+    vy: r.command.v * Math.sin(r.pose.theta),
+  }));
+  for (const ball of runtime.balls) {
+    integrateBall(ball, h);
+    collideBallWithRobots(ball, movers);
+    collideBallWithBodies(ball, runtime.bodies);
+  }
+}
+
+/** Recoloca robôs e bolas nas posições iniciais, mantendo tempo e controladores (008, D-05). */
+function restartPositions(runtime: SimulationRuntime): void {
+  for (const robot of runtime.robots) {
+    robot.pose = { ...robot.spec.pose, theta: normalizeAngle(robot.spec.pose.theta) };
+    robot.command = { v: 0, w: 0 };
+    robot.odometry = initialOdometry();
+    robot.contacts = [];
+  }
+  runtime.balls = runtime.world.balls.map(createBall);
+  updateReadings(runtime);
 }
 
 /** Avança um tick completo. Não faz nada se a partida já terminou. */
@@ -223,5 +294,8 @@ export function advanceTick(runtime: SimulationRuntime, snapshot: () => Simulati
   }
   updateReadings(runtime);
   runtime.tick += 1;
-  if (runtime.referee) runtime.match = runtime.referee.evaluate(snapshot());
+  if (runtime.referee) {
+    runtime.match = runtime.referee.evaluate(snapshot());
+    if (runtime.match.restart && runtime.match.phase === 'running') restartPositions(runtime);
+  }
 }

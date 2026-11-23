@@ -25,12 +25,19 @@ export type RobotState = {
   logs: LogEntry[];
 };
 
+export type BallState = {
+  id: string;
+  position: { x: number; y: number };
+  velocity: { x: number; y: number };
+};
+
 /** Snapshot serializável do estado da simulação (contracts/simulation-api.md). */
 export type SimulationState = {
   tick: number;
   time: number;
   match: MatchStatus | null;
   robots: RobotState[];
+  balls: BallState[];
 };
 
 /** Congela profundamente um objeto (snapshots não podem ser alterados pelos consumidores). */

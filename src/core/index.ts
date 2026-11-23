@@ -6,6 +6,7 @@ export {
   DEFAULT_SEED,
   MAX_DT,
   worldSchema,
+  type BallSpec,
   type FloorRegionSpec,
   type ObstacleSpec,
   type RangeSensorSpec,
@@ -15,6 +16,7 @@ export {
 } from './world/schema';
 export { createSimulation, type Simulation, type SimulationOptions } from './simulation/simulation';
 export type {
+  BallState,
   Command,
   OdometryReading,
   Pose,
@@ -24,7 +26,7 @@ export type {
   SimulationState,
 } from './simulation/state';
 export type { ControllerIssue, ControllerIssueCode } from './controller/compile';
-export type { RobotApi } from './controller/robotApi';
+export type { CameraReading, RobotApi } from './controller/robotApi';
 export {
   createModalityRegistry,
   EMPTY_REGISTRY,

@@ -137,7 +137,20 @@ const floorSensor = z.strictObject({
   noise: nonNegative.default(0),
 });
 
-const sensor = z.discriminatedUnion('type', [laserSensor, sonarSensor, bumperSensor, floorSensor]);
+/** Câmera de visão global (feature 008): pose do robô e posição da bola no referencial do campo. */
+const cameraSensor = z.strictObject({
+  id: identifier,
+  type: z.literal('camera'),
+  noise: nonNegative.default(0),
+});
+
+const sensor = z.discriminatedUnion('type', [
+  laserSensor,
+  sonarSensor,
+  bumperSensor,
+  floorSensor,
+  cameraSensor,
+]);
 
 // ---- Robôs -----------------------------------------------------------------
 
@@ -155,6 +168,22 @@ const robot = z.strictObject({
   controller: z.string().min(1).optional(),
   odometry: z.strictObject({ noise: nonNegative.default(0) }).default({ noise: 0 }),
   sensors: z.array(sensor).default([]),
+});
+
+// ---- Bolas (feature 008) -----------------------------------------------------
+
+export const DEFAULT_BALL_MASS = 0.046; // kg (bola de golfe, Futebol Mini — Art. 2.5)
+export const DEFAULT_BALL_FRICTION = 0.3; // m/s² de desaceleração de rolamento (hipótese)
+export const DEFAULT_BALL_RESTITUTION = 0.6; // fração da velocidade normal após o choque (hipótese)
+
+const ball = z.strictObject({
+  id: identifier,
+  position: point,
+  radius: positive,
+  mass: positive.default(DEFAULT_BALL_MASS),
+  friction: nonNegative.default(DEFAULT_BALL_FRICTION),
+  restitution: unit.default(DEFAULT_BALL_RESTITUTION),
+  color: color.default('#ff7a1a'),
 });
 
 // ---- Mundo -----------------------------------------------------------------
@@ -179,6 +208,7 @@ export const worldSchema = z.strictObject({
   }),
   obstacles: z.array(obstacle).default([]),
   robots: z.array(robot).default([]),
+  balls: z.array(ball).default([]),
 });
 
 export type World = z.infer<typeof worldSchema>;
@@ -189,6 +219,8 @@ export type SonarSpec = Extract<SensorSpec, { type: 'sonar' }>;
 export type RangeSensorSpec = LaserSpec | SonarSpec;
 export type BumperSpec = Extract<SensorSpec, { type: 'bumper' }>;
 export type FloorSensorSpec = Extract<SensorSpec, { type: 'floor' }>;
+export type CameraSensorSpec = Extract<SensorSpec, { type: 'camera' }>;
+export type BallSpec = World['balls'][number];
 export type ObstacleSpec = World['obstacles'][number];
 export type FloorRegionSpec = World['floor']['regions'][number];
 export type Point = [number, number];

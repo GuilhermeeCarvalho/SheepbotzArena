@@ -42,6 +42,11 @@ export function snapshotOf(runtime: SimulationRuntime): SimulationState {
       error: robot.error ? { ...robot.error } : null,
       logs: robot.logs.map((entry) => ({ ...entry })),
     })),
+    balls: runtime.balls.map((ball) => ({
+      id: ball.spec.id,
+      position: { x: ball.x, y: ball.y },
+      velocity: { x: ball.vx, y: ball.vy },
+    })),
   });
 }
 

@@ -14,6 +14,11 @@ export type MatchStatus = {
   reason: string | null;
   score: Record<string, number>;
   details?: Record<string, unknown>;
+  /**
+   * Pede ao núcleo que recoloque robôs e bolas nas posições iniciais após este tick
+   * (ex.: depois de um gol). Tempo, placar e memória dos controladores são mantidos.
+   */
+  restart?: boolean;
 };
 
 export interface Referee {
