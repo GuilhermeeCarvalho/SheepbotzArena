@@ -3,3 +3,4 @@ dist/
 *.log
 .DS_Store
 # coverage/ é versionado (constitution, princípio VII)
+.venv/
