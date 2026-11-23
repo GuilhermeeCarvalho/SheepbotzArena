@@ -311,10 +311,12 @@ ordem em que os robôs aparecem no mundo; (3) movimento; (4) colisões e bumpers
 
 **Cenários de aceitação**:
 
-1. **Dado** um controlador que lê o laser e para quando a leitura central é menor que
-   0,5, num mundo com parede em x = 2,0 e robô de raio 0,1 andando a 1,0 m/s, **quando**
-   executado por 100 ticks, **então** o robô para antes de encostar na parede e o bumper
-   nunca é acionado.
+1. **Dado** um controlador que lê o laser (3 raios, FOV = 1 rad, alcance máximo 3,0) e anda
+   a 1,0 m/s até a leitura central ficar menor que 0,48, num mundo com parede em x = 2,0 (de
+   y = −1 a y = 1) e robô de raio 0,1 em (0, 0, 0), **quando** executado por 100 ticks,
+   **então** o comando passa a (0, 0) no tick 32, a pose final é (1,550; 0,000; 0,000) e o
+   bumper nunca é acionado. (O limiar 0,48 evita que o resultado dependa de arredondamento:
+   a leitura no tick 31 é 0,500 e no tick 32 é 0,450.)
 2. **Dado** um controlador com erro de sintaxe, **quando** a simulação é criada, **então**
    ela não inicia e o erro informa o robô e a linha do problema.
 3. **Dado** um controlador sem a função `onTick`, **quando** a simulação é criada,
