@@ -21,13 +21,15 @@ describe('exemplos', () => {
     expect(examples.map((e) => e.id)).toEqual([
       'corridor',
       'obstacle-field',
+      'seguidor-oval',
+      'seguidor-retangulo',
       'sumo-lego',
       'sumo-mega',
       'sumo-mini',
     ]);
     expect(examples[0]!.name).toBe('Corredor com obstáculos');
     expect(Object.keys(examples[1]!.controllers)).toEqual(['explorador', 'seguidor']);
-    expect(Object.keys(examples[4]!.controllers)).toEqual(['sheep', 'rival']);
+    expect(Object.keys(examples[6]!.controllers)).toEqual(['sheep', 'rival']);
     expect(examples[1]!.controllers.seguidor).toContain('segue a parede');
   });
 

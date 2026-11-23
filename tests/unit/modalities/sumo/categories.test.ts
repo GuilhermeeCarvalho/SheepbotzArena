@@ -33,7 +33,9 @@ describe('categorias de Sumô', () => {
   });
 
   it('as três modalidades estão no registro', () => {
-    expect([...modalityRegistry.keys()]).toEqual(['sumo-mega', 'sumo-mini', 'sumo-lego']);
+    expect([...modalityRegistry.keys()]).toEqual(
+      expect.arrayContaining(['sumo-mega', 'sumo-mini', 'sumo-lego']),
+    );
     expect(modalityRegistry.get('sumo-mini')!.name).toBe('Mini Sumô (500 g)');
   });
 
