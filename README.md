@@ -1,7 +1,7 @@
 # SheepBotz Arena
 
 <!-- stats:start -->
-**273 testes · 94,0% de cobertura** (linhas; relatório em [`coverage/`](coverage/index.html))
+**288 testes · 94,4% de cobertura** (linhas; relatório em [`coverage/`](coverage/index.html))
 <!-- stats:end -->
 
 Simulador web de robôs móveis para a equipe Univille SheepBotz, no espírito do
@@ -32,7 +32,8 @@ Projeto desenvolvido com **Spec-Driven Development** (GitHub SpecKit).
 | [004 — Modalidade Sumô](specs/004-modalidade-sumo/) (Mega, Mini, LEGO®) | ✅ implementada (15/15 tarefas) |
 | 005 — Painel de inspeção e replay | planejada |
 | [006 — Seguidor de Linha](specs/006-seguidor-de-linha/) (Pro, Júnior) | ✅ implementada (7/7 tarefas) |
-| 007 — Trekking · 008 — Futebol | planejadas |
+| [007 — Trekking](specs/007-trekking/) | ✅ implementada (6/6 tarefas) |
+| 008 — Futebol | planejada |
 | 009 — Controlador remoto via WebSocket (bônus) | planejada |
 
 ## Como rodar
