@@ -5,6 +5,7 @@ import {
   buildSimulation,
   buildWorld,
   constantSpeed,
+  expectPose,
   readFixture,
   robotData,
   robotState,
@@ -31,11 +32,12 @@ describe('US6 — controlador', () => {
       ],
     });
     const simulation = buildSimulation(world, { r1: controller('stop-before-wall') });
-    for (let i = 0; i < 100; i++) expect(robotState(simulation.step()).sensors.frente).toBe(false);
-    const robot = robotState(simulation.getState());
-    expect(robot.pose.x).toBeGreaterThan(1.4);
-    expect(robot.pose.x).toBeLessThan(1.9);
-    expect(robot.command.v).toBe(0);
+    for (let i = 1; i <= 100; i++) {
+      const robot = robotState(simulation.step());
+      expect(robot.sensors.frente).toBe(false);
+      expect(robot.command.v).toBe(i < 32 ? 1 : 0);
+    }
+    expectPose(robotState(simulation.getState()).pose, { x: 1.55, y: 0, theta: 0 });
   });
 
   it('US6-AC2: erro de sintaxe impede o início e informa robô e linha', () => {

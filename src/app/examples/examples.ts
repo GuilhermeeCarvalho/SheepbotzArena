@@ -5,6 +5,8 @@
 export type Example = {
   id: string;
   name: string;
+  /** Modalidade declarada no mundo (spec 010, plan D-02). */
+  modality?: string;
   worldText: string;
   controllers: Record<string, string>;
 };
@@ -23,6 +25,7 @@ export function buildExamples(worldFiles: RawFiles, controllerFiles: RawFiles): 
     .map(([path, worldText]) => {
       const data = JSON.parse(worldText) as {
         name?: string;
+        modality?: string;
         robots?: { id: string; controller?: string }[];
       };
       const controllers: Record<string, string> = {};
@@ -33,7 +36,13 @@ export function buildExamples(worldFiles: RawFiles, controllerFiles: RawFiles): 
         if (source !== undefined) controllers[robot.id] = source;
       }
       const id = fileName(path).replace(/\.json$/, '');
-      return { id, name: data.name ?? id, worldText, controllers };
+      return {
+        id,
+        name: data.name ?? id,
+        ...(data.modality !== undefined && { modality: data.modality }),
+        worldText,
+        controllers,
+      };
     });
 }
 

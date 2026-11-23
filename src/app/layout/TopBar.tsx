@@ -1,4 +1,4 @@
-import { Moon, PanelRightClose, PanelRightOpen, Sun } from 'lucide-react';
+import { House, Moon, PanelRightClose, PanelRightOpen, Sun } from 'lucide-react';
 import { IconButton, Kbd, Select } from '../../ui/index';
 import styles from './TopBar.module.css';
 
@@ -6,6 +6,8 @@ export type TopBarProps = {
   examples: { id: string; name: string }[];
   exampleId: string | null;
   onSelectExample: (id: string) => void;
+  /** Volta à tela inicial (spec 010, FR-005); sem ela, o botão não aparece. */
+  onGoHome?: () => void;
   sidePanelOpen: boolean;
   onToggleSidePanel: () => void;
   theme: 'light' | 'dark';
@@ -22,6 +24,7 @@ export function TopBar({
   examples,
   exampleId,
   onSelectExample,
+  onGoHome,
   sidePanelOpen,
   onToggleSidePanel,
   theme,
@@ -50,6 +53,7 @@ export function TopBar({
       <span className={styles.shortcuts} aria-label="Atalhos de teclado">
         <Kbd>Espaço</Kbd> executar <Kbd>→</Kbd> avançar <Kbd>R</Kbd> reiniciar
       </span>
+      {onGoHome && <IconButton label="Tela inicial" icon={<House />} onClick={onGoHome} />}
       <IconButton
         label={theme === 'dark' ? 'Tema claro' : 'Tema escuro'}
         icon={theme === 'dark' ? <Sun /> : <Moon />}

@@ -30,11 +30,19 @@ const isTypingTarget = (target: EventTarget | null): boolean =>
     ['INPUT', 'SELECT', 'TEXTAREA'].includes(target.tagName) ||
     target.closest('.cm-editor') !== null);
 
+export type AppProps = {
+  examples?: Example[];
+  /** Exemplo aberto ao entrar; padrão: o primeiro (spec 010, FR-002 e FR-004). */
+  initialExampleId?: string;
+  /** Volta à tela inicial (spec 010, FR-005). */
+  onGoHome?: () => void;
+};
+
 /** Tela principal do simulador (spec 002). */
-export function App({ examples = loadBundledExamples() }: { examples?: Example[] }) {
+export function App({ examples = loadBundledExamples(), initialExampleId, onGoHome }: AppProps) {
   const [session, actions] = useSimulationSession(() => {
-    const first = examples[0]!;
-    return createSession(first.worldText, first.controllers, first.id);
+    const initial = examples.find((e) => e.id === initialExampleId) ?? examples[0]!;
+    return createSession(initial.worldText, initial.controllers, initial.id);
   });
   const [theme, toggleTheme] = useTheme();
   const [tab, setTab] = useState<SideTab>('controller');
@@ -157,6 +165,7 @@ export function App({ examples = loadBundledExamples() }: { examples?: Example[]
           examples={examples}
           exampleId={session.exampleId}
           onSelectExample={selectExample}
+          onGoHome={onGoHome}
           sidePanelOpen={sidePanelOpen}
           onToggleSidePanel={() => setSidePanelOpen((open) => !open)}
           theme={theme}

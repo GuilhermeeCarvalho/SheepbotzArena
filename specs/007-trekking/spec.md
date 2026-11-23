@@ -67,8 +67,9 @@ Campo 10 × 6 m, marcos centrados em (−3; 0), (−1,02; 0), (0,98; 0) e (2,98;
    por *false start* (Art. 4.13).
 5. **Dado** `timeLimit = 5` e o robô a 0,1 m/s, **quando** simulado, **então** termina no
    tick 100 com 1 marco.
-6. **Dado** o robô que passa pelo marco 3 antes do 2, **quando** simulado, **então** o marco 3
-   não conta até o 2 ser alcançado (Art. 4.2).
+6. **Dado** marcos em (−3; 0), (3; 2), (−1,02; 0) e (2,5; −2) e o robô andando a 1 m/s em
+   +x, **quando** simulado por 40 ticks, **então** o robô passa sobre o marco 3 sem ter
+   alcançado o 2 e termina com 1 marco: o marco 3 não conta até o 2 ser alcançado (Art. 4.2).
 
 ### História de usuário 2 — Validar campo e robô (Prioridade: P1)
 

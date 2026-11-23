@@ -89,8 +89,9 @@ Dohyo de raio 0,385 m):
    o round termina no tick 27, com vencedor A.
 3. **Dado** os dois robôs parados e `roundTimeLimit = 2`, **quando** simulado, **então** o
    round termina no tick 40, sem vencedor e com motivo "tempo esgotado".
-4. **Dado** os dois robôs saindo do Dohyo no mesmo tick, **quando** simulado, **então** o
-   round termina sem vencedor.
+4. **Dado** A em (−0,3; 0; π) e B em (0,3; 0; 0), ambos andando a 0,5 m/s para fora,
+   **quando** simulado, **então** os dois saem do Dohyo no mesmo tick e o round termina no
+   tick 4, sem vencedor, com A e B indicados como fora do Dohyo.
 5. **Dado** o round terminado, **quando** se pedem mais ticks, **então** o estado não avança
    (feature 001) e a interface pausa e mostra o resultado (feature 002, FR-008).
 

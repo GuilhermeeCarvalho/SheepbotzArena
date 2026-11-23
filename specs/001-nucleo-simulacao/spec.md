@@ -220,8 +220,10 @@ verificar poses finais e estado do bumper.
    ambos está acionado.
 6. **Dado** o cenário anterior com A de massa 3,0, **quando** executado por 20 ticks,
    **então** A termina em (0,400; 0,000) e B em (0,600; 0,000).
-7. **Dado** os robôs A e B de mesma massa frente a frente, **quando** ambos são comandados
-   com v = 0,5 um contra o outro, **então** após o contato nenhum dos dois avança.
+7. **Dado** os robôs A (raio 0,1, massa 1,0) em (0, 0, 0) e B (raio 0,1, massa 1,0) em
+   (0,3; 0; π), **quando** ambos são comandados com v = 0,5 um contra o outro, **então** eles
+   se encostam no tick 2 com A em (0,050; 0,000) e B em (0,250; 0,000), e após mais 20 ticks
+   continuam nessas posições (nenhum dos dois avança).
 8. **Dado** um robô sem obstáculos ao redor, **quando** executa qualquer comando, **então**
    seus bumpers permanecem desacionados.
 
@@ -309,10 +311,12 @@ ordem em que os robôs aparecem no mundo; (3) movimento; (4) colisões e bumpers
 
 **Cenários de aceitação**:
 
-1. **Dado** um controlador que lê o laser e para quando a leitura central é menor que
-   0,5, num mundo com parede em x = 2,0 e robô de raio 0,1 andando a 1,0 m/s, **quando**
-   executado por 100 ticks, **então** o robô para antes de encostar na parede e o bumper
-   nunca é acionado.
+1. **Dado** um controlador que lê o laser (3 raios, FOV = 1 rad, alcance máximo 3,0) e anda
+   a 1,0 m/s até a leitura central ficar menor que 0,48, num mundo com parede em x = 2,0 (de
+   y = −1 a y = 1) e robô de raio 0,1 em (0, 0, 0), **quando** executado por 100 ticks,
+   **então** o comando passa a (0, 0) no tick 32, a pose final é (1,550; 0,000; 0,000) e o
+   bumper nunca é acionado. (O limiar 0,48 evita que o resultado dependa de arredondamento:
+   a leitura no tick 31 é 0,500 e no tick 32 é 0,450.)
 2. **Dado** um controlador com erro de sintaxe, **quando** a simulação é criada, **então**
    ela não inicia e o erro informa o robô e a linha do problema.
 3. **Dado** um controlador sem a função `onTick`, **quando** a simulação é criada,

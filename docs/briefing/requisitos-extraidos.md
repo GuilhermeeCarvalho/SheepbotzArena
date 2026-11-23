@@ -69,6 +69,7 @@ registradas nas seções finais deste documento.
 | RB-24 | Em cada modalidade, o usuário configura o próprio robô (chassi, rodas, motores, sensores e itens) a partir de componentes reais usados pela equipe, para maior afinidade entre simulador e robô físico. | Equipe, 2026-11-20 |
 | RB-25 | A configuração respeita os limites da categoria (dimensões e massa máximas do regulamento). | Equipe, 2026-11-20 |
 | RB-26 | Cada modalidade oferece estratégias de exemplo em código (ex.: sumô: busca e ataque, fuga de borda). | Equipe, 2026-11-20 |
+| RB-27 | Uma tela inicial apresenta o simulador e leva às modalidades e aos seus exemplos, em vez de abrir direto no simulador. | Equipe, 2026-11-23 |
 
 ### Bônus
 
@@ -110,6 +111,7 @@ revista por emenda na especificação correspondente.
 | Q-13 | Portugol (bônus) roda no navegador?                                      | Em aberto. Avaliar após o escopo completo, sem modificar o meuPiá.                                                | —                |
 | Q-14 | Como representar componentes reais sem mudar o núcleo?                   | Um **catálogo** à parte converte dados de datasheet em parâmetros do núcleo (ex.: alcance e FOV → laser; rpm e diâmetro da roda → velocidade máxima; dimensões → raio; soma das massas → massa). O núcleo continua genérico. | spec 003         |
 | Q-15 | De onde vêm os números dos componentes?                                  | De datasheets oficiais, registrados com fonte em `docs/references/componentes/`; valores ausentes ficam marcados e não são inventados. | spec 003         |
+| Q-16 | A tela inicial ("entrar na plataforma") exige login? | **Não.** A ferramenta é de uso interno da equipe; contas trariam autenticação e dados pessoais para dentro de uma PoC enxuta. A tela inicial só apresenta o simulador e leva aos exemplos. | spec 010 |
 
 ## 4. Mapa de features
 
@@ -126,6 +128,7 @@ Cada feature é uma pasta `specs/NNN-nome/` com `spec.md`, `plan.md` e `tasks.md
 | 007     | Modalidade Trekking                    | RB-23, 25, 26                   | Além do completo |
 | 008     | Modalidade Futebol de robôs            | RB-20, 23, 25, 26               | Além do completo |
 | 009     | Controlador remoto via WebSocket       | RB-31                           | Bônus         |
+| 010     | Tela inicial                           | RB-23, 27                       | Além do completo (pedido da equipe) |
 | —       | Combate (RoboCore)                     | RB-23                           | Por último, a pedido da equipe (exige dano/impacto, fora do modelo atual) |
 
 Ordem de entrega: 001 → 002 → 003 → 004 → 005 fecham o escopo completo. 006 a 009 só
