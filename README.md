@@ -1,7 +1,7 @@
 # SheepBotz Arena
 
 <!-- stats:start -->
-**373 testes · 94,6% de cobertura** (linhas; relatório em [`coverage/`](coverage/index.html))
+**397 testes · 94,8% de cobertura** (linhas; relatório em [`coverage/`](coverage/index.html))
 <!-- stats:end -->
 
 Simulador web de robôs móveis para a equipe Univille SheepBotz, no espírito do
@@ -35,7 +35,7 @@ Projeto desenvolvido com **Spec-Driven Development** (GitHub SpecKit).
 | [006 — Seguidor de Linha](specs/006-seguidor-de-linha/) (Pro, Júnior) | ✅ implementada (7/7 tarefas) |
 | [007 — Trekking](specs/007-trekking/) | ✅ implementada (6/6 tarefas) |
 | [008 — Futebol Mini / VSS](specs/008-futebol/) (bola, câmera global, gols) | ✅ implementada (9/9 tarefas) |
-| 009 — Controlador remoto via WebSocket (bônus) | planejada |
+| [009 — Controlador remoto via WebSocket](specs/009-controle-remoto/) (bônus) | ✅ implementada (6/6 tarefas) |
 | [010 — Tela inicial](specs/010-tela-inicial/) (modalidades e exemplos) | ✅ implementada (5/5 tarefas) |
 
 ## Como rodar
@@ -62,6 +62,9 @@ npm run sim -- <mundo.json> --ticks <N> [--controller <robô>=<arquivo.js>]... [
 npm run sim -- examples/worlds/corridor.json --ticks 600 --pretty
 npm run sim -- tests/fixtures/worlds/laser-wall-3rays.json --ticks 0 --pretty
 ```
+
+Com `--remote <robô>=ws://endereço`, o robô é comandado por um programa externo
+(feature 009); veja o exemplo em Python em [`examples/remote/`](examples/remote/).
 
 A saída é o estado final em JSON. Códigos de término: `0` sucesso, `1` uso incorreto,
 `2` mundo inválido, `3` controlador inválido, `4` tempo limite excedido

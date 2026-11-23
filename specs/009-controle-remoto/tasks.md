@@ -11,7 +11,7 @@ Commits: `feat(009/<ID>): <descrição> [FR-xxx]`.
 - [x] T003 [US1] Adaptador `WebSocket` e opção `--remote` na CLI; testes `US1-AC6` e da CLI (FR-001, FR-004)
 - [x] T004 [US2] Robô remoto na sessão e no painel do controlador; testes `US2-AC1` a `US2-AC4` (FR-001, FR-004)
 - [x] T005 [US3] Programa de exemplo em Python e guia de uso (FR-006)
-- [ ] T006 Acabamento: README, HANDOFF e cobertura
+- [x] T006 Acabamento: README, HANDOFF e cobertura
 
 ## Rastreabilidade
 

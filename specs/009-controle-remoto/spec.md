@@ -1,6 +1,6 @@
 # Especificação da feature: Controlador remoto via WebSocket
 
-**Feature**: `009-controle-remoto` | **Criada em**: 2026-11-23 | **Status**: Rascunho
+**Feature**: `009-controle-remoto` | **Criada em**: 2026-11-23 | **Status**: Implementada
 
 **Entrada**: "Controlador remoto via WebSocket, no estilo Player/ROS, para comandar o robô a
 partir de um programa externo" (bônus da Trilha 4).
