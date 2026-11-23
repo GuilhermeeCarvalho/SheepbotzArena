@@ -57,12 +57,16 @@ export type RobotMesh = {
 
 export type RayMesh = { robotId: string; sensorId: string; from: Vec3; to: Vec3; hit: boolean };
 
+/** Bola (feature 008): esfera apoiada no chão. */
+export type BallMesh = { id: string; position: Vec3; radius: number; color: string };
+
 export type SceneModel = {
   arena: { width: number; depth: number; color: string; walls: WallMesh[] };
   floorRegions: FloorRegionMesh[];
   obstacles: ObstacleMesh[];
   robots: RobotMesh[];
   rays: RayMesh[];
+  balls: BallMesh[];
   camera: { position: Vec3; target: Vec3 };
 };
 
@@ -291,7 +295,7 @@ function sensorRays(world: World, state: SimulationState): RayMesh[] {
 /** Partes que só dependem do mundo (memorizáveis enquanto o mundo não muda). */
 export type StaticScene = Pick<SceneModel, 'arena' | 'floorRegions' | 'obstacles' | 'camera'>;
 /** Partes que mudam a cada tick. */
-export type DynamicScene = Pick<SceneModel, 'robots' | 'rays'>;
+export type DynamicScene = Pick<SceneModel, 'robots' | 'rays' | 'balls'>;
 
 export function buildStaticScene(world: World): StaticScene {
   const span = Math.max(world.arena.width, world.arena.height);
@@ -331,6 +335,15 @@ export function buildDynamicScene(
       };
     }),
     rays: showRays ? sensorRays(world, state) : [],
+    balls: world.balls.map((spec, index) => {
+      const ball = state.balls[index]!;
+      return {
+        id: spec.id,
+        position: toScene(ball.position.x, ball.position.y, spec.radius),
+        radius: spec.radius,
+        color: spec.color,
+      };
+    }),
   };
 }
 

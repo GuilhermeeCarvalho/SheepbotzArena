@@ -270,3 +270,14 @@ describe('enquadramento pela proporção da tela', () => {
     expect(top.position[1]).toBeGreaterThan(0);
   });
 });
+
+describe('bola na cena (feature 008, FR-009)', () => {
+  it('a bola vira uma esfera apoiada no chão, na posição do estado', () => {
+    const model = modelOf(
+      worldData({ balls: [{ id: 'bola', position: [0.3, -0.2], radius: 0.02 }] }),
+    );
+    expect(model.balls).toEqual([
+      { id: 'bola', position: [0.3, 0.02, 0.2], radius: 0.02, color: '#ff7a1a' },
+    ]);
+  });
+});

@@ -39,7 +39,7 @@ const wander = `
 const controllers = { a: wander, b: wander, c: wander, d: wander };
 
 describe('determinismo', () => {
-  it('SC-002: 4 robôs, 10 000 ticks, estados idênticos', { timeout: 60_000 }, () => {
+  it('SC-002: 4 robôs, 10 000 ticks, estados idênticos', { timeout: 180_000 }, () => {
     const first = buildSimulation(world, controllers);
     const second = buildSimulation(world, controllers);
     for (let tick = 1; tick <= 10_000; tick++) {

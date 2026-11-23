@@ -83,6 +83,24 @@ export function collideBallWithBodies(ball: BallRuntime, bodies: readonly Static
   }
 }
 
+/**
+ * Depois de a bola ser contida por paredes, um robô que ainda a sobrepõe é que recua:
+ * bola presa contra a parede age como obstáculo (D-03). Devolve as correções por robô.
+ */
+export function blockRobotsByBall(
+  ball: BallRuntime,
+  robots: readonly MovingDisc[],
+): { dx: number; dy: number }[] {
+  return robots.map((robot) => {
+    const dx = robot.x - ball.x;
+    const dy = robot.y - ball.y;
+    const d = Math.hypot(dx, dy);
+    const overlap = ball.spec.radius + robot.radius - d;
+    if (overlap <= 0 || d < 1e-12) return { dx: 0, dy: 0 };
+    return { dx: (dx / d) * overlap, dy: (dy / d) * overlap };
+  });
+}
+
 /** Afasta a bola dos robôs e aplica o impulso do choque (D-03). */
 export function collideBallWithRobots(ball: BallRuntime, robots: readonly MovingDisc[]): void {
   for (const robot of robots) {

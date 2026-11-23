@@ -48,6 +48,14 @@ export function DynamicSceneContent({
         ))}
       </group>
       <SensorRays rays={scene.rays} />
+      <group name="balls">
+        {scene.balls.map((ball) => (
+          <mesh key={ball.id} name={ball.id} position={ball.position} castShadow>
+            <sphereGeometry args={[ball.radius, 24, 16]} />
+            <meshStandardMaterial color={ball.color} roughness={0.5} />
+          </mesh>
+        ))}
+      </group>
     </>
   );
 }

@@ -20,6 +20,7 @@ describe('exemplos', () => {
   it('carrega todos os mundos com nome e controladores resolvidos por arquivo', () => {
     expect(examples.map((e) => e.id)).toEqual([
       'corridor',
+      'futebol-2x1',
       'obstacle-field',
       'seguidor-oval',
       'seguidor-retangulo',
@@ -29,9 +30,9 @@ describe('exemplos', () => {
       'trekking',
     ]);
     expect(examples[0]!.name).toBe('Corredor com obstáculos');
-    expect(Object.keys(examples[1]!.controllers)).toEqual(['explorador', 'seguidor']);
-    expect(Object.keys(examples[6]!.controllers)).toEqual(['sheep', 'rival']);
-    expect(examples[1]!.controllers.seguidor).toContain('segue a parede');
+    expect(Object.keys(examples[2]!.controllers)).toEqual(['explorador', 'seguidor']);
+    expect(Object.keys(examples[7]!.controllers)).toEqual(['sheep', 'rival']);
+    expect(examples[2]!.controllers.seguidor).toContain('segue a parede');
   });
 
   it('US4-AC1: cada exemplo abre uma sessão válida, pausada no tick 0', () => {

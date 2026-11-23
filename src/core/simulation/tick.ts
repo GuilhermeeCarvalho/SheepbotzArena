@@ -4,6 +4,7 @@
  */
 import {
   type BallRuntime,
+  blockRobotsByBall,
   collideBallWithBodies,
   collideBallWithRobots,
   createBall,
@@ -263,6 +264,14 @@ function moveBalls(runtime: SimulationRuntime, h: number): void {
     integrateBall(ball, h);
     collideBallWithRobots(ball, movers);
     collideBallWithBodies(ball, runtime.bodies);
+    // Bola contida pela parede e ainda sobreposta: o robô recua (bola presa = obstáculo).
+    blockRobotsByBall(ball, movers).forEach(({ dx, dy }, i) => {
+      if (dx === 0 && dy === 0) return;
+      const robot = runtime.robots[i]!;
+      robot.pose = { x: robot.pose.x + dx, y: robot.pose.y + dy, theta: robot.pose.theta };
+      movers[i]!.x = robot.pose.x;
+      movers[i]!.y = robot.pose.y;
+    });
   }
 }
 

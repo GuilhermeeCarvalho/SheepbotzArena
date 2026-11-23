@@ -36,6 +36,7 @@ const world = worldData({
     { id: 'caixa', type: 'box', center: [-1.5, 0], width: 0.3, height: 0.6, angle: 0.5 },
     { id: 'parede', type: 'wall', from: [1, -1.4], to: [1, 1.4] },
   ],
+  balls: [{ id: 'bola', position: [0.5, -0.5], radius: 0.02 }],
   robots: [
     robotData({ sensors: [{ id: 'laser', type: 'laser', rays: 3, fov: PI, maxRange: 1.2 }] }),
     robotData({ id: 'r2', pose: { x: -1, y: 1, theta: PI / 2 } }),
@@ -90,6 +91,9 @@ describe('cena 3D', () => {
     expect(robot.instance.rotation.y).toBeCloseTo(PI / 2, 9);
     expect(robot.findAllByProps({ name: 'wheel' })).toHaveLength(2);
     expect(robot.findByProps({ name: 'front-marker' })).toBeDefined();
+    const ball = renderer.scene.findByProps({ name: 'bola' });
+    expect(ball.instance.position.x).toBeCloseTo(0.5, 9);
+    expect(ball.instance.position.z).toBeCloseTo(0.5, 9);
   });
 
   it('US3: raios divididos entre detecção e livres, com pontos de impacto', async () => {
